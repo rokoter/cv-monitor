@@ -44,7 +44,8 @@ PLACE = {
     'R6': (24.0, 46.0, 0, 'F'), 'C4': (24.0, 48.5, 0, 'F'),
     'U3': (30.0, 47.5, 0, 'F'), 'R7': (30.0, 51.5, 0, 'F'),
     'Q2': (38.0, 47.5, 0, 'F'),
-    'D5': (22.0, 54.5, 180, 'F'), 'R26': (26.0, 54.5, 0, 'F'), 'D6': (31.0, 54.5, 180, 'F'),
+    'D5': (4.5, 50.0, 90, 'B'),            # 3 mm THT-LED aan de accukant (onderkant), naast de houder
+    'R26': (8.0, 45.5, 90, 'F'), 'D6': (8.0, 50.5, 90, 'F'),
     'J9': (41.5, 14.5, 0, 'F'),            # NTC: buiten de accuhouder (THT!), bij het TEMP-netwerk
     # ---- 5. ESP32-S3 (rechtsboven, antenne aan de bovenrand)
     'U5': (79.0, 13.4, 0, 'F'),            # antenne 0,65 mm van de bovenrand (silk binnen het bord)
@@ -62,7 +63,7 @@ PLACE = {
     'J3': (None, 57.0, 90, 'F'),
     # ---- 7. Bediening + uitbreiding (onderrand)
     'SW1': (11.0, 66.0, 0, 'F'), 'SW2': (19.5, 66.0, 0, 'F'), 'SW3': (28.0, 66.0, 0, 'F'),
-    'R11': (28.0, 61.5, 0, 'F'),
+    'R11': (61.0, 18.5, 0, 'F'),           # pull-up STATUS-knop (GPIO15), bij de ESP
     'J4': (56.0, 8.5, 0, 'F'),            # verticaal links van de ESP
     # ---- 8. Qwiic (onderrand, opening naar beneden)
     'R20': (50.0, 62.0, 90, 'F'), 'R21': (52.5, 62.0, 90, 'F'),
@@ -79,10 +80,16 @@ EDGE_ALIGN = {'J1': ('left', 0.0), 'J2': ('right', -0.6), 'J3': ('right', -0.6),
 # Functielabels op de bovenkant (silkscreen), naast het onderdeel
 FUNC_LABELS = {
     'SW1': 'RESET', 'SW2': 'BOOT', 'SW3': 'STATUS',
-    'D2': 'LADEN', 'D3': 'VOL', 'D4': 'LED', 'D5': 'ACCU OMGEKEERD',
+    'D2': 'LADEN', 'D3': 'VOL', 'D4': 'LED',
     'J1': 'USB 5V', 'J2': 'AANVOER', 'J3': 'RETOUR', 'J4': 'UITBREIDING',
     'J5': 'QWIIC', 'J6': 'QWIIC', 'J7': 'OLED', 'J8': 'E-INK', 'J9': 'NTC',
 }
+
+# Functielabels op de onderkant (onderdelen die aan de onderkant zitten)
+FUNC_LABELS_BACK = {'D5': 'ACCU OMGEKEERD'}
+
+# Labels die altijd recht boven het onderdeel moeten staan (op één lijn)
+FUNC_LABEL_DIR = {'SW1': 'up', 'SW2': 'up', 'SW3': 'up'}
 
 # Pinbenamingen op de onderkant: (richting t.o.v. de pad, teksthoek, {pad: tekst})
 PIN_LABELS = {

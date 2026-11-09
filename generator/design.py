@@ -109,7 +109,8 @@ COMPONENTS = [
     R('R6', '100', 25, 49, 'BAT+', 'DW_VCC'),
     C('C4', '100n', 29, 49, 'DW_VCC', 'B-'),
     R('R7', '1k', 28, 58, 'DW_CS', 'GND'),
-    LED('D5', 'rood: accu omgekeerd!', 'C2286', 11, 62, 'REV_A', 'CELL+', ref_at=(10, 60.5), val_at=(8, 64.5)),
+    LED('D5', 'rood 3mm THT: accu omgekeerd', '', 11, 62, 'REV_A', 'CELL+', ref_at=(10, 60.5), val_at=(6, 64.5),
+        fp='LED_THT:LED_D3.0mm', dnp=True),
     R('R26', '1k', 16, 62, 'REV_A', 'REV_R', rot=90, ref_at=(15, 60.5), val_at=(15, 64)),
     dict(ref='D6', lib='Diode:1N4148W', value='1N4148W', gx=21, gy=62, fp='Diode_SMD:D_SOD-123', lcsc='C81598',
          ref_at=(20, 60.5), val_at=(19.5, 64), nets={'1': 'REV_R', '2': 'B-'}),
@@ -279,7 +280,7 @@ TEXTS = [
            'De FET-schakelaar zit in de min-leiding.\n'
            'Q3 = ompoolbeveiliging: accu goed -> gate laag -> Q3 geleidt (laden en ontladen).\n'
            'Accu verkeerd om -> gate hoog -> Q3 blokkeert, er loopt geen stroom.\n'
-           'D5 (rood) brandt alleen als de accu verkeerd om zit (D6 blokkeert normaal).\n'
+           'D5 (rode 3 mm LED, onderkant bij de accu) brandt alleen als de accu verkeerd om zit.\n'
            'Na plaatsen van de accu: 1x USB aansluiten om de DW01A te activeren.', gx=4, gy=73),
 
     dict(t='5. ESP32-S3-WROOM-1-N8', gx=70, gy=42, size=2.0, bold=True),

@@ -181,9 +181,10 @@ bt.Reference().SetTextAngle(pcbnew.EDA_ANGLE(0, pcbnew.DEGREES_T))
 # ------------------------------------------------------------------ silkscreen-referenties
 from silk import place_all  # noqa: E402
 tp_labels = {r: comps[r]['value'] for r in comps if r.startswith('TP')}
-from placement import FUNC_LABELS, PIN_LABELS  # noqa: E402
+from placement import FUNC_LABELS, FUNC_LABELS_BACK, FUNC_LABEL_DIR, PIN_LABELS  # noqa: E402
 failed = place_all(board, OX, OY, BOARD_W, BOARD_H, CORNER_R, label_override=tp_labels, hide=tuple(HOLES),
-                   inner=('U5',), func_labels=FUNC_LABELS)
+                   inner=('U5',), func_labels=FUNC_LABELS, func_labels_back=FUNC_LABELS_BACK,
+                   func_dir=FUNC_LABEL_DIR, manual=('BT1',))
 from silk import place_pin_labels  # noqa: E402
 failed += place_pin_labels(board, OX, OY, BOARD_W, BOARD_H, CORNER_R, PIN_LABELS)
 if failed:

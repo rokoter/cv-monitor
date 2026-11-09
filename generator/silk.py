@@ -167,50 +167,63 @@ def place_pin_labels(board, ox, oy, w, h, r, pin_labels):
     return failed
 
 
-def place_all(board, ox, oy, w, h, r, label_override=None, hide=(), inner=(), func_labels=None):
-    """Plaatst alle referenties. label_override: {ref: tekst} -> extra silk-tekst i.p.v. de referentie
-    (bijv. netnaam bij testpunten). hide: referenties die niet geprint worden."""
+def place_all(board, ox, oy, w, h, r, label_override=None, hide=(), inner=(), func_labels=None,
+              func_labels_back=None, func_dir=None, manual=()):
+    """Plaatst functielabels en referenties op boven- en onderkant.
+    label_override: {ref: tekst} i.p.v. de referentie (bijv. netnaam bij testpunten)
+    func_labels / func_labels_back: extra functietekst (boven / onder)
+    func_dir: {ref: richting} -> functielabel vast in die richting (bijv. 'up' voor een rij knoppen)
+    hide: referenties die niet geprint worden; manual: referenties die al met de hand staan."""
     label_override = label_override or {}
-    sp = SilkPlacer(board, ox, oy, w, h, r)
+    func_dir = func_dir or {}
     failed = []
-    fps = sorted(board.GetFootprints(), key=lambda f: -_area(f))   # grote onderdelen eerst
-    # functielabels eerst: die zijn voor de gebruiker het belangrijkst
-    for fp in fps:
-        ref = fp.GetReference()
-        if func_labels and ref in func_labels:
-            own = sp.crt.get(ref) or _box(fp.GetBoundingBox(False, False))
-            t = _new_text(board, func_labels[ref], pcbnew.F_SilkS)
-            if not sp.place(t, ref, own):
-                board.Remove(t)
-                failed.append(ref + ' (functie)')
-    for fp in fps:
-        fp.Value().SetVisible(False)
-        ref = fp.GetReference()
-        rt = fp.Reference()
-        if fp.IsFlipped():
-            continue
-        if ref in hide:
-            rt.SetVisible(False)
-            continue
-        if ref in inner:     # module: zoek binnen de pads (de courtyard bevat ook de antennezone)
-            pb = [_box(p.GetBoundingBox()) for p in fp.Pads()]
-            own = (min(q[0] for q in pb), min(q[1] for q in pb), max(q[2] for q in pb), max(q[3] for q in pb))
-        else:
-            own = sp.crt.get(ref) or _box(fp.GetBoundingBox(False, False))
-        if ref in label_override:
-            rt.SetVisible(False)
-            t = pcbnew.PCB_TEXT(board)
-            t.SetText(label_override[ref])
-            t.SetLayer(pcbnew.F_SilkS)
-            board.Add(t)
-            if not sp.place(t, ref, own):
-                board.Remove(t)
+    for side, funcs in (('F', func_labels or {}), ('B', func_labels_back or {})):
+        sp = SilkPlacer(board, ox, oy, w, h, r, side=side)
+        layer = sp.layer
+        fps = [f for f in board.GetFootprints() if f.IsFlipped() == (side == 'B')]
+        fps.sort(key=lambda f: -_area(f))     # grote onderdelen eerst
+        own_of = {}
+        for fp in fps:
+            ref = fp.GetReference()
+            if ref in inner:     # module: binnen de pads zoeken (courtyard bevat ook de antennezone)
+                pb = [_box(p.GetBoundingBox()) for p in fp.Pads()]
+                own_of[ref] = (min(q[0] for q in pb), min(q[1] for q in pb), max(q[2] for q in pb), max(q[3] for q in pb))
+            else:
+                own_of[ref] = sp.crt.get(ref) or _box(fp.GetBoundingBox(False, False))
+        # 1) functielabels met vaste richting, 2) overige functielabels, 3) referenties
+        for fixed in (True, False):
+            for fp in fps:
+                ref = fp.GetReference()
+                if ref not in funcs or (ref in func_dir) != fixed:
+                    continue
+                t = _new_text(board, funcs[ref], layer)
+                ok = (sp.place_dir(t, ref, own_of[ref], func_dir[ref], 0) if fixed
+                      else sp.place(t, ref, own_of[ref]))
+                if not ok:
+                    board.Remove(t)
+                    failed.append(ref + ' (functie)')
+        for fp in fps:
+            fp.Value().SetVisible(False)
+            ref = fp.GetReference()
+            rt = fp.Reference()
+            if ref in manual:
+                continue
+            if ref in hide:
+                rt.SetVisible(False)
+                continue
+            if ref in label_override:
+                rt.SetVisible(False)
+                t = _new_text(board, label_override[ref], layer)
+                if not sp.place(t, ref, own_of[ref]):
+                    board.Remove(t)
+                    failed.append(ref)
+                continue
+            rt.SetLayer(layer)
+            if side == 'B':
+                rt.SetMirrored(True)
+            if not sp.place(rt, ref, own_of[ref], inner=ref in inner):
+                rt.SetLayer(pcbnew.F_Fab if side == 'F' else pcbnew.B_Fab)
                 failed.append(ref)
-            continue
-        rt.SetLayer(pcbnew.F_SilkS)
-        if not sp.place(rt, ref, own, inner=ref in inner):
-            rt.SetLayer(pcbnew.F_Fab)
-            failed.append(ref)
     return failed
 
 

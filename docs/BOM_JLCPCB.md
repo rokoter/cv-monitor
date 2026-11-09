@@ -16,7 +16,7 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-09; bij b
 | R18, R19, R20, R21, R23 | 4.7k | R_0603_1608Metric | C23162 | Basic | 5 |  |
 | R24 | 47k | R_0603_1608Metric | C25819 | Basic | 1 |  |
 | R9, R10, R11, R22, R25 | 10k | R_0603_1608Metric | C25804 | Basic | 5 |  |
-| D2, D5 | rood: laden / rood: accu omgekeerd! | LED_0603_1608Metric | C2286 | Basic | 2 |  |
+| D2 | rood: laden | LED_0603_1608Metric | C2286 | Basic | 1 |  |
 | R4, R5, R7, R8, R13, R26 | 1k | R_0603_1608Metric | C21190 | Basic | 6 |  |
 | D3 | groen: vol | LED_0603_1608Metric | C72043 | Basic | 1 |  |
 | D1 | SS34 | D_SMA | C8678 | Basic | 1 |  |
@@ -41,6 +41,7 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-09; bij b
 | U1 | USBLC6-2SC6 | SOT-23-6 |
 | J9 | NTC 10k (accu) | JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical |
 | BT1 | 18650 – houder MPD BK-18650-PC2 | BatteryHolder_MPD_BH-18650-PC2 |
+| D5 | rood 3mm THT: accu omgekeerd | LED_D3.0mm |
 | U5 | ESP32-S3-WROOM-1-N8 (zelf solderen) | ESP32-S3-WROOM-1_HandSolder |
 | J2 | SENSOR1 (aanvoer) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
 | J3 | SENSOR2 (retour) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
