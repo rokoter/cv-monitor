@@ -205,7 +205,7 @@ for c in COMPONENTS:
     c.setdefault('rot', 0)
     comp_by_ref[c['ref']] = c
     pins = place_symbol(c['lib'], c['ref'], c['value'], c['x'], c['y'], c['rot'], c.get('fp', ''),
-                        c.get('lcsc', ''), c.get('extra'), dnp=c.get('dnp', False),
+                        c.get('lcsc', ''), c.get('extra'), dnp=c.get('dnp', False), in_bom=c.get('in_bom', True),
                         ref_at=c.get('ref_at') and (g(c['ref_at'][0]), g(c['ref_at'][1])),
                         val_at=c.get('val_at') and (g(c['val_at'][0]), g(c['val_at'][1])))
     seen_pos = {}

@@ -12,6 +12,7 @@ python3 -I generator/make_drawio.py docs/accubeveiliging_DW01A_FS8205A.drawio
 # Controle: KiCad exporteert de netlist, wij vergelijken met de bedoeling (design.py)
 kicad-cli sch export netlist -o /tmp/cv_monitor.net "$PRJ/cv_monitor.kicad_sch" >/dev/null
 python3 -I generator/check_netlist.py /tmp/cv_monitor.net generator/expected_nets.json
+python3 -I generator/check_footprints.py | tail -1
 
 kicad-cli sch export pdf -o docs/cv_monitor_schema.pdf "$PRJ/cv_monitor.kicad_sch" >/dev/null
 python3 -I generator/bom_overview.py

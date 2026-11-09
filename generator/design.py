@@ -56,7 +56,7 @@ COMPONENTS = [
          nets={'1': 'VBUS_IN', '2': 'VBUS'}),
     R('R1', '5.1k', 28, 18, 'CC1', 'GND'),
     R('R2', '5.1k', 32, 18, 'CC2', 'GND'),
-    C('C1', '10u', 36, 19, 'VBUS', 'GND', '0805'),
+    C('C1', '1u', 36, 19, 'VBUS', 'GND'),
     dict(ref='U1', lib='Power_Protection:USBLC6-2SC6', value='USBLC6-2SC6', gx=30, gy=28,
          fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C7519', dnp=True, ref_at=(32, 25), val_at=(32, 31.5),
          nets={'1': 'USB_D+', '6': 'USB_D+', '3': 'USB_D-', '4': 'USB_D-', '5': 'VBUS', '2': 'GND'}),
@@ -89,7 +89,7 @@ COMPONENTS = [
     dict(ref='Q1', lib='Transistor_FET:AO3401A', value='AO3401A', gx=104, gy=24,
          fp='Package_TO_SOT_SMD:SOT-23', lcsc='C15127', ref_at=(107, 23.5), val_at=(107, 25),
          nets={'1': 'VBUS', '2': 'VSYS', '3': 'BAT+'}),
-    R('R8', '10k', 98, 25, 'VBUS', 'GND'),
+    R('R8', '1k', 98, 25, 'VBUS', 'GND'),
     C('C5', '10u', 112, 22, 'VSYS', 'GND', '0805'),
     dict(ref='U4', lib='Regulator_Linear:AP2112K-3.3', value='AP2112K-3.3', gx=124, gy=18,
          fp='Package_TO_SOT_SMD:SOT-23-5', lcsc='C51118', ref_at=(121, 14.5), val_at=(121, 15.5),
@@ -98,7 +98,7 @@ COMPONENTS = [
     C('C6', '10u', 134, 20, '+3V3', 'GND', '0805'),
 
     # ------------------------------------------------------------ 4. Accu + beveiliging
-    dict(ref='BT1', lib='Device:Battery_Cell', value='18650', gx=7, gy=55,
+    dict(ref='BT1', lib='Device:Battery_Cell', value='18650', gx=7, gy=55, extra={'MPN': 'houder MPD BK-18650-PC2'},
          fp='Battery:BatteryHolder_MPD_BH-18650-PC2', dnp=True, ref_at=(8.5, 54), val_at=(8.5, 55.5),
          nets={'1': 'CELL+', '2': 'B-'}),
     dict(ref='Q3', lib='Transistor_FET:AO3401A', value='AO3401A', gx=14, gy=50,
@@ -140,14 +140,16 @@ COMPONENTS = [
     C('C11', '100n', 140, 54, 'VBAT_SENSE', 'GND'),
     R('R16', '100k', 150, 48, 'VBUS', 'VBUS_SENSE'),
     R('R17', '100k', 150, 54, 'VBUS_SENSE', 'GND'),
-    R('R18', '4.7k', 134, 64, '+3V3', 'DQ_AANVOER'),
-    R('R19', '4.7k', 134, 72, '+3V3', 'DQ_RETOUR'),
+    R('R18', '4.7k', 130, 64, '+3V3', 'DQ_AANVOER'),
+    R('R27', '100', 142, 64, 'DQ_AANVOER', 'SENS1', rot=90, ref_at=(141, 62.5), val_at=(141, 66)),
+    R('R19', '4.7k', 130, 72, '+3V3', 'DQ_RETOUR'),
+    R('R28', '100', 142, 72, 'DQ_RETOUR', 'SENS2', rot=90, ref_at=(141, 70.5), val_at=(141, 74)),
     dict(ref='J2', lib='Connector:Screw_Terminal_01x03', value='SENSOR1 (aanvoer)', gx=150, gy=64, dnp=True,
          fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal',
-         ref_at=(152, 63), val_at=(152, 65), nets={'1': '+3V3', '2': 'DQ_AANVOER', '3': 'GND'}),
+         ref_at=(152, 63), val_at=(152, 65), nets={'1': '+3V3', '2': 'SENS1', '3': 'GND'}),
     dict(ref='J3', lib='Connector:Screw_Terminal_01x03', value='SENSOR2 (retour)', gx=150, gy=72, dnp=True,
          fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal',
-         ref_at=(152, 71), val_at=(152, 73), nets={'1': '+3V3', '2': 'DQ_RETOUR', '3': 'GND'}),
+         ref_at=(152, 71), val_at=(152, 73), nets={'1': '+3V3', '2': 'SENS2', '3': 'GND'}),
     C('C12', '100n', 159, 49, '+3V3', 'GND'),
 
     # ------------------------------------------------------------ 7. Bediening & uitbreiding
@@ -193,6 +195,18 @@ COMPONENTS = [
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical',
          ref_at=(152, 87), val_at=(150, 94.5),
          nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SCL', '4': 'I2C_SDA'}),
+
+    # ------------------------------------------------------------ Testpunten (alleen koperpads, geen BOM)
+    dict(ref='TP1', lib='Connector:TestPoint', value='VBUS', gx=143, gy=37, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(143.8, 38), val_at=(143.8, 39), nets={'1': 'VBUS'}),
+    dict(ref='TP2', lib='Connector:TestPoint', value='VSYS', gx=147, gy=37, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(147.8, 38), val_at=(147.8, 39), nets={'1': 'VSYS'}),
+    dict(ref='TP3', lib='Connector:TestPoint', value='BAT+', gx=151, gy=37, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(151.8, 38), val_at=(151.8, 39), nets={'1': 'BAT+'}),
+    dict(ref='TP4', lib='Connector:TestPoint', value='3V3', gx=155, gy=37, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(155.8, 38), val_at=(155.8, 39), nets={'1': '+3V3'}),
+    dict(ref='TP5', lib='Connector:TestPoint', value='GND', gx=159, gy=36, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(160, 37.5), val_at=(160, 38.5), nets={'1': 'GND'}),
 ]
 
 # Directe draden tussen pinnen (optioneel 3e element = label midden op de draad)
@@ -208,6 +222,8 @@ WIRES = [
     (('Q3', '1'), ('R22', '1')),         # gate ompoolbeveiliging
     (('D5', '2'), ('R26', '1')),         # fout-LED keten
     (('R25', '2'), ('JP1', '1')),        # vaste 10k via soldeerjumper
+    (('R27', '2'), ('J2', '2')),         # serieweerstand sensor 1
+    (('R28', '2'), ('J3', '2')),         # serieweerstand sensor 2
     (('R26', '2'), ('D6', '1')),
     (('R14', '2'), ('R15', '1'), 'VBAT_SENSE'),
     (('R16', '2'), ('R17', '1'), 'VBUS_SENSE'),
@@ -240,8 +256,9 @@ TEXTS = [
     dict(t='3. POWER-PATH (UPS) + 3,3 V', gx=94, gy=6, size=2.0, bold=True),
     dict(t='USB aanwezig: gate Q1 = 5 V -> Q1 dicht. Systeem (VSYS ~4,6 V) via D1,\n'
            '   de accu wordt ongestoord geladen (TP4056 ziet alleen de accu).\n'
-           'USB weg: R8 trekt de gate naar 0 V -> Q1 geleidt -> accu voedt VSYS naadloos.\n'
-           'AP2112K-3.3: LDO 600 mA, ~250 mV dropout. Werkt tot cel ~3,4 V.', gx=94, gy=36),
+           'USB weg: R8 (1k) trekt de gate binnen ~10 ms naar 0 V -> Q1 geleidt -> accu voedt VSYS.\n'
+           'AP2112K-3.3: LDO 600 mA, ~250 mV dropout. Werkt tot cel ~3,4 V.\n'
+           'Voeding: lader >= 1 A gebruiken (laden 0,6 A + systeem); een pc-poort levert te weinig.', gx=94, gy=37),
 
     dict(t='PWR_FLAGS', gx=142, gy=6, size=2.0, bold=True),
     dict(t='Vertelt de ERC-controle waar een net\nzijn voeding vandaan krijgt.', gx=142, gy=30),
@@ -252,7 +269,8 @@ TEXTS = [
            'De FET-schakelaar zit in de min-leiding.\n'
            'Q3 = ompoolbeveiliging: accu goed -> gate laag -> Q3 geleidt (laden en ontladen).\n'
            'Accu verkeerd om -> gate hoog -> Q3 blokkeert, er loopt geen stroom.\n'
-           'D5 (rood) brandt alleen als de accu verkeerd om zit (D6 blokkeert normaal).', gx=4, gy=71),
+           'D5 (rood) brandt alleen als de accu verkeerd om zit (D6 blokkeert normaal).\n'
+           'Na plaatsen van de accu: 1x USB aansluiten om de DW01A te activeren.', gx=4, gy=73),
 
     dict(t='5. ESP32-S3-WROOM-1-N8', gx=70, gy=42, size=2.0, bold=True),
     dict(t='Zelf solderen (randpads + GND-pad via de via\'s van onder).\n'
@@ -262,7 +280,8 @@ TEXTS = [
     dict(t='VBAT: 100k/100k -> max 2,1 V op GPIO1 (ADC).\n'
            'VBUS: 100k/100k -> 2,5 V op GPIO2 = USB aanwezig.\n'
            'Klemmen = algemene poorten: 1 = 3V3, 2 = GPIO (4/5), 3 = GND.\n'
-           'DS18B20: rood = 3V3, geel = DQ, zwart = GND (4,7k pull-up).', gx=126, gy=79),
+           'DS18B20: rood = 3V3, geel = DQ, zwart = GND (4,7k pull-up).\n'
+           'R27/R28 (100R) in serie beschermen de GPIO bij lange kabels.', gx=126, gy=80.5),
 
     dict(t='7. BEDIENING & UITBREIDING', gx=4, gy=85, size=2.0, bold=True),
     dict(t='STATUS-knop (GPIO15): scherm verversen / accu tonen.\n'

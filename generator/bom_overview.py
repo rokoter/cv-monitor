@@ -25,6 +25,8 @@ BASIC_PASSIVE = {'C14663', 'C15849', 'C15850', 'C45783', 'C21190', 'C22775', 'C2
 
 lines = OrderedDict()
 for c in COMPONENTS:
+    if c.get('in_bom') is False:
+        continue
     fp = c.get('fp', '').split(':')[-1]
     key = (c.get('lcsc', ''), '' if c.get('lcsc') else c['ref'], fp)
     lines.setdefault(key, []).append(c)
@@ -36,7 +38,8 @@ for (lcsc, _, fp), comps in lines.items():
     if comps[0].get('dnp') or not lcsc:
         if fp.startswith('SolderJumper'):
             continue
-        self_rows.append(f'| {refs} | {val} | {fp} |')
+        mpn = comps[0].get('extra', {}).get('MPN')
+        self_rows.append(f'| {refs} | {val}{" – " + mpn if mpn else ""} | {fp} |')
         continue
     cls, note = JLC.get(lcsc, ('Basic' if lcsc in BASIC_PASSIVE else '?', ''))
     if cls.startswith('Extended'):
