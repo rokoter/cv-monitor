@@ -28,4 +28,9 @@ if detail:
             print('-', msg.strip(), '|', ' / '.join(l.strip() for l in body.splitlines()[:3]))
 m = re.search(r'\*\* Found (\d+) DRC violations', txt)
 u = re.search(r'\*\* Found (\d+) unconnected pads', txt)
-print(f'DRC: {m.group(1) if m else "?"} schendingen, {u.group(1) if u else "?"} niet-verbonden pads')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from pcb_checks import tht_vs_other_side  # noqa: E402
+mech = tht_vs_other_side(board)
+for e in mech:
+    print('MECH-FOUT:', e)
+print(f'DRC: {m.group(1) if m else "?"} schendingen, {u.group(1) if u else "?"} niet-verbonden pads, {len(mech)} mechanische fouten')

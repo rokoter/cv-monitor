@@ -15,7 +15,7 @@ import pcbnew
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from placement import PLACE, HOLES, EDGE_ALIGN, BOARD_W, BOARD_H, CORNER_R  # noqa: E402
+from placement import PLACE, HOLES, EDGE_ALIGN, BOARD_W, BOARD_H, CORNER_R, COPPER_LAYERS  # noqa: E402
 
 NETLIST, OUT = sys.argv[1], sys.argv[2]
 PRJ = os.path.dirname(os.path.abspath(OUT))
@@ -49,7 +49,7 @@ from design import COMPONENTS  # noqa: E402
 meta = {c['ref']: c for c in COMPONENTS}
 
 board = pcbnew.BOARD()
-board.SetCopperLayerCount(2)
+board.SetCopperLayerCount(COPPER_LAYERS)
 
 # ------------------------------------------------------------------ footprints
 fps = {}
@@ -156,21 +156,41 @@ def text(t, x, y, size=1.0, layer=pcbnew.F_SilkS, mirror=False):
     board.Add(tx)
 
 
-text('CV-monitor rev 0.1', 47.0, 36.5, 1.2)
+text('CV-monitor rev 0.2', 55.0, 46.0, 1.2)
+
+# accupolariteit: '+' en '-' naast de padden van de houder (boven- en onderkant)
 bt = fps['BT1']
+POL = {'1': ('+', 0.0, 3.6), '2': ('-', 0.0, -3.6)}       # (teken, dx, dy) t.o.v. de pad
 for pad in bt.Pads():
-    if pad.GetNumber() in ('1', '2'):
+    if pad.GetNumber() in POL:
+        sym, dx, dy = POL[pad.GetNumber()]
         pos = pad.GetPosition()
-        sym = '+' if pad.GetNumber() == '1' else '-'
         for layer, mir in ((pcbnew.B_SilkS, True), (pcbnew.F_SilkS, False)):
             t = pcbnew.PCB_TEXT(board)
             t.SetText(sym)
-            t.SetPosition(pcbnew.VECTOR2I(pos.x, pos.y - mm(3.2)))
+            t.SetPosition(pcbnew.VECTOR2I(pos.x + mm(dx), pos.y + mm(dy)))
             t.SetLayer(layer)
             t.SetTextSize(pcbnew.VECTOR2I(mm(2.0), mm(2.0)))
             t.SetTextThickness(mm(0.3))
             t.SetMirrored(mir)
             board.Add(t)
+# referentie van de houder midden op de houder (onderkant)
+bt.Reference().SetPosition(P(47.0, 58.7))
+bt.Reference().SetTextAngle(pcbnew.EDA_ANGLE(0, pcbnew.DEGREES_T))
+
+# ------------------------------------------------------------------ silkscreen-referenties
+from silk import place_all  # noqa: E402
+tp_labels = {r: comps[r]['value'] for r in comps if r.startswith('TP')}
+failed = place_all(board, OX, OY, BOARD_W, BOARD_H, CORNER_R, label_override=tp_labels, hide=tuple(HOLES),
+                   inner=('U5',))
+if failed:
+    print('referentie naar fab-laag (geen plek op silk):', ', '.join(failed))
+
+# ------------------------------------------------------------------ mechanische controle
+from pcb_checks import tht_vs_other_side  # noqa: E402
+mech = tht_vs_other_side(board)
+for e in mech:
+    print('MECH-FOUT:', e)
 
 board.BuildConnectivity()
 pcbnew.SaveBoard(OUT, board)

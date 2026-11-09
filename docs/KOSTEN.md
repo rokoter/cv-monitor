@@ -4,7 +4,7 @@ Inschatting vóór de PCB-layout. De definitieve prijs volgt uit de JLCPCB-offer
 Gerber/BOM/CPL. Bedragen in USD zoals JLCPCB rekent; euro's afgerond (koers ~0,9, niet geverifieerd).
 
 ## Aannames
-- 2-laags bord, maximaal 100 × 100 mm, 1,6 mm, groen, HASL.
+- 4-laags bord (sinds PCB rev 0.2), 94 × 70 mm, 1,6 mm, groen, HASL. Economic PCBA ondersteunt 4 lagen (alleen groen).
 - 5 PCB's, waarvan **2 geassembleerd** (Economic PCBA, minimum is 2).
 - JLCPCB plaatst 25 unieke SMD-onderdelen (~150 soldeerpunten per bord), waarvan 5–6 extended
   (TP4056 is mogelijk "preferred" en dan gratis). Zie `BOM_JLCPCB.md`.
@@ -13,7 +13,7 @@ Gerber/BOM/CPL. Bedragen in USD zoals JLCPCB rekent; euro's afgerond (koers ~0,9
 ## A. JLCPCB-bestelling (1 zending)
 | Post | Bedrag | Toelichting |
 |---|---|---|
-| PCB, 5 stuks | $2 – 5 | 2-laags ≤ 100 × 100 mm |
+| PCB, 5 stuks | $2 – 15 | 4-laags; JLCPCB adverteert 1–4 lagen vanaf $2, exacte prijs volgt uit de offerte |
 | Setup Economic PCBA | $8,18 | eenmalig per order |
 | Stencil | $1,50 | |
 | Extended feeders | $15 – 18 | 5–6 × $3,07 |
