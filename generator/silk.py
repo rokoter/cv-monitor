@@ -31,27 +31,50 @@ def _hit(a, b):
 
 
 class SilkPlacer:
-    def __init__(self, board, ox, oy, w, h, r):
+    def __init__(self, board, ox, oy, w, h, r, side='F'):
         self.board = board
+        self.side = side
+        self.layer = pcbnew.F_SilkS if side == 'F' else pcbnew.B_SilkS
         self.bx = (mm(ox), mm(oy), mm(ox + w), mm(oy + h))
         self.r = mm(r)
         self.pads, self.silk, self.crt, self.texts = [], [], {}, []
         for fp in board.GetFootprints():
-            back = fp.IsFlipped()
+            same = fp.IsFlipped() == (side == 'B')
             for p in fp.Pads():
-                if not back or p.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):
+                if same or p.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH):
                     self.pads.append(_infl(_box(p.GetBoundingBox()), PAD_CLR))
-            if back:
-                continue
             for it in fp.GraphicalItems():
-                if it.GetLayer() == pcbnew.F_SilkS and it.GetClass() != 'FP_TEXT':
+                if it.GetLayer() == self.layer and it.GetClass() != 'FP_TEXT':
                     self.silk.append(_infl(_box(it.GetBoundingBox()), 0.1))
-            cy = fp.GetCourtyard(pcbnew.F_CrtYd)
+            if not same:
+                continue
+            cy = fp.GetCourtyard(pcbnew.F_CrtYd if side == 'F' else pcbnew.B_CrtYd)
             if cy.OutlineCount():
                 self.crt[fp.GetReference()] = _box(cy.BBox())
         for d in board.GetDrawings():
-            if d.GetLayer() == pcbnew.F_SilkS:
+            if d.GetLayer() == self.layer:
                 self.texts.append(_infl(_box(d.GetBoundingBox()), 0.15))
+
+    def place_dir(self, text, own_ref, pad_box, direction, angle, size=TEXT_H):
+        """Pinlabel: alleen in één richting naast de pad zoeken (consistente rij labels)."""
+        text.SetTextSize(pcbnew.VECTOR2I(mm(size), mm(size)))
+        text.SetTextThickness(mm(TEXT_W))
+        text.SetTextAngle(pcbnew.EDA_ANGLE(angle, pcbnew.DEGREES_T))
+        l, t, r, b = pad_box
+        cx, cy = (l + r) // 2, (t + b) // 2
+        text.SetPosition(pcbnew.VECTOR2I(cx, cy))
+        tb = _box(text.GetBoundingBox())
+        hw, hh = (tb[2] - tb[0]) // 2, (tb[3] - tb[1]) // 2
+        for gap in (0.35, 0.6, 0.9, 1.3):
+            g = mm(gap)
+            x, y = {'left': (l - g - hw, cy), 'right': (r + g + hw, cy),
+                    'up': (cx, t - g - hh), 'down': (cx, b + g + hh)}[direction]
+            text.SetPosition(pcbnew.VECTOR2I(int(x), int(y)))
+            bb = _box(text.GetBoundingBox())
+            if self._ok(bb, own_ref, False):
+                self.texts.append(_infl(bb, 0.1))
+                return True
+        return False
 
     def _inside_board(self, b):
         m = mm(0.3)
@@ -117,13 +140,49 @@ class SilkPlacer:
         return False
 
 
-def place_all(board, ox, oy, w, h, r, label_override=None, hide=(), inner=()):
+def _new_text(board, txt, layer):
+    t = pcbnew.PCB_TEXT(board)
+    t.SetText(txt)
+    t.SetLayer(layer)
+    if layer == pcbnew.B_SilkS:
+        t.SetMirrored(True)
+    board.Add(t)
+    return t
+
+
+def place_pin_labels(board, ox, oy, w, h, r, pin_labels):
+    """pin_labels: {ref: (richting, hoek, {padnummer: tekst})} -> labels op de onderkant (B.SilkS)."""
+    sp = SilkPlacer(board, ox, oy, w, h, r, side='B')
+    fps = {f.GetReference(): f for f in board.GetFootprints()}
+    failed = []
+    for ref, (direction, angle, labels) in pin_labels.items():
+        for pad in fps[ref].Pads():
+            txt = labels.get(pad.GetNumber())
+            if not txt:
+                continue
+            t = _new_text(board, txt, pcbnew.B_SilkS)
+            if not sp.place_dir(t, ref, _box(pad.GetBoundingBox()), direction, angle):
+                board.Remove(t)
+                failed.append(f'{ref}.{pad.GetNumber()}')
+    return failed
+
+
+def place_all(board, ox, oy, w, h, r, label_override=None, hide=(), inner=(), func_labels=None):
     """Plaatst alle referenties. label_override: {ref: tekst} -> extra silk-tekst i.p.v. de referentie
     (bijv. netnaam bij testpunten). hide: referenties die niet geprint worden."""
     label_override = label_override or {}
     sp = SilkPlacer(board, ox, oy, w, h, r)
     failed = []
     fps = sorted(board.GetFootprints(), key=lambda f: -_area(f))   # grote onderdelen eerst
+    # functielabels eerst: die zijn voor de gebruiker het belangrijkst
+    for fp in fps:
+        ref = fp.GetReference()
+        if func_labels and ref in func_labels:
+            own = sp.crt.get(ref) or _box(fp.GetBoundingBox(False, False))
+            t = _new_text(board, func_labels[ref], pcbnew.F_SilkS)
+            if not sp.place(t, ref, own):
+                board.Remove(t)
+                failed.append(ref + ' (functie)')
     for fp in fps:
         fp.Value().SetVisible(False)
         ref = fp.GetReference()

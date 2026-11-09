@@ -10,7 +10,7 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 | Stap | Status |
 |------|--------|
 | 1. Schema (KiCad) | rev 0.7 – gereviewd; POC-BOM voor JLCPCB Economic, zie `docs/BOM_JLCPCB.md` |
-| 2. PCB-layout | plaatsing rev 0.2, 4 lagen – in review (`docs/pcb_preview_boven_rev0.2.png`, `docs/pcb_plaatsing_rev0.2.png`) |
+| 2. PCB-layout | plaatsing rev 0.2, 4 lagen – in review (`docs/pcb_preview_boven_rev0.2.png`, `docs/pcb_preview_onder_rev0.2.png`, `docs/pcb_plaatsing_rev0.2.png`) |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | – |
 | 4. Firmware (ESPHome) | – |
 | 5. Behuizing (FreeCAD) | – |

@@ -73,5 +73,25 @@ PLACE = {
 }
 
 # Onderdelen die met de 'opening' tegen een bordrand moeten: (rand, overstek in mm)
-EDGE_ALIGN = {'J1': ('left', 0.0), 'J2': ('right', 0.0), 'J3': ('right', 0.0),
+EDGE_ALIGN = {'J1': ('left', 0.0), 'J2': ('right', -0.6), 'J3': ('right', -0.6),
               'J5': ('bottom', 0.0), 'J6': ('bottom', 0.0)}
+
+# Functielabels op de bovenkant (silkscreen), naast het onderdeel
+FUNC_LABELS = {
+    'SW1': 'RESET', 'SW2': 'BOOT', 'SW3': 'STATUS',
+    'D2': 'LADEN', 'D3': 'VOL', 'D4': 'LED', 'D5': 'ACCU OMGEKEERD',
+    'J1': 'USB 5V', 'J2': 'AANVOER', 'J3': 'RETOUR', 'J4': 'UITBREIDING',
+    'J5': 'QWIIC', 'J6': 'QWIIC', 'J7': 'OLED', 'J8': 'E-INK', 'J9': 'NTC',
+}
+
+# Pinbenamingen op de onderkant: (richting t.o.v. de pad, teksthoek, {pad: tekst})
+PIN_LABELS = {
+    'J4': ('right', 0, {'1': 'VSYS', '2': '3V3', '3': 'GND', '4': 'IO6', '5': 'IO7', '6': 'IO17',
+                        '7': 'IO18', '8': 'TX', '9': 'RX', '10': 'GND'}),
+    'J7': ('left', 0, {'1': 'GND', '2': '3V3', '3': 'SCL', '4': 'SDA'}),
+    'J8': ('down', 90, {'1': '3V3', '2': 'GND', '3': 'DIN', '4': 'CLK', '5': 'CS', '6': 'DC',
+                        '7': 'RST', '8': 'BUSY'}),
+    'J2': ('left', 0, {'1': '3V3', '2': 'DQ', '3': 'GND'}),
+    'J3': ('right', 0, {'1': '3V3', '2': 'DQ', '3': 'GND'}),   # links zit de accuhouder
+    'J9': ('down', 0, {'1': 'NTC'}),
+}
