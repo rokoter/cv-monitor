@@ -1,0 +1,13 @@
+# KiCad
+*-backups/
+*.kicad_prl
+fp-info-cache
+*.bak
+_autosave-*
+~*.lck
+*.lck
+# Productie-uitvoer (wordt per release als zip/tag vastgelegd)
+hardware/**/production/tmp/
+# Python
+__pycache__/
+generator/expected_nets.json
