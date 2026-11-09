@@ -9,7 +9,7 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 ## Status
 | Stap | Status |
 |------|--------|
-| 1. Schema (KiCad) | rev 0.4 – in review |
+| 1. Schema (KiCad) | rev 0.5 – in review (BOM geoptimaliseerd voor JLCPCB, zie `docs/BOM_JLCPCB.md`) |
 | 2. PCB-layout | – |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | – |
 | 4. Firmware (ESPHome) | – |
@@ -30,6 +30,12 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 ```
 Genereert het schema uit `generator/design.py`, laat KiCad de netlist exporteren en vergelijkt die
 pin voor pin met de bedoeling (kortsluitingen, losse pinnen, voeding). Daarnaast: ERC in KiCad zelf.
+
+## KiCad-versie
+De bestanden worden gemaakt met **KiCad 7.0** (het formaat dat de generator schrijft). Openen, bekijken
+en ERC draaien kan prima in KiCad 8, 9 of 10. **Sla ze in een nieuwere versie niet op over de repo-bestanden**:
+KiCad zet ze dan om naar het nieuwe formaat, dat KiCad 7 niet meer kan lezen. Wil je iets aanpassen,
+geef het door (of sla op als kopie); de wijziging komt dan via `design.py` in het ontwerp.
 
 ## Werkwijze
 - Elke ontwerpwijziging is een eigen commit; goedgekeurde stappen krijgen een tag (bijv. `schema-v1.0`).

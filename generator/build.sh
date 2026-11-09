@@ -14,4 +14,5 @@ kicad-cli sch export netlist -o /tmp/cv_monitor.net "$PRJ/cv_monitor.kicad_sch" 
 python3 -I generator/check_netlist.py /tmp/cv_monitor.net generator/expected_nets.json
 
 kicad-cli sch export pdf -o docs/cv_monitor_schema.pdf "$PRJ/cv_monitor.kicad_sch" >/dev/null
+python3 -I generator/bom_overview.py
 echo "klaar: schema, PDF en controle bijgewerkt"

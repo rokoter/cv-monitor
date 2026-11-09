@@ -12,7 +12,7 @@ LED0603 = 'LED_SMD:LED_0603_1608Metric'
 # LCSC-nummers basis-onderdelen JLCPCB (worden in de BOM-stap nogmaals gecontroleerd)
 LC = {
     '5.1k': 'C23186', '2k': 'C22975', '1k': 'C21190', '100': 'C22775', '10k': 'C25804',
-    '100k': 'C25803', '68k': 'C23231', '4.7k': 'C23162', '47k': 'C25819',
+    '100k': 'C25803', '4.7k': 'C23162', '47k': 'C25819',
     '10u': 'C15850', '22u': 'C45783', '100n': 'C14663', '1u': 'C15849',
 }
 
@@ -75,8 +75,8 @@ COMPONENTS = [
     dict(ref='JP1', lib='Jumper:SolderJumper_2_Bridged', value='zonder NTC: dicht', gx=77, gy=13.5, rot=270,
          fp='Jumper:SolderJumper-2_P1.3mm_Bridged_RoundedPad1.0x1.5mm', ref_at=(80.5, 12.8), val_at=(86, 14.8),
          nets={'1': 'NTC_JP', '2': 'GND'}),
-    dict(ref='J9', lib='Connector_Generic:Conn_01x02', value='NTC 10k (accu)', gx=88, gy=19, pwr_rotate=True,
-         fp='Connector_JST:JST_PH_S2B-PH-K_1x02_P2.00mm_Horizontal', ref_at=(87, 17), val_at=(85, 22.5),
+    dict(ref='J9', lib='Connector_Generic:Conn_01x02', value='NTC 10k (accu)', gx=88, gy=19, pwr_rotate=True, dnp=True,
+         fp='Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical', ref_at=(87, 17), val_at=(85, 22.5),
          nets={'1': 'TEMP', '2': 'GND'}),
     LED('D2', 'rood: laden', 'C2286', 73, 22, 'LEDR', 'CHRG'),
     R('R4', '1k', 78, 22, 'LEDR', 'VBUS', rot=90, ref_at=(77, 20.5), val_at=(77, 23.5)),
@@ -99,7 +99,7 @@ COMPONENTS = [
 
     # ------------------------------------------------------------ 4. Accu + beveiliging
     dict(ref='BT1', lib='Device:Battery_Cell', value='18650', gx=7, gy=55,
-         fp='Battery:BatteryHolder_Keystone_1042_1x18650', ref_at=(8.5, 54), val_at=(8.5, 55.5),
+         fp='Battery:BatteryHolder_MPD_BH-18650-PC2', dnp=True, ref_at=(8.5, 54), val_at=(8.5, 55.5),
          nets={'1': 'CELL+', '2': 'B-'}),
     dict(ref='Q3', lib='Transistor_FET:AO3401A', value='AO3401A', gx=14, gy=50,
          fp='Package_TO_SOT_SMD:SOT-23', lcsc='C15127', ref_at=(16, 49.5), val_at=(16, 51),
@@ -116,7 +116,7 @@ COMPONENTS = [
     dict(ref='U3', lib='cv_monitor:DW01A', value='DW01A', gx=40, gy=52, lcsc='C351410',
          fp='Package_TO_SOT_SMD:SOT-23-6', ref_at=(34, 48.5), val_at=(41, 48.5),
          nets={'5': 'DW_VCC', '2': 'DW_CS', '1': 'DW_OD', '3': 'DW_OC', '4': 'NC', '6': 'B-'}),
-    dict(ref='Q2', lib='cv_monitor:FS8205A', value='FS8205A', gx=58, gy=52, lcsc='C32254',
+    dict(ref='Q2', lib='cv_monitor:FS8205A', value='8205A (HXY)', gx=58, gy=52, lcsc='C5148694',
          fp='Package_SO:TSSOP-8_4.4x3mm_P0.65mm', ref_at=(52, 48.5), val_at=(59, 48.5),
          nets={'4': 'DW_OD', '2': 'B-', '3': 'B-', '5': 'DW_OC', '6': 'GND', '7': 'GND',
                '1': 'NC', '8': 'NC'}),
@@ -140,14 +140,14 @@ COMPONENTS = [
     R('R14', '100k', 132, 48, 'BAT+', 'VBAT_SENSE'),
     R('R15', '100k', 132, 54, 'VBAT_SENSE', 'GND'),
     C('C11', '100n', 140, 54, 'VBAT_SENSE', 'GND'),
-    R('R16', '68k', 150, 48, 'VBUS', 'VBUS_SENSE'),
+    R('R16', '100k', 150, 48, 'VBUS', 'VBUS_SENSE'),
     R('R17', '100k', 150, 54, 'VBUS_SENSE', 'GND'),
     R('R18', '4.7k', 134, 64, '+3V3', 'DQ_AANVOER'),
     R('R19', '4.7k', 134, 72, '+3V3', 'DQ_RETOUR'),
-    dict(ref='J2', lib='Connector:Screw_Terminal_01x03', value='SENSOR1 (aanvoer)', gx=150, gy=64,
+    dict(ref='J2', lib='Connector:Screw_Terminal_01x03', value='SENSOR1 (aanvoer)', gx=150, gy=64, dnp=True,
          fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal',
          ref_at=(152, 63), val_at=(152, 65), nets={'1': '+3V3', '2': 'DQ_AANVOER', '3': 'GND'}),
-    dict(ref='J3', lib='Connector:Screw_Terminal_01x03', value='SENSOR2 (retour)', gx=150, gy=72,
+    dict(ref='J3', lib='Connector:Screw_Terminal_01x03', value='SENSOR2 (retour)', gx=150, gy=72, dnp=True,
          fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal',
          ref_at=(152, 71), val_at=(152, 73), nets={'1': '+3V3', '2': 'DQ_RETOUR', '3': 'GND'}),
     C('C12', '100n', 159, 49, '+3V3', 'GND'),
@@ -178,10 +178,10 @@ COMPONENTS = [
     # ------------------------------------------------------------ 8. Qwiic / STEMMA QT (I2C)
     R('R20', '4.7k', 80, 92, '+3V3', 'I2C_SDA'),
     R('R21', '4.7k', 85, 92, '+3V3', 'I2C_SCL'),
-    dict(ref='J5', lib='Connector_Generic:Conn_01x04', value='QWIIC 1', gx=100, gy=93, lcsc='C160390',
+    dict(ref='J5', lib='Connector_Generic:Conn_01x04', value='QWIIC 1', gx=100, gy=93, lcsc='C160404',
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal',
          ref_at=(99, 90), val_at=(99, 97.5), nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SDA', '4': 'I2C_SCL'}),
-    dict(ref='J6', lib='Connector_Generic:Conn_01x04', value='QWIIC 2', gx=112, gy=93, lcsc='C160390',
+    dict(ref='J6', lib='Connector_Generic:Conn_01x04', value='QWIIC 2', gx=112, gy=93, lcsc='C160404',
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal',
          ref_at=(111, 90), val_at=(111, 97.5), nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SDA', '4': 'I2C_SCL'}),
 
@@ -263,7 +263,7 @@ TEXTS = [
 
     dict(t='6. METINGEN + SENSOREN', gx=126, gy=42, size=2.0, bold=True),
     dict(t='VBAT: 100k/100k -> max 2,1 V op GPIO1 (ADC).\n'
-           'VBUS: 68k/100k -> 3,0 V op GPIO2 = USB aanwezig.\n'
+           'VBUS: 100k/100k -> 2,5 V op GPIO2 = USB aanwezig.\n'
            'Klemmen = algemene poorten: 1 = 3V3, 2 = GPIO (4/5), 3 = GND.\n'
            'DS18B20: rood = 3V3, geel = DQ, zwart = GND (4,7k pull-up).', gx=126, gy=79),
 
