@@ -10,7 +10,7 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-09; bij b
 | F1 | 1,1A PTC | Fuse_1206_3216Metric | C523825 | Extended | 1 | geen basic PTC beschikbaar |
 | R1, R2 | 5.1k | R_0603_1608Metric | C23186 | Basic | 2 |  |
 | C1, C10 | 1uF | C_0603_1608Metric | C15849 | Basic | 2 |  |
-| U2 | TP4056 | SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias | C16581 | Extended* | 1 | *mogelijk "preferred" (geen toeslag) |
+| U2 | TP4056 | SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias_0.3mm | C16581 | Extended* | 1 | *mogelijk "preferred" (geen toeslag) |
 | C2, C3, C5, C6 | 10uF | C_0805_2012Metric | C15850 | Basic | 4 |  |
 | R3 | 2k | R_0603_1608Metric | C22975 | Basic | 1 |  |
 | R18, R19, R20, R21, R23 | 4.7k | R_0603_1608Metric | C23162 | Basic | 5 |  |
@@ -41,7 +41,7 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-09; bij b
 | U1 | USBLC6-2SC6 | SOT-23-6 |
 | J9 | NTC 10k (accu) | JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical |
 | BT1 | 18650 – houder MPD BK-18650-PC2 | BatteryHolder_MPD_BH-18650-PC2 |
-| U5 | ESP32-S3-WROOM-1-N8 (zelf solderen) | ESP32-S3-WROOM-1 |
+| U5 | ESP32-S3-WROOM-1-N8 (zelf solderen) | ESP32-S3-WROOM-1_HandSolder |
 | J2 | SENSOR1 (aanvoer) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
 | J3 | SENSOR2 (retour) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
 | J4 | UITBREIDING (DNP) | PinHeader_1x10_P2.54mm_Vertical |

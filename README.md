@@ -10,7 +10,7 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 | Stap | Status |
 |------|--------|
 | 1. Schema (KiCad) | rev 0.7 – gereviewd; POC-BOM voor JLCPCB Economic, zie `docs/BOM_JLCPCB.md` |
-| 2. PCB-layout | – |
+| 2. PCB-layout | plaatsing rev 0.1 – in review (`docs/pcb_plaatsing_rev0.1.png`) |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | – |
 | 4. Firmware (ESPHome) | – |
 | 5. Behuizing (FreeCAD) | – |
@@ -23,6 +23,14 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 | `docs/` | Schema-PDF en uitleg (draw.io) |
 | `firmware/` | ESPHome-configuratie (volgt) |
 | `enclosure/` | FreeCAD-behuizing (volgt) |
+
+## PCB opnieuw genereren (overschrijft routing!)
+```bash
+kicad-cli sch export netlist -o /tmp/cv_monitor.net hardware/cv_monitor/cv_monitor.kicad_sch
+/usr/bin/python3 generator/make_pcb.py /tmp/cv_monitor.net hardware/cv_monitor/cv_monitor.kicad_pcb
+/usr/bin/python3 generator/drc.py hardware/cv_monitor/cv_monitor.kicad_pcb
+```
+Plaatsing staat in `generator/placement.py`. Na het routen wordt de PCB niet meer opnieuw gegenereerd.
 
 ## Opnieuw bouwen en controleren
 ```bash

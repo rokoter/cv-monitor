@@ -64,7 +64,7 @@ COMPONENTS = [
     # ------------------------------------------------------------ 2. Lader
     dict(ref='U2', lib='cv_monitor:TP4056', value='TP4056', gx=62, gy=22, lcsc='C16581',
          label_wired={'4': True}, ref_at=(58, 18.5), val_at=(62, 18.5),
-         fp='Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias',
+         fp='cv_monitor:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias_0.3mm',
          nets={'4': 'VBUS', '8': 'VBUS', '2': 'PROG', '1': 'TEMP', '5': 'BAT+', '7': 'CHRG',
                '6': 'STDBY', '3': 'GND', '9': 'GND'}),
     C('C2', '10u', 48, 22, 'VBUS', 'GND', '0805'),
@@ -123,7 +123,7 @@ COMPONENTS = [
 
     # ------------------------------------------------------------ 5. ESP32-S3
     dict(ref='U5', lib='RF_Module:ESP32-S3-WROOM-1', value='ESP32-S3-WROOM-1-N8 (zelf solderen)', gx=96, gy=62,
-         fp='RF_Module:ESP32-S3-WROOM-1', lcsc='C2913198', dnp=True, ref_at=(89, 49.5), val_at=(98, 74.5),
+         fp='cv_monitor:ESP32-S3-WROOM-1_HandSolder', lcsc='C2913198', dnp=True, ref_at=(89, 49.5), val_at=(98, 74.5),
          nets={'2': '+3V3', '1': 'GND', '40': 'GND', '41': 'GND', '3': 'EN', '27': 'BOOT',
                '39': 'VBAT_SENSE', '38': 'VBUS_SENSE', '15': 'NC', '4': 'DQ_AANVOER', '5': 'DQ_RETOUR',
                '6': 'EXP_GPIO6', '7': 'EXP_GPIO7', '12': 'I2C_SDA', '17': 'I2C_SCL',
@@ -207,6 +207,16 @@ COMPONENTS = [
          fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(155.8, 38), val_at=(155.8, 39), nets={'1': '+3V3'}),
     dict(ref='TP5', lib='Connector:TestPoint', value='GND', gx=159, gy=36, in_bom=False,
          fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(160, 37.5), val_at=(160, 38.5), nets={'1': 'GND'}),
+
+    # ------------------------------------------------------------ Bevestigingsgaten M3 (behuizing)
+    dict(ref='H1', lib='Mechanical:MountingHole', value='M3', gx=9, gy=110, in_bom=False,
+         fp='MountingHole:MountingHole_3.2mm_M3', ref_at=(10.5, 109.5), val_at=(10.5, 111), nets={}),
+    dict(ref='H2', lib='Mechanical:MountingHole', value='M3', gx=14, gy=110, in_bom=False,
+         fp='MountingHole:MountingHole_3.2mm_M3', ref_at=(15.5, 109.5), val_at=(15.5, 111), nets={}),
+    dict(ref='H3', lib='Mechanical:MountingHole', value='M3', gx=19, gy=110, in_bom=False,
+         fp='MountingHole:MountingHole_3.2mm_M3', ref_at=(20.5, 109.5), val_at=(20.5, 111), nets={}),
+    dict(ref='H4', lib='Mechanical:MountingHole', value='M3', gx=24, gy=110, in_bom=False,
+         fp='MountingHole:MountingHole_3.2mm_M3', ref_at=(25.5, 109.5), val_at=(25.5, 111), nets={}),
 ]
 
 # Directe draden tussen pinnen (optioneel 3e element = label midden op de draad)
