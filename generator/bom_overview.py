@@ -15,7 +15,6 @@ CHECKED = '2026-11-09'
 # lcsc -> (klasse, opmerking)
 JLC = {
     'C15127': ('Basic', ''), 'C8678': ('Basic', ''), 'C318884': ('Basic', ''),
-    'C2913206': ('Extended', 'ESP32-S3-MINI: Standard PCBA + X-ray'),
     'C165948': ('Extended', ''), 'C7519': ('Extended', 'ESD, optioneel'),
     'C351410': ('Extended', ''), 'C5148694': ('Extended', 'vervangt uitverkochte C32254'),
     'C51118': ('Extended', ''), 'C523825': ('Extended', 'geen basic PTC beschikbaar'),

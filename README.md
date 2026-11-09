@@ -9,7 +9,7 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 ## Status
 | Stap | Status |
 |------|--------|
-| 1. Schema (KiCad) | rev 0.5 – in review (BOM geoptimaliseerd voor JLCPCB, zie `docs/BOM_JLCPCB.md`) |
+| 1. Schema (KiCad) | rev 0.6 – in review; POC-BOM voor JLCPCB Economic, zie `docs/BOM_JLCPCB.md` |
 | 2. PCB-layout | – |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | – |
 | 4. Firmware (ESPHome) | – |

@@ -58,7 +58,7 @@ COMPONENTS = [
     R('R2', '5.1k', 32, 18, 'CC2', 'GND'),
     C('C1', '10u', 36, 19, 'VBUS', 'GND', '0805'),
     dict(ref='U1', lib='Power_Protection:USBLC6-2SC6', value='USBLC6-2SC6', gx=30, gy=28,
-         fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C7519', ref_at=(32, 25), val_at=(32, 31.5),
+         fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C7519', dnp=True, ref_at=(32, 25), val_at=(32, 31.5),
          nets={'1': 'USB_D+', '6': 'USB_D+', '3': 'USB_D-', '4': 'USB_D-', '5': 'VBUS', '2': 'GND'}),
 
     # ------------------------------------------------------------ 2. Lader
@@ -122,17 +122,15 @@ COMPONENTS = [
                '1': 'NC', '8': 'NC'}),
 
     # ------------------------------------------------------------ 5. ESP32-S3
-    dict(ref='U5', lib='cv_monitor:ESP32-S3-MINI-1', value='ESP32-S3-MINI-1-N8', gx=96, gy=62,
-         fp='cv_monitor:ESP32-S3-MINI-1', lcsc='C2913206', ref_at=(87, 47.5), val_at=(97, 76.5),
-         nets={'3': '+3V3', '1': 'GND', '45': 'EN', '4': 'BOOT', '5': 'VBAT_SENSE', '6': 'VBUS_SENSE',
-               '7': 'NC', '8': 'DQ_AANVOER', '9': 'DQ_RETOUR', '10': 'EXP_GPIO6', '11': 'EXP_GPIO7',
-               '12': 'I2C_SDA', '13': 'I2C_SCL', '14': 'EPD_CS', '15': 'EPD_DIN', '16': 'EPD_CLK',
-               '17': 'EPD_DC', '18': 'EPD_RST',
-               '19': 'KNOP', '20': 'LED_STATUS', '21': 'EXP_GPIO17', '22': 'EXP_GPIO18',
-               '23': 'USB_D-', '24': 'USB_D+', '25': 'EPD_BUSY', '39': 'UART_TX', '40': 'UART_RX',
-               **{n: 'NC' for n in ['26', '28', '29', '31', '32', '33', '34', '35', '36', '37', '38',
-                                    '41', '44', '27', '30']},
-               **{n: 'GND' for n in ['2', '42', '43'] + [str(k) for k in range(46, 66)]}}),
+    dict(ref='U5', lib='RF_Module:ESP32-S3-WROOM-1', value='ESP32-S3-WROOM-1-N8 (zelf solderen)', gx=96, gy=62,
+         fp='RF_Module:ESP32-S3-WROOM-1', lcsc='C2913198', dnp=True, ref_at=(89, 49.5), val_at=(98, 74.5),
+         nets={'2': '+3V3', '1': 'GND', '40': 'GND', '41': 'GND', '3': 'EN', '27': 'BOOT',
+               '39': 'VBAT_SENSE', '38': 'VBUS_SENSE', '15': 'NC', '4': 'DQ_AANVOER', '5': 'DQ_RETOUR',
+               '6': 'EXP_GPIO6', '7': 'EXP_GPIO7', '12': 'I2C_SDA', '17': 'I2C_SCL',
+               '18': 'EPD_CS', '19': 'EPD_DIN', '20': 'EPD_CLK', '21': 'EPD_DC', '22': 'EPD_RST',
+               '8': 'KNOP', '9': 'LED_STATUS', '10': 'EXP_GPIO17', '11': 'EXP_GPIO18',
+               '13': 'USB_D-', '14': 'USB_D+', '23': 'EPD_BUSY', '37': 'UART_TX', '36': 'UART_RX',
+               **{n: 'NC' for n in ['16', '24', '25', '26', '28', '29', '30', '31', '32', '33', '34', '35']}}),
     C('C8', '22u', 116, 44, '+3V3', 'GND', '0805'),
     C('C9', '100n', 120, 44, '+3V3', 'GND'),
 
@@ -178,10 +176,10 @@ COMPONENTS = [
     # ------------------------------------------------------------ 8. Qwiic / STEMMA QT (I2C)
     R('R20', '4.7k', 80, 92, '+3V3', 'I2C_SDA'),
     R('R21', '4.7k', 85, 92, '+3V3', 'I2C_SCL'),
-    dict(ref='J5', lib='Connector_Generic:Conn_01x04', value='QWIIC 1', gx=100, gy=93, lcsc='C160404',
+    dict(ref='J5', lib='Connector_Generic:Conn_01x04', value='QWIIC 1', gx=100, gy=93, lcsc='C160404', dnp=True,
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal',
          ref_at=(99, 90), val_at=(99, 97.5), nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SDA', '4': 'I2C_SCL'}),
-    dict(ref='J6', lib='Connector_Generic:Conn_01x04', value='QWIIC 2', gx=112, gy=93, lcsc='C160404',
+    dict(ref='J6', lib='Connector_Generic:Conn_01x04', value='QWIIC 2', gx=112, gy=93, lcsc='C160404', dnp=True,
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal',
          ref_at=(111, 90), val_at=(111, 97.5), nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SDA', '4': 'I2C_SCL'}),
 
@@ -228,7 +226,7 @@ TEXTS = [
     dict(t='1. USB-C INGANG', gx=4, gy=6, size=2.0, bold=True),
     dict(t='F1: herstelbare zekering (1,1 A) beschermt tegen kortsluiting op het bord.\n'
            'CC1/CC2 met 5,1k naar GND: de adapter ziet een "sink" en levert 5 V.\n'
-           'USBLC6: ESD-bescherming op D+/D-. De ESP32-C3 heeft native USB:\n'
+           'U1 USBLC6 (ESD): footprint aanwezig, in de POC niet bestukt. ESP32-S3 heeft native USB:\n'
            'flashen en loggen via dezelfde USB-C, geen USB-serieel chip nodig.', gx=4, gy=38),
 
     dict(t='2. LADER (TP4056)', gx=44, gy=6, size=2.0, bold=True),
@@ -256,10 +254,9 @@ TEXTS = [
            'Accu verkeerd om -> gate hoog -> Q3 blokkeert, er loopt geen stroom.\n'
            'D5 (rood) brandt alleen als de accu verkeerd om zit (D6 blokkeert normaal).', gx=4, gy=71),
 
-    dict(t='5. ESP32-S3-MINI-1-N8', gx=70, gy=42, size=2.0, bold=True),
-    dict(t='Alle GPIO-pinnen zichtbaar; ongebruikte met X.\n'
-           'GPIO3/45/46 = strapping: bewust vrij gelaten.\n'
-           'Antenne straks aan de PCB-rand!', gx=70, gy=80),
+    dict(t='5. ESP32-S3-WROOM-1-N8', gx=70, gy=42, size=2.0, bold=True),
+    dict(t='Zelf solderen (randpads + GND-pad via de via\'s van onder).\n'
+           'GPIO3/45/46 = strapping: bewust vrij. Antenne aan de PCB-rand!', gx=70, gy=80),
 
     dict(t='6. METINGEN + SENSOREN', gx=126, gy=42, size=2.0, bold=True),
     dict(t='VBAT: 100k/100k -> max 2,1 V op GPIO1 (ADC).\n'

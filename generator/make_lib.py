@@ -150,6 +150,6 @@ def fs8205a():
 
 if __name__ == '__main__':
     out = '(kicad_symbol_lib (version 20220914) (generator cv_monitor_gen)\n'
-    out += esp32s3() + tp4056() + dw01a() + fs8205a() + ')\n'
+    out += tp4056() + dw01a() + fs8205a() + ')\n'
     open(sys.argv[1], 'w').write(out)
     print('ok', sys.argv[1])

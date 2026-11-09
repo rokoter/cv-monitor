@@ -10,7 +10,6 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-09; bij b
 | F1 | 1,1A PTC | Fuse_1206_3216Metric | C523825 | Extended | 1 | geen basic PTC beschikbaar |
 | R1, R2 | 5.1k | R_0603_1608Metric | C23186 | Basic | 2 |  |
 | C1, C2, C3, C5, C6 | 10uF | C_0805_2012Metric | C15850 | Basic | 5 |  |
-| U1 | USBLC6-2SC6 | SOT-23-6 | C7519 | Extended | 1 | ESD, optioneel |
 | U2 | TP4056 | SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias | C16581 | Extended* | 1 | *mogelijk "preferred" (geen toeslag) |
 | R3 | 2k | R_0603_1608Metric | C22975 | Basic | 1 |  |
 | R18, R19, R20, R21, R23 | 4.7k | R_0603_1608Metric | C23162 | Basic | 5 |  |
@@ -27,24 +26,25 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-09; bij b
 | D6 | 1N4148W | D_SOD-123 | C81598 | Basic | 1 |  |
 | U3 | DW01A | SOT-23-6 | C351410 | Extended | 1 |  |
 | Q2 | 8205A (HXY) | TSSOP-8_4.4x3mm_P0.65mm | C5148694 | Extended | 1 | vervangt uitverkochte C32254 |
-| U5 | ESP32-S3-MINI-1-N8 | ESP32-S3-MINI-1 | C2913206 | Extended | 1 | ESP32-S3-MINI: Standard PCBA + X-ray |
 | C8 | 22uF | C_0805_2012Metric | C45783 | Basic | 1 |  |
 | R14, R15, R16, R17 | 100k | R_0603_1608Metric | C25803 | Basic | 4 |  |
 | C10 | 1uF | C_0603_1608Metric | C15849 | Basic | 1 |  |
 | SW1, SW2, SW3 | RESET / BOOT / STATUS | SW_Push_1P1T_XKB_TS-1187A | C318884 | Basic | 3 |  |
 | D4 | blauw: status | LED_0603_1608Metric | C72041 | Basic | 1 |  |
-| J5, J6 | QWIIC 1 / QWIIC 2 | JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal | C160404 | Extended | 2 | liggende JST-SH (Qwiic) |
 
-**28 unieke onderdelen, waarvan 9 extended** (extended = eenmalige opstartkosten per uniek onderdeel per order).
+**25 unieke onderdelen, waarvan 6 extended** (extended = eenmalige opstartkosten per uniek onderdeel per order).
 
 ## Zelf solderen (THT, niet in de JLCPCB-BOM)
 
 | Referenties | Waarde | Footprint |
 |---|---|---|
+| U1 | USBLC6-2SC6 | SOT-23-6 |
 | J9 | NTC 10k (accu) | JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical |
 | BT1 | 18650 | BatteryHolder_MPD_BH-18650-PC2 |
+| U5 | ESP32-S3-WROOM-1-N8 (zelf solderen) | ESP32-S3-WROOM-1 |
 | J2 | SENSOR1 (aanvoer) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
 | J3 | SENSOR2 (retour) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
 | J4 | UITBREIDING (DNP) | PinHeader_1x10_P2.54mm_Vertical |
+| J5, J6 | QWIIC 1 / QWIIC 2 | JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal |
 | J8 | E-INK (DNP) | PinHeader_1x08_P2.54mm_Vertical |
 | J7 | OLED I2C (DNP) | PinHeader_1x04_P2.54mm_Vertical |
