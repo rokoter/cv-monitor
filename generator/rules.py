@@ -13,9 +13,11 @@ CLASSES = [
     ('PowerIn', 0.2,  0.5, 0.8, 0.4),   # USB-C VBUS-pinnen (0,5 mm steek): smaller
     ('Batt',    0.2,  0.4, 0.8, 0.4),   # B- (via de 8205A in TSSOP-8: 0,4 mm past op de pads)
     ('Supply',  0.2,  0.4, 0.6, 0.3),   # GND en 3V3 (vooral via de binnenvlakken)
+    ('USB',     0.15, 0.25, 0.6, 0.3),  # USB D+/D-: differentieel paar 0,25/0,15 mm (~90 ohm, schatting)
 ]
 PATTERNS = ([('Power', n) for n in ('VBUS', 'VSYS', 'BAT+', 'CELL+')] + [('PowerIn', 'VBUS_IN')] +
-            [('Batt', 'B-')] + [('Supply', n) for n in ('GND', '+3V3')])
+            [('Batt', 'B-')] + [('Supply', n) for n in ('GND', '+3V3')] +
+            [('USB', n) for n in ('USB_D+', 'USB_D-')])
 RULES = dict(min_copper_edge_clearance=0.3, min_track_width=0.15, min_clearance=0.15, min_via_diameter=0.5,
              min_through_hole_diameter=0.3, min_hole_clearance=0.25)
 
@@ -27,6 +29,8 @@ def apply(pro):
     for name, clr, tw, vd, vdr in CLASSES:
         c = dict(base)
         c.update(name=name, clearance=clr, track_width=tw, via_diameter=vd, via_drill=vdr)
+        if name == 'USB':
+            c.update(diff_pair_width=0.25, diff_pair_gap=0.15, diff_pair_via_gap=0.25)
         classes.append(c)
     d['net_settings']['classes'] = classes
     d['net_settings']['netclass_patterns'] = [{'netclass': c, 'pattern': n} for c, n in PATTERNS]

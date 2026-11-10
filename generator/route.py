@@ -244,6 +244,40 @@ def do_import(path, ses):
         sys.exit('bord is al gerouteerd: eerst make_pcb.py + route.py prep opnieuw draaien')
     nt, nv = import_ses(board, ses)
     print(f'SES ingelezen: {nt} spoorsegmenten, {nv} via\'s')
+    # opruimen: piepkleine stukjes spoor en via's die maar op één laag verbonden zijn
+    removed = 0
+    for t in list(board.GetTracks()):
+        if t.GetClass() == 'PCB_TRACK' and not t.IsLocked() and (t.GetStart() - t.GetEnd()).EuclideanNorm() < mm(0.005):
+            board.Remove(t)
+            removed += 1
+    def on_seg(p, a, b2):
+        d = b2 - a
+        L2 = d.x * d.x + d.y * d.y
+        if L2 == 0:
+            return (p - a).EuclideanNorm() < 1000
+        t = max(0.0, min(1.0, ((p.x - a.x) * d.x + (p.y - a.y) * d.y) / L2))
+        q = pcbnew.VECTOR2I(int(a.x + t * d.x), int(a.y + t * d.y))
+        return (p - q).EuclideanNorm() < 1000                        # < 1 µm
+    fixed = [t for t in board.GetTracks() if t.GetClass() == 'PCB_TRACK' and t.IsLocked()]
+    for t in [t for t in board.GetTracks() if t.GetClass() == 'PCB_TRACK' and not t.IsLocked()]:
+        if any(f.GetNetCode() == t.GetNetCode() and f.GetLayer() == t.GetLayer() and
+               on_seg(t.GetStart(), f.GetStart(), f.GetEnd()) and on_seg(t.GetEnd(), f.GetStart(), f.GetEnd())
+               for f in fixed):
+            board.Remove(t)                                          # ligt volledig op een vast spoor
+            removed += 1
+    planes = {'GND', '+3V3'}
+    for v in [t for t in board.GetTracks() if t.GetClass() == 'PCB_VIA' and not t.IsLocked()]:
+        if v.GetNetname() in planes:
+            continue
+        pos, r = v.GetPosition(), v.GetWidth() // 2
+        layers = {t.GetLayer() for t in board.GetTracks() if t.GetClass() == 'PCB_TRACK' and t.GetNetCode() == v.GetNetCode()
+                  and min((t.GetStart() - pos).EuclideanNorm(), (t.GetEnd() - pos).EuclideanNorm()) < r}
+        on_pad = any(p.GetNetCode() == v.GetNetCode() and p.HitTest(pos) for fp in board.GetFootprints() for p in fp.Pads())
+        if len(layers) <= 1 and not on_pad:
+            board.Remove(v)
+            removed += 1
+    if removed:
+        print(f'opgeruimd: {removed} overbodige spoorstukjes/via\'s')
     # koper zonder net in footprints (brug van soldeerjumper JP1): geen vulling eromheen laten lopen
     for fp in board.GetFootprints():
         for it in fp.GraphicalItems():

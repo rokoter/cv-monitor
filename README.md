@@ -38,7 +38,10 @@ xvfb-run -a java -jar freerouting.jar -de $P.dsn -dr generator/freerouting.rules
 - Plaatsing: `generator/placement.py`; ontwerpregels en netklassen: `generator/rules.py`.
 - Lagen: F.Cu signaal + GND-vulling | In1 GND-vlak | In2 3V3-vlak | B.Cu signaal + GND-vulling.
 - Netklassen: standaard 0,2 mm (0,15 mm vrij), 5V/VSYS/accu 0,8 mm, USB-ingang 0,5 mm, B− 0,4 mm,
-  GND/3V3 0,4 mm; via's 0,6/0,3 mm (vermogen 0,8/0,4 mm).
+  GND/3V3 0,4 mm, USB D+/D− als differentieel paar 0,25/0,15 mm (~90 Ω, schatting); via's 0,6/0,3 mm
+  (vermogen 0,8/0,4 mm).
+- USB: vast voorgerouteerd (`fanout.usb_preroute`): USB-C → ESD-chip U1 (180° gedraaid, zodat D−/D+
+  zonder kruising doorlopen) → paar over de onderkant → ESP-pin 13/14; ~79 mm, lengteverschil < 0,5 mm.
 - `route.py prep` geeft elke SMD-pad op GND/3V3 een eigen via naar het vlak (`generator/fanout.py`),
   legt de dubbele USB-C-datapinnen vast en houdt de antennezone (alle lagen) en de bovenlaag onder
   de ESP-module vrij van sporen. Freerouting (v1.9.0, open source) routeert de rest.

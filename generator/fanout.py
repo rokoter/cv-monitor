@@ -32,6 +32,13 @@ def _d_pt_box(x, y, b):
     return math.hypot(dx, dy)
 
 
+def _d_pt_seg(px, py, x1, y1, x2, y2):
+    dx, dy = x2 - x1, y2 - y1
+    L2 = dx * dx + dy * dy
+    t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((px - x1) * dx + (py - y1) * dy) / L2))
+    return math.hypot(px - (x1 + t * dx), py - (y1 + t * dy))
+
+
 class Obstacles:
     def __init__(self, board):
         self.items = []     # (box, net, kind) kind: 'pad' (koper), 'hole', 'via', 'stub'
@@ -55,6 +62,15 @@ class Obstacles:
         for z in board.Zones():
             if z.GetIsRuleArea() and z.GetDoNotAllowVias():
                 self.keepout.append(z)
+        self.segs = []      # bestaande sporen: (x1, y1, x2, y2, halve breedte, net)
+        for t in board.GetTracks():
+            if t.GetClass() == 'PCB_VIA':
+                self.vias.append((pcbnew.ToMM(t.GetPosition().x) - OX, pcbnew.ToMM(t.GetPosition().y) - OY,
+                                  t.GetNetname()))
+            else:
+                self.segs.append((pcbnew.ToMM(t.GetStart().x) - OX, pcbnew.ToMM(t.GetStart().y) - OY,
+                                  pcbnew.ToMM(t.GetEnd().x) - OX, pcbnew.ToMM(t.GetEnd().y) - OY,
+                                  pcbnew.ToMM(t.GetWidth()) / 2, t.GetNetname(), t.GetLayer()))
         for d in board.GetDrawings():                         # uitsparingen (NTC-sleuf)
             if d.GetLayer() == pcbnew.Edge_Cuts:
                 b = _box(d)
@@ -89,6 +105,9 @@ class Obstacles:
         for vx, vy, vn in self.vias:
             if math.hypot(x - vx, y - vy) < VIA_D + 0.3:
                 return False
+        for sx1, sy1, sx2, sy2, hw, sn, sl in self.segs:          # via: alle lagen
+            if sn != net and _d_pt_seg(x, y, sx1, sy1, sx2, sy2) < r + hw + CLR:
+                return False
         if strict_crt:
             own_ref = pcbnew.Cast_to_FOOTPRINT(own_pad.GetParent()).GetReference() if own_pad else ''
             for b, ref, cy in self.crt:
@@ -96,17 +115,20 @@ class Obstacles:
                     return False
         return True
 
-    def stub_ok(self, x1, y1, x2, y2, net, own_pad):
+    def stub_ok(self, x1, y1, x2, y2, net, own_pad, other_pad=None):
         n = max(2, int(math.hypot(x2 - x1, y2 - y1) / 0.05))
         for i in range(n + 1):
             x, y = x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n
             for b, pn, kind, ref, p in self.items:
-                if p is own_pad or (pn == net and kind == 'pad'):
+                if p is own_pad or p is other_pad or (pn == net and kind in ('pad', 'stub')):
                     continue
                 if _d_pt_box(x, y, b) < STUB_W / 2 + (0.3 if kind == 'hole' else CLR):
                     return False
             for vx, vy, vn in self.vias:
                 if vn != net and math.hypot(x - vx, y - vy) < VIA_D / 2 + STUB_W / 2 + CLR:
+                    return False
+            for sx1, sy1, sx2, sy2, hw, sn, sl in self.segs:      # stub ligt op de bovenlaag
+                if sl == pcbnew.F_Cu and sn != net and _d_pt_seg(x, y, sx1, sy1, sx2, sy2) < STUB_W / 2 + hw + CLR:
                     return False
         return True
 
@@ -180,6 +202,28 @@ def fanout(board, nets=('GND', '+3V3')):
                     break
             if placed:
                 break
+        if not placed:
+            # geen plek voor een eigen via: kort spoor naar een pad van hetzelfde net in de buurt
+            # (bijv. ESP-voedingspin -> ontkoppelcondensator, die zelf een via naar het vlak heeft)
+            cands = []
+            for fp2 in board.GetFootprints():
+                for q in fp2.Pads():
+                    tht = q.GetAttribute() == pcbnew.PAD_ATTRIB_PTH        # zit al aan het vlak
+                    smd_other = (q.GetAttribute() == pcbnew.PAD_ATTRIB_SMD and not fp2.IsFlipped()
+                                 and fp2.GetReference() != fp.GetReference())
+                    if q.GetNetname() == p.GetNetname() and (tht or smd_other):
+                        qb = _box(q)
+                        qx, qy = (qb[0] + qb[2]) / 2, (qb[1] + qb[3]) / 2
+                        dd = math.hypot(qx - px, qy - py)
+                        if dd < 4.0:
+                            cands.append((dd, q, qx, qy))
+            for dd, q, qx, qy in sorted(cands, key=lambda c: c[0]):
+                if obs.stub_ok(px, py, qx, qy, p.GetNetname(), p, q):
+                    _add_track(board, net, px, py, qx, qy, STUB_W)
+                    obs.items.append(((min(px, qx), min(py, qy), max(px, qx), max(py, qy)),
+                                      p.GetNetname(), 'stub', '', None))
+                    placed = True
+                    break
         if placed:
             done += 1
         else:
@@ -187,26 +231,116 @@ def fanout(board, nets=('GND', '+3V3')):
     return done, failed
 
 
+USB_W, USB_GAP = 0.25, 0.15          # differentieel paar: ~90 ohm op JLCPCB 4-laags (schatting)
+
+
+def _offset(points, d):
+    """Evenwijdige lijn op afstand d links van de rijrichting (y omlaag), met verstekhoeken."""
+    out = []
+    n = len(points)
+    for i in range(n):
+        normals = []
+        for a, b in ((i - 1, i), (i, i + 1)):
+            if 0 <= a and b < n:
+                dx, dy = points[b][0] - points[a][0], points[b][1] - points[a][1]
+                L = math.hypot(dx, dy)
+                normals.append((dy / L, -dx / L))
+        nx = sum(v[0] for v in normals) / len(normals)
+        ny = sum(v[1] for v in normals) / len(normals)
+        L = math.hypot(nx, ny)
+        nx, ny = nx / L, ny / L
+        k = d / (nx * normals[0][0] + ny * normals[0][1])
+        out.append((points[i][0] + nx * k, points[i][1] + ny * k))
+    return out
+
+
+def _poly(board, net, pts, w, layer):
+    for (x1, y1), (x2, y2) in zip(pts, pts[1:]):
+        _add_track(board, net, x1, y1, x2, y2, w, layer)
+
+
 def usb_preroute(board):
-    """Vaste verbindingen van de dubbele USB-C datapinnen (zie module-uitleg)."""
-    j1 = next(f for f in board.GetFootprints() if f.GetReference() == 'J1')
-    pads = {p.GetNumber(): p for p in j1.Pads()}
-    pos = lambda n: (pcbnew.ToMM(pads[n].GetPosition().x) - OX, pcbnew.ToMM(pads[n].GetPosition().y) - OY)
-    dm, dp = pads['A7'].GetNet(), pads['A6'].GetNet()
-    (xa7, ya7), (xb7, yb7) = pos('A7'), pos('B7')
-    (xa6, ya6), (xb6, yb6) = pos('A6'), pos('B6')
-    w = 0.2
-    # D-: rechts van de padrij
+    """USB D+/D- helemaal vast: dubbele pinnen in de USB-C, via ESD-chip U1 en dan als
+    differentieel paar (0,25 mm / 0,15 mm) over de onderkant naar ESP-pin 13 (D-) en 14 (D+).
+    U1 staat 180° gedraaid zodat D- links/boven en D+ rechts/onder blijft: geen kruising nodig."""
+    fps = {f.GetReference(): f for f in board.GetFootprints()}
+    def pad(ref, num):
+        p = next(q for q in fps[ref].Pads() if q.GetNumber() == num)
+        return pcbnew.ToMM(p.GetPosition().x) - OX, pcbnew.ToMM(p.GetPosition().y) - OY, p.GetNet()
+    xa7, ya7, dm = pad('J1', 'A7')
+    xb7, yb7, _ = pad('J1', 'B7')
+    xa6, ya6, dp = pad('J1', 'A6')
+    xb6, yb6, _ = pad('J1', 'B6')
+    F, B = pcbnew.F_Cu, pcbnew.B_Cu
+    w0 = 0.2                                     # tussen de 0,5 mm-pinnen van de USB-C
+    # D-: rechts van de padrij, via naar de onderkant (zodat de tweede VBUS-pin A9 vrij naar rechts kan),
+    #     onder langs en via weer omhoog: van boven in U1 pin 4 (west, boven)
     xr = xa7 + 0.725 + 0.63
     for y in (ya7, yb7):
-        _add_track(board, dm, xa7, y, xr, y, w)
-    _add_track(board, dm, xr, ya7, xr, yb7, w)
-    # D+: links van de padrij (onder de connector) en via naar de onderkant
+        _add_track(board, dm, xa7, y, xr, y, w0)
+    _add_track(board, dm, xr, ya7, xr, yb7, w0)
+    u4x, u4y, _ = pad('U1', '4')
+    ylow = max(ya7, yb7)
+    v1x, v1y = xr + 0.4, ylow + 0.85
+    _poly(board, dm, [(xr, ylow), (xr + 0.4, ylow + 0.4), (v1x, v1y)], w0, F)
+    _add_via(board, dm, v1x, v1y)
+    v2x, v2y = u4x, u4y - 1.2
+    _poly(board, dm, [(v1x, v1y), (v1x, v2y - (v2x - v1x)), (v2x, v2y)], w0, B)
+    _add_via(board, dm, v2x, v2y)
+    _add_track(board, dm, v2x, v2y, u4x, u4y, w0)
+    # D+: links van de padrij (onder de connector), via naar de onderkant, en van onderen in U1 pin 6
     xl = xa6 - 0.725 - 0.27
     for y in (ya6, yb6):
-        _add_track(board, dp, xa6, y, xl, y, w)
-    _add_track(board, dp, xl, ya6, xl, yb6, w)
-    vx, vy = xl - 0.25, (ya6 + yb6) / 2           # standaardvia 0,6/0,3, 0,22 mm van pad A7
-    _add_track(board, dp, xl, vy, vx, vy, w)
-    _add_via(board, dp, vx, vy)
-    return (xr, (ya7 + yb7) / 2), (vx, vy)
+        _add_track(board, dp, xa6, y, xl, y, w0)
+    _add_track(board, dp, xl, ya6, xl, yb6, w0)
+    v0x, v0y = xl - 0.25, (ya6 + yb6) / 2
+    _add_track(board, dp, xl, v0y, v0x, v0y, w0)
+    _add_via(board, dp, v0x, v0y)
+    u6x, u6y, _ = pad('U1', '6')
+    xb = v0x + 1.75                              # verticaal op de onderkant, rechts van de mantelpin S1
+    vbx, vby = xb, u6y + 0.4
+    _poly(board, dp, [(v0x, v0y), (xb, v0y + 1.25), (xb, vby)], w0, B)
+    _add_via(board, dp, vbx, vby)
+    _poly(board, dp, [(vbx, vby), (vbx + 0.4, u6y), (u6x, u6y)], w0, F)
+    # U1 pin 5 (VBUS) zit nu tussen D- en D+ in: eigen via naar links, de autorouter doet de rest
+    u5x, u5y, vbus = pad('U1', '5')
+    _add_track(board, vbus, u5x, u5y, u5x - 0.96, u5y, 0.5)
+    _add_via(board, vbus, u5x - 0.96, u5y, 0.8, 0.4)
+    # U1 oost: pin 3 (D-, boven) en pin 1 (D+, onder) -> via's -> paar op de onderkant
+    u3x, u3y, _ = pad('U1', '3')
+    u1x, u1y, _ = pad('U1', '1')
+    vx = u3x + 1.76
+    _add_track(board, dm, u3x, u3y, vx, u3y, USB_W)
+    _add_track(board, dp, u1x, u1y, vx, u1y, USB_W)
+    _add_via(board, dm, vx, u3y)
+    _add_via(board, dp, vx, u1y)
+    # ESP-kant: via's links van pin 13 (D-) en 14 (D+)
+    e13x, e13y, _ = pad('U5', '13')
+    e14x, e14y, _ = pad('U5', '14')
+    ex = e13x - 2.3
+    _add_via(board, dm, ex, e13y)
+    _add_via(board, dp, ex, e14y)
+    _add_track(board, dm, ex, e13y, e13x, e13y, USB_W)
+    _add_track(board, dp, ex, e14y, e14x, e14y, USB_W)
+    # het paar (middellijn) op de onderkant: oost (onder J9 langs), noord langs x 49,4 (tussen de
+    # NTC-connector en de uitbreidingsheader), oost tussen J7 en J4 door, en zuid naar de ESP-via's
+    h = (USB_W + USB_GAP) / 2
+    yc = (u3y + u1y) / 2
+    top = 19.2                                   # tussen J7 (onderste pad 17,0) en J4 (bovenste pad 21,2)
+    xv = 49.4
+    xs = vx + 0.75
+    xturn = ex - 1.55
+    centre = [(xs, yc), (xv - 1.0, yc), (xv, yc - 1.0), (xv, top + 1.0), (xv + 1.0, top), (xturn, top),
+              (xturn, e13y - 0.8)]
+    left, right = _offset(centre, h), _offset(centre, -h)          # links = D-, rechts = D+
+    # einde: D- schuin naar via 13, D+ verder omlaag en evenwijdig schuin (0,6 mm hart-op-hart) naar via 14
+    lx, ly = left[-1]
+    dm_end = [(lx + (e13y - ly), e13y), (ex, e13y)]
+    c2 = (lx - ly) - 0.85
+    rx, ry = right[-1]
+    y2 = max(ry, rx - c2)
+    xe = min(ex, c2 + e14y)
+    dp_end = [(rx, y2), (xe, e14y)] + ([(ex, e14y)] if xe < ex else [])
+    _poly(board, dm, [(vx, u3y)] + left + dm_end, USB_W, B)
+    _poly(board, dp, [(vx, u1y)] + right + dp_end, USB_W, B)
+    return (xr, (ya7 + yb7) / 2), (v0x, v0y)

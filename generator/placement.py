@@ -19,7 +19,7 @@ PLACE = {
     'J1': (None, 30.0, 270, 'F'),          # x wordt berekend: opening gelijk met de bordrand
     'F1': (13.0, 22.0, 0, 'F'),
     'C1': (13.0, 25.5, 0, 'F'),
-    'U1': (11.5, 36.0, 0, 'F'),
+    'U1': (11.5, 36.0, 180, 'F'),          # 180°: D-/D+ in dezelfde volgorde als bij de ESP (USB-paar zonder kruising)
     'R1': (11.0, 40.5, 0, 'F'),
     'R2': (11.0, 42.5, 0, 'F'),
     # ---- 2. Lader
@@ -54,7 +54,7 @@ PLACE = {
     # ---- 5. ESP32-S3 (rechtsboven, antenne aan de bovenrand)
     'U5': (79.0, 13.4, 0, 'F'),            # antenne 0,65 mm van de bovenrand (silk binnen het bord)
     # ESP-randcomponenten in twee kolommen, referentie boven elk onderdeel
-    'C8': (66.0, 9.5, 0, 'F'), 'C9': (66.0, 13.5, 0, 'F'), 'C10': (66.0, 17.5, 0, 'F'),
+    'C8': (66.0, 9.5, 180, 'F'), 'C9': (66.0, 13.5, 0, 'F'), 'C10': (66.0, 17.5, 0, 'F'),
     'R9': (61.0, 9.5, 0, 'F'), 'R13': (61.0, 17.5, 0, 'F'), 'D4': (61.0, 21.5, 180, 'F'),
     'R10': (91.0, 28.5, 0, 'F'),
     # ---- 6. Metingen + sensoren (rechterrand)
