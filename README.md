@@ -38,6 +38,7 @@ Plaatsingsafspraken (worden door `drc.py` mee gecontroleerd):
 - referentie bij voorkeur recht boven/onder/links/rechts van het eigen onderdeel, binnen de bordrand;
 - pinnamen van headers en klemmen op de bovenkant (waar je aansluit), één naam per regel links van de pin;
 - polariteit (+) bij de accu en bij de accu-omgekeerd-LED, op boven- en onderkant;
+- achterkant: blokschema van de werking (`generator/back_diagram.py`), titel bovenaan tussen de montagegaten;
 - geen THT-pin door een onderdeel aan de andere kant (accuhouder).
 
 ## Opnieuw bouwen en controleren

@@ -202,6 +202,8 @@ bt.Reference().SetTextAngle(pcbnew.EDA_ANGLE(0, pcbnew.DEGREES_T))
 from silk import place_all  # noqa: E402
 tp_labels = {r: comps[r]['value'] for r in comps if r.startswith('TP')}
 from placement import FUNC_LABELS, FUNC_LABELS_BACK, FUNC_LABEL_DIR, PIN_LABELS  # noqa: E402
+import back_diagram  # noqa: E402
+back_diagram.draw(board, OX, OY)          # blokschema werking op de achterkant (vóór de labelplaatsing)
 from silk import place_pin_labels  # noqa: E402
 failed = place_pin_labels(board, OX, OY, BOARD_W, BOARD_H, CORNER_R, PIN_LABELS)   # eerst: vaste plek
 failed += place_all(board, OX, OY, BOARD_W, BOARD_H, CORNER_R, label_override=tp_labels, hide=tuple(HOLES),
