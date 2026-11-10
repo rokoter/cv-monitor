@@ -226,4 +226,6 @@ if miss3d:
 
 board.BuildConnectivity()
 pcbnew.SaveBoard(OUT, board)
+import rules  # noqa: E402
+rules.apply(os.path.splitext(OUT)[0] + '.kicad_pro')    # SaveBoard schreef een nieuw projectbestand
 print(f'PCB geschreven: {len(fps)} footprints, {len(nets)} netten -> {OUT}')

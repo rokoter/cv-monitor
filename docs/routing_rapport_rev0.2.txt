@@ -1,0 +1,62 @@
+net                  lengte   min  via  lagen
+VBUS                 147.3mm  0.60    2  B.Cu,F.Cu
+BAT+                 118.1mm  0.80    2  B.Cu,F.Cu
+EN                   116.0mm  0.20    2  B.Cu,F.Cu
+USB_D-               111.2mm  0.20    5  B.Cu,F.Cu
+I2C_SCL              100.2mm  0.20    2  B.Cu,F.Cu
+BOOT                 100.1mm  0.20    0  F.Cu
+I2C_SDA               88.6mm  0.20    3  B.Cu,F.Cu
+KNOP                  87.7mm  0.20    2  B.Cu,F.Cu
+CELL+                 85.2mm  0.80    1  B.Cu,F.Cu
+USB_D+                82.2mm  0.20    5  B.Cu,F.Cu
+UART_RX               62.0mm  0.20    2  B.Cu,F.Cu
+VSYS                  59.9mm  0.60    2  B.Cu,F.Cu
+B-                    55.6mm  0.40    2  B.Cu,F.Cu
+UART_TX               54.5mm  0.20    2  B.Cu,F.Cu
+TEMP                  49.7mm  0.20    2  B.Cu,F.Cu
+DQ_RETOUR             49.0mm  0.20    2  B.Cu,F.Cu
+VBAT_SENSE            43.9mm  0.20    2  B.Cu,F.Cu
+GND                   41.7mm  0.40   38  B.Cu,F.Cu
+DQ_AANVOER            40.5mm  0.20    2  B.Cu,F.Cu
+EPD_BUSY              40.5mm  0.20    0  F.Cu
+Net-(D3-K)            39.0mm  0.20    2  B.Cu,F.Cu
+Net-(D2-K)            35.8mm  0.20    2  B.Cu,F.Cu
+VBUS_SENSE            34.7mm  0.20    2  B.Cu,F.Cu
+EXP_GPIO7             29.4mm  0.20    2  B.Cu,F.Cu
+EXP_GPIO18            26.9mm  0.20    0  F.Cu
+EXP_GPIO6             25.2mm  0.20    2  B.Cu,F.Cu
+EXP_GPIO17            25.2mm  0.20    0  F.Cu
+EPD_RST               23.8mm  0.20    0  F.Cu
+EPD_DC                22.4mm  0.20    0  F.Cu
+EPD_CS                19.6mm  0.20    0  F.Cu
+EPD_CLK               16.8mm  0.20    0  F.Cu
++3V3                  16.8mm  0.40   16  F.Cu
+CC1                   15.3mm  0.20    0  F.Cu
+Net-(U2-PROG)         15.2mm  0.20    2  B.Cu,F.Cu
+CC2                   14.9mm  0.20    0  F.Cu
+VBUS_IN               14.4mm  0.50    0  F.Cu
+EPD_DIN               14.0mm  0.20    0  F.Cu
+DW_VCC                13.1mm  0.20    0  F.Cu
+DW_OC                 11.8mm  0.20    0  F.Cu
+Net-(J2-Pin_2)        10.7mm  0.20    0  F.Cu
+Net-(J3-Pin_2)        10.3mm  0.20    0  F.Cu
+LED_STATUS             9.9mm  0.20    0  F.Cu
+Net-(D5-A)             8.0mm  0.20    0  F.Cu
+Net-(D4-A)             7.6mm  0.20    0  F.Cu
+DW_OD                  7.2mm  0.20    0  F.Cu
+unconnected-(Q2-D-Pad1)     5.7mm  0.20    0  F.Cu
+Net-(Q3-G)             5.6mm  0.20    0  F.Cu
+DW_CS                  5.1mm  0.20    0  F.Cu
+Net-(D6-K)             4.8mm  0.20    0  F.Cu
+Net-(D3-A)             4.6mm  0.20    0  F.Cu
+Net-(D2-A)             4.6mm  0.20    0  F.Cu
+Net-(JP1-A)            2.5mm  0.20    0  F.Cu
+
+106 via's, 2035 mm spoor
+info: VSYS: 0.60 mm over 1.8 mm (versmalling bij pin)
+info: VSYS: 0.60 mm over 0.1 mm (versmalling bij pin)
+info: VSYS: 0.60 mm over 1.8 mm (versmalling bij pin)
+info: VSYS: 0.60 mm over 0.1 mm (versmalling bij pin)
+info: VBUS: 0.60 mm over 0.1 mm (versmalling bij pin)
+info: VBUS: 0.60 mm over 0.9 mm (versmalling bij pin)
+CONTROLE: in orde

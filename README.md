@@ -10,7 +10,7 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 | Stap | Status |
 |------|--------|
 | 1. Schema (KiCad) | rev 0.7 – gereviewd; POC-BOM voor JLCPCB Economic, zie `docs/BOM_JLCPCB.md` |
-| 2. PCB-layout | plaatsing rev 0.2, 4 lagen – in review (`docs/pcb_preview_boven_rev0.2.png`, `docs/pcb_preview_onder_rev0.2.png`, `docs/pcb_plaatsing_rev0.2.png`) |
+| 2. PCB-layout | rev 0.2, 4 lagen: plaatsing goedgekeurd, eerste routing (Freerouting) in review – `docs/pcb_routing_*_rev0.2.png`, 3D: `docs/pcb_3d_*_rev0.2.png` |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | – |
 | 4. Firmware (ESPHome) | – |
 | 5. Behuizing (FreeCAD) | – |
@@ -24,13 +24,25 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 | `firmware/` | ESPHome-configuratie (volgt) |
 | `enclosure/` | FreeCAD-behuizing (volgt) |
 
-## PCB opnieuw genereren (overschrijft routing!)
+## PCB opnieuw genereren: plaatsing + routing
 ```bash
-kicad-cli sch export netlist -o /tmp/cv_monitor.net hardware/cv_monitor/cv_monitor.kicad_sch
-/usr/bin/python3 generator/make_pcb.py /tmp/cv_monitor.net hardware/cv_monitor/cv_monitor.kicad_pcb
-/usr/bin/python3 generator/drc.py hardware/cv_monitor/cv_monitor.kicad_pcb
+P=hardware/cv_monitor/cv_monitor
+kicad-cli sch export netlist -o /tmp/cv_monitor.net $P.kicad_sch
+/usr/bin/python3 generator/make_pcb.py /tmp/cv_monitor.net $P.kicad_pcb      # plaatsing + silkscreen
+/usr/bin/python3 generator/route.py prep $P.kicad_pcb $P.dsn                 # vlakken, keepouts, fanout, DSN
+xvfb-run -a java -jar freerouting.jar -de $P.dsn -dr generator/freerouting.rules -do $P.ses -mp 80 -mt 1
+/usr/bin/python3 generator/route.py import $P.kicad_pcb $P.ses               # sporen + GND-vulling
+/usr/bin/python3 generator/drc.py $P.kicad_pcb                               # moet 0 / 0 geven
+/usr/bin/python3 generator/route_report.py $P.kicad_pcb                      # lengtes, breedtes, controles
 ```
-Plaatsing staat in `generator/placement.py`. Na het routen wordt de PCB niet meer opnieuw gegenereerd.
+- Plaatsing: `generator/placement.py`; ontwerpregels en netklassen: `generator/rules.py`.
+- Lagen: F.Cu signaal + GND-vulling | In1 GND-vlak | In2 3V3-vlak | B.Cu signaal + GND-vulling.
+- Netklassen: standaard 0,2 mm (0,15 mm vrij), 5V/VSYS/accu 0,8 mm, USB-ingang 0,5 mm, B− 0,4 mm,
+  GND/3V3 0,4 mm; via's 0,6/0,3 mm (vermogen 0,8/0,4 mm).
+- `route.py prep` geeft elke SMD-pad op GND/3V3 een eigen via naar het vlak (`generator/fanout.py`),
+  legt de dubbele USB-C-datapinnen vast en houdt de antennezone (alle lagen) en de bovenlaag onder
+  de ESP-module vrij van sporen. Freerouting (v1.9.0, open source) routeert de rest.
+- Koperlagen als plaatje: `generator/render_layers.sh $P.kicad_pcb docs rev0.2`.
 
 3D: alle footprints staan in de projectbibliotheek `cv_monitor.pretty` en de 3D-modellen (STEP) in
 `hardware/cv_monitor/3dmodels` (zie de README daar). In KiCad: **Beeld → 3D-viewer** (Alt+3).
