@@ -218,6 +218,12 @@ mech = tht_vs_other_side(board)
 for e in mech:
     print('MECH-FOUT:', e)
 
+# ------------------------------------------------------------------ 3D-modellen (uit de projectmap)
+from models3d import check_models  # noqa: E402
+miss3d = check_models(board, os.path.join(os.path.dirname(os.path.abspath(OUT)), '3dmodels'))
+if miss3d:
+    print('3D-MODEL ONTBREEKT:', ', '.join(miss3d))
+
 board.BuildConnectivity()
 pcbnew.SaveBoard(OUT, board)
 print(f'PCB geschreven: {len(fps)} footprints, {len(nets)} netten -> {OUT}')

@@ -156,6 +156,8 @@ def place_symbol(lib_id, ref, value, x, y, r=0, fp='', lcsc='', extra=None, ref_
     fa = r if r in (90, 270) else 0
     s += prop('Reference', ref, ra, hide_ref, 'left', fa)
     s += prop('Value', value, va, hide_val, 'left', fa)
+    if fp:                                  # alle footprints komen uit de projectbibliotheek
+        fp = 'cv_monitor:' + fp.split(':')[-1]
     s += prop('Footprint', fp, (x, y), True)
     s += prop('Datasheet', '~', (x, y), True)
     if lcsc:

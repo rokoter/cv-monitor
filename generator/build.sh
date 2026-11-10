@@ -6,6 +6,7 @@ cd "$(dirname "$0")/.."
 PRJ=hardware/cv_monitor
 
 python3 -I generator/make_lib.py "$PRJ/cv_monitor.kicad_sym"
+python3 -I generator/make_project_fps.py "$PRJ/cv_monitor.pretty"
 python3 -I generator/make_sch.py "$PRJ"
 python3 -I generator/make_drawio.py docs/accubeveiliging_DW01A_FS8205A.drawio
 

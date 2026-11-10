@@ -32,6 +32,12 @@ kicad-cli sch export netlist -o /tmp/cv_monitor.net hardware/cv_monitor/cv_monit
 ```
 Plaatsing staat in `generator/placement.py`. Na het routen wordt de PCB niet meer opnieuw gegenereerd.
 
+3D: alle footprints staan in de projectbibliotheek `cv_monitor.pretty` en de 3D-modellen (STEP) in
+`hardware/cv_monitor/3dmodels` (zie de README daar). In KiCad: **Beeld → 3D-viewer** (Alt+3).
+Bord met onderdelen: 94 × 70 × 29,9 mm (19,1 mm onder het bord door accuhouder + cel, 9,3 mm erboven).
+Snelle preview zonder KiCad: `kicad-cli pcb export step` en `generator/render_3d.py` →
+`docs/pcb_3d_boven_rev0.2.png` en `docs/pcb_3d_onder_rev0.2.png`.
+
 Plaatsingsafspraken (worden door `drc.py` mee gecontroleerd):
 - alle R's, C's, diodes en LED's horizontaal (0° of 180°), kleine onderdelen in nette rijen/kolommen;
 - alle silkscreentekst horizontaal, leesbaar vanuit één kant (boven: van voren, onder: met het bord omgedraaid);
