@@ -93,7 +93,7 @@ FUNC_LABELS_BACK = {'D5': 'ACCU OMGEKEERD'}
 
 # Doorvoersleuf voor de NTC-draad (boven -> onder, naar de cel): middelpunt x, y, breedte, hoogte (mm).
 # Naast het midden van de accuhouder; 4 x 7 mm: ook een JST-PH-stekkertje past er in de lengte doorheen.
-NTC_SLOT = (43.5, 44.0, 4.0, 7.0)
+NTC_SLOT = ('J9', 44.0, 4.0, 7.0)   # x = midden van de behuizing van J9 (verticaal uitgelijnd)
 
 # Labels die altijd recht boven het onderdeel moeten staan (op één lijn)
 # Bij 'up'/'down' komt de referentie daar nog boven/onder (eerst functie, dan referentie).

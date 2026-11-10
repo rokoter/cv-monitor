@@ -146,6 +146,9 @@ for (sx, sy, mx, my, ex, ey) in [(0, R, k, k, R, 0), (W - R, 0, W - k, k, W, R),
 # ------------------------------------------------------------------ doorvoersleuf NTC (afgeronde sleuf in Edge.Cuts)
 from placement import NTC_SLOT  # noqa: E402
 sx0, sy0, sw, sh = NTC_SLOT
+if isinstance(sx0, str):                              # uitlijnen op het midden van de courtyard van die connector
+    _cb = fps[sx0].GetCourtyard(pcbnew.F_CrtYd).BBox()
+    sx0 = pcbnew.ToMM(_cb.GetCenter().x) - OX
 sr = sw / 2                                           # halve breedte = straal van de ronde uiteinden
 for x in (sx0 - sr, sx0 + sr):
     s = pcbnew.PCB_SHAPE(board)
