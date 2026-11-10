@@ -143,6 +143,22 @@ for (sx, sy, mx, my, ex, ey) in [(0, R, k, k, R, 0), (W - R, 0, W - k, k, W, R),
     a.SetArcGeometry(P(sx, sy), P(mx, my), P(ex, ey))
     add_shape(a)
 
+# ------------------------------------------------------------------ doorvoersleuf NTC (afgeronde sleuf in Edge.Cuts)
+from placement import NTC_SLOT  # noqa: E402
+sx0, sy0, sw, sh = NTC_SLOT
+sr = sw / 2                                           # halve breedte = straal van de ronde uiteinden
+for x in (sx0 - sr, sx0 + sr):
+    s = pcbnew.PCB_SHAPE(board)
+    s.SetShape(pcbnew.SHAPE_T_SEGMENT)
+    s.SetStart(P(x, sy0 - sh / 2 + sr))
+    s.SetEnd(P(x, sy0 + sh / 2 - sr))
+    add_shape(s)
+for cy, d in ((sy0 - sh / 2 + sr, -1), (sy0 + sh / 2 - sr, 1)):
+    a = pcbnew.PCB_SHAPE(board)
+    a.SetShape(pcbnew.SHAPE_T_ARC)
+    a.SetArcGeometry(P(sx0 - sr, cy), P(sx0, cy + d * sr), P(sx0 + sr, cy))
+    add_shape(a)
+
 # ------------------------------------------------------------------ silkscreen: titel en accupolariteit
 def text(t, x, y, size=1.0, layer=pcbnew.F_SilkS, mirror=False):
     tx = pcbnew.PCB_TEXT(board)

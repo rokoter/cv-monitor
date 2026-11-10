@@ -48,6 +48,9 @@ Gemaakt in KiCad 7-formaat; KiCad 8/9 vraagt bij opslaan om te converteren – d
 - Voeding via een USB-lader van minimaal 1 A (laden 0,6 A + systeem); een pc-poort levert te weinig.
 - Na het plaatsen van de accu één keer USB aansluiten: dan activeert de DW01A de accu-uitgang.
 - Accuhouder: MPD BK-18650-PC2 (de footprint past alleen op deze houder).
+- Accu-NTC (optioneel): stekker in J9 aan de bovenkant, de draad door de sleuf (4 × 7 mm) eronder naar
+  de onderkant en de NTC met kaptontape midden op de cel. Bij gebruik van een NTC: JP1 doorsnijden.
+  De sleuf is groot genoeg om ook een JST-PH-stekkertje in de lengte door te steken.
 
 ## Nog open voor de PCB-stap
 - Footprint accuhouder (nu Keystone 1042; alternatief MYOUNG BH-18650-B1BA002, C2988620).

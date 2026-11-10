@@ -56,6 +56,13 @@ class SilkPlacer:
         for d in board.GetDrawings():
             if d.GetLayer() == self.layer:
                 self.texts.append(_infl(_box(d.GetBoundingBox()), 0.15))
+            elif d.GetLayer() == pcbnew.Edge_Cuts:
+                # uitsparingen binnen het bord (NTC-sleuf): silk minstens 0,5 mm ervan af
+                b = _box(d.GetBoundingBox())
+                inner = (b[0] > self.bx[0] + mm(1) and b[2] < self.bx[2] - mm(1) and
+                         b[1] > self.bx[1] + mm(1) and b[3] < self.bx[3] - mm(1))
+                if inner:
+                    self.pads.append(_infl(b, 0.5))
 
     def place_dir(self, text, own_ref, pad_box, direction, angle, size=TEXT_H, offset=0.0):
         """Pinlabel: alleen in één richting naast de pad zoeken (consistente rij labels)."""

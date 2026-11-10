@@ -44,10 +44,10 @@ PLACE = {
     'C3': (20.0, 47.0, 0, 'F'),
     'R6': (24.5, 46.0, 0, 'F'), 'C4': (24.5, 48.5, 0, 'F'),
     'U3': (30.5, 47.5, 0, 'F'), 'R7': (30.5, 51.5, 0, 'F'),
-    'Q2': (38.5, 47.5, 0, 'F'),
+    'Q2': (37.5, 47.5, 0, 'F'),
     'D5': (4.5, 50.0, 0, 'B'),            # 3 mm THT-LED aan de accukant (onderkant), naast de houder
     'R26': (9.5, 47.0, 0, 'F'), 'D6': (10.0, 51.0, 0, 'F'),
-    'J9': (40.5, 14.5, 0, 'F'),            # NTC: buiten de accuhouder (THT!), bij het TEMP-netwerk
+    'J9': (43.5, 34.5, 0, 'F'),            # NTC-connector boven, direct boven de doorvoersleuf
     # ---- 5. ESP32-S3 (rechtsboven, antenne aan de bovenrand)
     'U5': (79.0, 13.4, 0, 'F'),            # antenne 0,65 mm van de bovenrand (silk binnen het bord)
     # ESP-randcomponenten in twee kolommen, referentie boven elk onderdeel
@@ -90,6 +90,10 @@ FUNC_LABELS = {
 
 # Functielabels op de onderkant (onderdelen die aan de onderkant zitten)
 FUNC_LABELS_BACK = {'D5': 'ACCU OMGEKEERD'}
+
+# Doorvoersleuf voor de NTC-draad (boven -> onder, naar de cel): middelpunt x, y, breedte, hoogte (mm).
+# Naast het midden van de accuhouder; 4 x 7 mm: ook een JST-PH-stekkertje past er in de lengte doorheen.
+NTC_SLOT = (43.5, 44.0, 4.0, 7.0)
 
 # Labels die altijd recht boven het onderdeel moeten staan (op één lijn)
 # Bij 'up'/'down' komt de referentie daar nog boven/onder (eerst functie, dan referentie).
