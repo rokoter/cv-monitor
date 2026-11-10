@@ -29,8 +29,8 @@ if detail:
 m = re.search(r'\*\* Found (\d+) DRC violations', txt)
 u = re.search(r'\*\* Found (\d+) unconnected pads', txt)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from pcb_checks import tht_vs_other_side  # noqa: E402
-mech = tht_vs_other_side(board)
+from pcb_checks import tht_vs_other_side, silk_text_checks, passive_orientation  # noqa: E402
+mech = tht_vs_other_side(board) + silk_text_checks(board) + passive_orientation(board)
 for e in mech:
-    print('MECH-FOUT:', e)
-print(f'DRC: {m.group(1) if m else "?"} schendingen, {u.group(1) if u else "?"} niet-verbonden pads, {len(mech)} mechanische fouten')
+    print('EIGEN-CONTROLE:', e)
+print(f'DRC: {m.group(1) if m else "?"} schendingen, {u.group(1) if u else "?"} niet-verbonden pads, {len(mech)} fouten in eigen controles (THT, silk-hoek, oriëntatie)')

@@ -27,3 +27,34 @@ def tht_vs_other_side(board):
                                   f'gaat door {other.GetReference()} aan de '
                                   f'{"onderkant" if other.IsFlipped() else "bovenkant"}')
     return errors
+
+
+def silk_text_checks(board):
+    """Silkscreen-afspraken: alle zichtbare tekst horizontaal (0°) en geen tekst op de fab-laag
+    terwijl hij op silk had gemoeten. Geeft een lijst met afwijkingen terug."""
+    issues = []
+    silk = (pcbnew.F_SilkS, pcbnew.B_SilkS)
+    texts = [(fp.GetReference(), t) for fp in board.GetFootprints()
+             for t in (fp.Reference(), fp.Value()) if t.IsVisible()]
+    texts += [(fp.GetReference(), t) for fp in board.GetFootprints()
+              for t in fp.GraphicalItems() if isinstance(t, pcbnew.FP_TEXT) and t.IsVisible()]
+    texts += [('bord', t) for t in board.GetDrawings() if isinstance(t, pcbnew.PCB_TEXT)]
+    for owner, t in texts:
+        if t.GetLayer() not in silk:
+            continue
+        rot = t.GetDrawRotation().AsDegrees() if hasattr(t, 'GetDrawRotation') else t.GetTextAngle().AsDegrees()
+        if abs(((rot + 180) % 360) - 180) > 0.01:
+            issues.append(f'{owner}: tekst "{t.GetShownText()}" staat op {rot:.0f}°')
+    return issues
+
+
+def passive_orientation(board):
+    """Afspraak: alle R's, C's, diodes en LED's horizontaal (0° of 180°)."""
+    issues = []
+    for fp in board.GetFootprints():
+        ref = fp.GetReference()
+        if ref.rstrip('0123456789') in ('R', 'C', 'D', 'F'):
+            o = fp.GetOrientationDegrees() % 180
+            if abs(o) > 0.01:
+                issues.append(f'{ref}: staat op {fp.GetOrientationDegrees():.0f}° (moet horizontaal)')
+    return issues

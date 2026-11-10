@@ -32,6 +32,12 @@ kicad-cli sch export netlist -o /tmp/cv_monitor.net hardware/cv_monitor/cv_monit
 ```
 Plaatsing staat in `generator/placement.py`. Na het routen wordt de PCB niet meer opnieuw gegenereerd.
 
+Plaatsingsafspraken (worden door `drc.py` mee gecontroleerd):
+- alle R's, C's, diodes en LED's horizontaal (0° of 180°), kleine onderdelen in nette rijen/kolommen;
+- alle silkscreentekst horizontaal, leesbaar vanuit één kant (boven: van voren, onder: met het bord omgedraaid);
+- referentie bij voorkeur recht boven/onder/links/rechts van het eigen onderdeel, binnen de bordrand;
+- geen THT-pin door een onderdeel aan de andere kant (accuhouder).
+
 ## Opnieuw bouwen en controleren
 ```bash
 ./generator/build.sh

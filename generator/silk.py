@@ -55,23 +55,25 @@ class SilkPlacer:
             if d.GetLayer() == self.layer:
                 self.texts.append(_infl(_box(d.GetBoundingBox()), 0.15))
 
-    def place_dir(self, text, own_ref, pad_box, direction, angle, size=TEXT_H):
+    def place_dir(self, text, own_ref, pad_box, direction, angle, size=TEXT_H, offset=0.0):
         """Pinlabel: alleen in één richting naast de pad zoeken (consistente rij labels)."""
         text.SetTextSize(pcbnew.VECTOR2I(mm(size), mm(size)))
         text.SetTextThickness(mm(TEXT_W))
-        text.SetTextAngle(pcbnew.EDA_ANGLE(angle, pcbnew.DEGREES_T))
+        _set_angle(text, angle)
         l, t, r, b = pad_box
         cx, cy = (l + r) // 2, (t + b) // 2
         text.SetPosition(pcbnew.VECTOR2I(cx, cy))
         tb = _box(text.GetBoundingBox())
         hw, hh = (tb[2] - tb[0]) // 2, (tb[3] - tb[1]) // 2
         for gap in (0.35, 0.6, 0.9, 1.3):
-            g = mm(gap)
+            g = mm(gap + offset)
             x, y = {'left': (l - g - hw, cy), 'right': (r + g + hw, cy),
                     'up': (cx, t - g - hh), 'down': (cx, b + g + hh)}[direction]
             text.SetPosition(pcbnew.VECTOR2I(int(x), int(y)))
             bb = _box(text.GetBoundingBox())
             if self._ok(bb, own_ref, False):
+                if hasattr(text, 'SetLocalCoord'):
+                    text.SetLocalCoord()
                 self.texts.append(_infl(bb, 0.1))
                 return True
         return False
@@ -109,7 +111,7 @@ class SilkPlacer:
         l, t, r, b = own_box
         cx, cy = (l + r) // 2, (t + b) // 2
         if inner:
-            text.SetTextAngle(pcbnew.EDA_ANGLE(0, pcbnew.DEGREES_T))
+            _set_angle(text, 0)
             for k in (-0.3, 0.3, -0.15, 0.15, -0.4, 0.4):
                 text.SetPosition(pcbnew.VECTOR2I(cx, int(cy + k * (b - t))))
                 bb = _box(text.GetBoundingBox())
@@ -118,18 +120,20 @@ class SilkPlacer:
                         text.SetLocalCoord()
                     self.texts.append(_infl(bb, 0.15))
                     return True
-        for strict in (True, False):
-            for gap in (0.15, 0.5, 1.0, 1.6, 2.4):
-                g = mm(gap)
-                for ang in (0, 90):
-                    text.SetTextAngle(pcbnew.EDA_ANGLE(ang, pcbnew.DEGREES_T))
-                    text.SetPosition(pcbnew.VECTOR2I(cx, cy))
-                    tb = _box(text.GetBoundingBox())
-                    hw, hh = (tb[2] - tb[0]) // 2, (tb[3] - tb[1]) // 2
-                    cands = [(cx, t - g - hh), (cx, b + g + hh), (l - g - hw, cy), (r + g + hw, cy),
-                             (l - g - hw, t - g - hh), (r + g + hw, t - g - hh),
+        # volgorde: eerst recht boven/onder/links/rechts dichtbij, dan schuin (hoeken), dan verder weg.
+        # Zo blijft een referentie zo eenduidig mogelijk bij zijn eigen onderdeel.
+        _set_angle(text, 0)              # alle tekst horizontaal: leesbaar vanuit één kant
+        text.SetPosition(pcbnew.VECTOR2I(cx, cy))
+        tb = _box(text.GetBoundingBox())
+        hw, hh = (tb[2] - tb[0]) // 2, (tb[3] - tb[1]) // 2
+        sides = lambda g: [(cx, t - g - hh), (cx, b + g + hh), (l - g - hw, cy), (r + g + hw, cy)]
+        corners = lambda g: [(l - g - hw, t - g - hh), (r + g + hw, t - g - hh),
                              (l - g - hw, b + g + hh), (r + g + hw, b + g + hh)]
-                    for (x, y) in cands:
+        steps = [(sides, (0.15, 0.5, 1.0)), (corners, (0.15, 0.5)), (sides, (1.6, 2.4)), (corners, (1.0, 1.6, 2.4))]
+        for strict in (True, False):
+            for fn, gaps in steps:
+                for gap in gaps:
+                    for (x, y) in fn(mm(gap)):
                         text.SetPosition(pcbnew.VECTOR2I(int(x), int(y)))
                         bb = _box(text.GetBoundingBox())
                         if self._ok(bb, own_ref, strict):
@@ -138,6 +142,13 @@ class SilkPlacer:
                             self.texts.append(_infl(bb, 0.15))
                             return True
         return False
+
+
+def _set_angle(text, ang):
+    """Absolute teksthoek. KiCad 7 slaat de hoek van een footprinttekst (FP_TEXT) op t.o.v. de footprint."""
+    if isinstance(text, pcbnew.FP_TEXT):
+        ang -= pcbnew.Cast_to_FOOTPRINT(text.GetParent()).GetOrientationDegrees()
+    text.SetTextAngle(pcbnew.EDA_ANGLE(ang, pcbnew.DEGREES_T))
 
 
 def _new_text(board, txt, layer):
@@ -155,13 +166,15 @@ def place_pin_labels(board, ox, oy, w, h, r, pin_labels):
     sp = SilkPlacer(board, ox, oy, w, h, r, side='B')
     fps = {f.GetReference(): f for f in board.GetFootprints()}
     failed = []
-    for ref, (direction, angle, labels) in pin_labels.items():
-        for pad in fps[ref].Pads():
+    for ref, (direction, angle, labels, *opt) in pin_labels.items():
+        stagger = 'stagger' in opt      # om en om in twee rijen (labels breder dan de pinafstand)
+        for i, pad in enumerate(sorted(fps[ref].Pads(), key=lambda p: int(p.GetNumber() or 0))):
             txt = labels.get(pad.GetNumber())
             if not txt:
                 continue
             t = _new_text(board, txt, pcbnew.B_SilkS)
-            if not sp.place_dir(t, ref, _box(pad.GetBoundingBox()), direction, angle):
+            off = 1.9 if (stagger and i % 2) else 0.0   # 1 tekstregel (incl. marge) lager
+            if not sp.place_dir(t, ref, _box(pad.GetBoundingBox()), direction, angle, offset=off):
                 board.Remove(t)
                 failed.append(f'{ref}.{pad.GetNumber()}')
     return failed
@@ -221,7 +234,11 @@ def place_all(board, ox, oy, w, h, r, label_override=None, hide=(), inner=(), fu
             rt.SetLayer(layer)
             if side == 'B':
                 rt.SetMirrored(True)
-            if not sp.place(rt, ref, own_of[ref], inner=ref in inner):
+            if func_dir.get(ref) in ('up', 'down') and ref in funcs:
+                ok = sp.place_dir(rt, ref, own_of[ref], func_dir[ref], 0, offset=1.4)   # boven/onder het functielabel
+            else:
+                ok = sp.place(rt, ref, own_of[ref], inner=ref in inner)
+            if not ok:
                 rt.SetLayer(pcbnew.F_Fab if side == 'F' else pcbnew.B_Fab)
                 failed.append(ref)
     return failed
