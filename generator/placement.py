@@ -11,6 +11,9 @@ CORNER_R = 3.0
 # Bevestigingsgaten M3 (ook gebruikt voor de behuizing in FreeCAD)
 HOLES = {'H1': (3.5, 3.5), 'H2': (3.5, 66.5), 'H3': (90.5, 66.5), 'H4': (47.0, 3.5)}
 
+# Headers J7/J4 op één verticale lijn; J8 met J4 onderaan gelijk (zelfde 2,54-mm-raster)
+HDR_X, HDR_Y = 55.0, 22.0
+
 PLACE = {
     # ---- 1. USB-C ingang (linkerrand)
     'J1': (None, 30.0, 270, 'F'),          # x wordt berekend: opening gelijk met de bordrand
@@ -67,13 +70,13 @@ PLACE = {
     # knoppen rechts van de accugaten (x 11 en 18,7): boven elke knop ruimte voor referentie + functie
     'SW1': (24.0, 66.0, 0, 'F'), 'SW2': (32.5, 66.0, 0, 'F'), 'SW3': (41.0, 66.0, 0, 'F'),
     'R11': (61.0, 13.5, 0, 'F'),           # pull-up STATUS-knop (GPIO15), bij de ESP
-    'J4': (55.0, 22.0, 0, 'F'),           # verticaal, pinnamen links (boven het accuhoudergebied)
+    'J4': (HDR_X, HDR_Y, 0, 'F'),         # uitbreiding, pinnamen links (boven het accuhoudergebied)
     # ---- 8. Qwiic (onderrand, opening naar beneden)
     'R20': (52.0, 60.5, 0, 'F'), 'R21': (52.0, 63.0, 0, 'F'),
     'J5': (64.0, None, 0, 'F'), 'J6': (74.0, None, 0, 'F'),   # y berekend: opening aan de onderrand
     # ---- 9. Displays (bovenrand)
-    'J8': (66.5, 28.5, 0, 'F'),           # e-ink verticaal onder de ESP, pinnamen links
-    'J7': (50.5, 8.5, 0, 'F'),             # OLED (THT): buiten de accuhouder, naast J4
+    'J8': (66.5, HDR_Y + 2 * 2.54, 0, 'F'),  # e-ink: onderkant gelijk met J4 (pin 1 op hoogte van J4-pin 3)
+    'J7': (HDR_X, 8.5, 0, 'F'),           # OLED: verticaal uitgelijnd met J4
 }
 
 # Onderdelen die met de 'opening' tegen een bordrand moeten: (rand, overstek in mm)
