@@ -58,7 +58,7 @@ COMPONENTS = [
     R('R2', '5.1k', 32, 18, 'CC2', 'GND'),
     C('C1', '1u', 36, 19, 'VBUS', 'GND'),
     dict(ref='U1', lib='Power_Protection:USBLC6-2SC6', value='USBLC6-2SC6', gx=30, gy=28,
-         fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C7519', dnp=True, ref_at=(32, 25), val_at=(32, 31.5),
+         fp='Package_TO_SOT_SMD:SOT-23-6', lcsc='C7519', ref_at=(32, 25), val_at=(32, 31.5),
          nets={'1': 'USB_D+', '6': 'USB_D+', '3': 'USB_D-', '4': 'USB_D-', '5': 'VBUS', '2': 'GND'}),
 
     # ------------------------------------------------------------ 2. Lader
@@ -179,10 +179,10 @@ COMPONENTS = [
     # ------------------------------------------------------------ 8. Qwiic / STEMMA QT (I2C)
     R('R20', '4.7k', 80, 92, '+3V3', 'I2C_SDA'),
     R('R21', '4.7k', 85, 92, '+3V3', 'I2C_SCL'),
-    dict(ref='J5', lib='Connector_Generic:Conn_01x04', value='QWIIC 1', gx=100, gy=93, lcsc='C160404', dnp=True,
+    dict(ref='J5', lib='Connector_Generic:Conn_01x04', value='QWIIC 1', gx=100, gy=93, lcsc='C160404',
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal',
          ref_at=(99, 90), val_at=(99, 97.5), nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SDA', '4': 'I2C_SCL'}),
-    dict(ref='J6', lib='Connector_Generic:Conn_01x04', value='QWIIC 2', gx=112, gy=93, lcsc='C160404', dnp=True,
+    dict(ref='J6', lib='Connector_Generic:Conn_01x04', value='QWIIC 2', gx=112, gy=93, lcsc='C160404',
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_JST:JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal',
          ref_at=(111, 90), val_at=(111, 97.5), nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SDA', '4': 'I2C_SCL'}),
 

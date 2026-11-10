@@ -41,6 +41,7 @@
 
   (setup
     (pad_to_mask_clearance 0)
+    (aux_axis_origin 100 170)
     (pcbplotparams
       (layerselection 0x00010fc_ffffffff)
       (plot_on_all_layers_selection 0x0000000_00000000)
@@ -1114,7 +1115,7 @@
     (descr "SOT, 6 Pin (https://www.jedec.org/sites/default/files/docs/Mo-178c.PDF variant AB), generated with kicad-footprint-generator ipc_gullwing_generator.py")
     (tags "SOT TO_SOT_SMD")
     (property "LCSC" "C7519")
-    (attr smd exclude_from_pos_files exclude_from_bom)
+    (attr smd)
     (fp_text reference "U1" (at 0 2.698249) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 6ed5fb66-4f21-43d2-827a-9cf43e608891)
@@ -1337,7 +1338,7 @@
     (descr "JST SH series connector, SM04B-SRSS-TB (http://www.jst-mfg.com/product/pdf/eng/eSH.pdf), generated with kicad-footprint-generator")
     (tags "connector JST SH horizontal")
     (property "LCSC" "C160404")
-    (attr smd exclude_from_pos_files exclude_from_bom)
+    (attr smd)
     (fp_text reference "J5" (at -5.032142 0) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 2d308908-798b-457a-adee-1e78294a8eed)
@@ -2673,7 +2674,7 @@
     (descr "JST SH series connector, SM04B-SRSS-TB (http://www.jst-mfg.com/product/pdf/eng/eSH.pdf), generated with kicad-footprint-generator")
     (tags "connector JST SH horizontal")
     (property "LCSC" "C160404")
-    (attr smd exclude_from_pos_files exclude_from_bom)
+    (attr smd)
     (fp_text reference "J6" (at -5.032142 0) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 5ac189bd-7dd4-40ce-a3e1-26a7a05283a1)

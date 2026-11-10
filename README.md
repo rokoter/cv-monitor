@@ -10,8 +10,8 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 | Stap | Status |
 |------|--------|
 | 1. Schema (KiCad) | rev 0.7 – gereviewd; POC-BOM voor JLCPCB Economic, zie `docs/BOM_JLCPCB.md` |
-| 2. PCB-layout | rev 0.2, 4 lagen: plaatsing goedgekeurd, eerste routing (Freerouting) in review – `docs/pcb_routing_*_rev0.2.png`, 3D: `docs/pcb_3d_*_rev0.2.png` |
-| 3. JLCPCB productie (Gerber, BOM, CPL) | – |
+| 2. PCB-layout | rev 0.2, 4 lagen, gerouteerd (DRC 0/0), USB als differentieel paar – `docs/pcb_routing_*_rev0.2.png`, 3D: `docs/pcb_3d_*_rev0.2.png` |
+| 3. JLCPCB productie (Gerber, BOM, CPL) | rev 0.2 klaar voor offerte: Economic PCBA, ESP + through-hole zelf – `hardware/cv_monitor/production/README.md`, kosten: `docs/KOSTEN.md` |
 | 4. Firmware (ESPHome) | – |
 | 5. Behuizing (FreeCAD) | – |
 
@@ -61,6 +61,15 @@ Plaatsingsafspraken (worden door `drc.py` mee gecontroleerd):
 - polariteit (+) bij de accu en bij de accu-omgekeerd-LED, op boven- en onderkant;
 - achterkant: blokschema van de werking (`generator/back_diagram.py`), titel bovenaan tussen de montagegaten;
 - geen THT-pin door een onderdeel aan de andere kant (accuhouder).
+
+## Productiebestanden (JLCPCB)
+```bash
+P=hardware/cv_monitor/cv_monitor
+/usr/bin/python3 generator/sync_attrs.py $P.kicad_pcb            # LCSC/DNP uit design.py, routing blijft
+/usr/bin/python3 generator/make_production.py $P.kicad_pcb rev0.2  # Gerber-zip, BOM, CPL
+```
+Uitvoer en bestelchecklist: `hardware/cv_monitor/production/`. JLCPCB-draaiingscorrecties staan in
+`make_production.py` (`ROT_FIX`); gepolariseerde onderdelen altijd in de JLCPCB-preview controleren.
 
 ## Opnieuw bouwen en controleren
 ```bash
