@@ -175,7 +175,8 @@ def text(t, x, y, size=1.0, layer=pcbnew.F_SilkS, mirror=False):
     board.Add(tx)
 
 
-text('CV-monitor rev 0.2', 58.0, 56.5, 1.2)
+# titel bovenaan: midden tussen montagegaten H1 en H4, op dezelfde hoogte als de gaten
+text('CV-monitor rev 0.2', (HOLES['H1'][0] + HOLES['H4'][0]) / 2, HOLES['H1'][1], 1.2)
 
 # accupolariteit: '+' en '-' naast de padden van de houder (boven- en onderkant)
 bt = fps['BT1']
