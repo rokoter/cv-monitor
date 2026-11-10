@@ -37,7 +37,7 @@ class SilkPlacer:
         self.layer = pcbnew.F_SilkS if side == 'F' else pcbnew.B_SilkS
         self.bx = (mm(ox), mm(oy), mm(ox + w), mm(oy + h))
         self.r = mm(r)
-        self.pads, self.silk, self.crt, self.texts = [], [], {}, []
+        self.pads, self.silk, self.crt, self.texts, self.poly = [], [], {}, [], {}
         for fp in board.GetFootprints():
             same = fp.IsFlipped() == (side == 'B')
             for p in fp.Pads():
@@ -51,6 +51,8 @@ class SilkPlacer:
             cy = fp.GetCourtyard(pcbnew.F_CrtYd if side == 'F' else pcbnew.B_CrtYd)
             if cy.OutlineCount():
                 self.crt[fp.GetReference()] = _box(cy.BBox())
+                if cy.OutlineCount() > 1 or cy.Outline(0).PointCount() > 5:   # geen simpele rechthoek
+                    self.poly[fp.GetReference()] = pcbnew.SHAPE_POLY_SET(cy)
         for d in board.GetDrawings():
             if d.GetLayer() == self.layer:
                 self.texts.append(_infl(_box(d.GetBoundingBox()), 0.15))
@@ -58,14 +60,14 @@ class SilkPlacer:
     def place_dir(self, text, own_ref, pad_box, direction, angle, size=TEXT_H, offset=0.0):
         """Pinlabel: alleen in één richting naast de pad zoeken (consistente rij labels)."""
         text.SetTextSize(pcbnew.VECTOR2I(mm(size), mm(size)))
-        text.SetTextThickness(mm(TEXT_W))
+        text.SetTextThickness(mm(max(TEXT_W, 0.15 * size)))     # grotere tekst (polariteit) iets dikker
         _set_angle(text, angle)
         l, t, r, b = pad_box
         cx, cy = (l + r) // 2, (t + b) // 2
         text.SetPosition(pcbnew.VECTOR2I(cx, cy))
         tb = _box(text.GetBoundingBox())
         hw, hh = (tb[2] - tb[0]) // 2, (tb[3] - tb[1]) // 2
-        for gap in (0.35, 0.6, 0.9, 1.3):
+        for gap in (0.35, 0.6, 0.9, 1.3, 1.8):
             g = mm(gap + offset)
             x, y = {'left': (l - g - hw, cy), 'right': (r + g + hw, cy),
                     'up': (cx, t - g - hh), 'down': (cx, b + g + hh)}[direction]
@@ -92,6 +94,20 @@ class SilkPlacer:
                 return False
         return True
 
+    def _poly_hit(self, ref, b):
+        """Raakt box b de echte courtyard-vorm (niet alleen de omhullende rechthoek)?"""
+        poly = self.poly.get(ref)
+        if poly is None:
+            return True
+        l, t, r, bt = b
+        if poly.Contains(pcbnew.VECTOR2I((l + r) // 2, (t + bt) // 2)):
+            return True
+        corners = [pcbnew.VECTOR2I(l, t), pcbnew.VECTOR2I(r, t), pcbnew.VECTOR2I(r, bt), pcbnew.VECTOR2I(l, bt)]
+        for k in range(4):
+            if poly.Collide(pcbnew.SEG(corners[k], corners[(k + 1) % 4]), 0):
+                return True
+        return False
+
     def _ok(self, b, own, strict):
         if not self._inside_board(b):
             return False
@@ -99,7 +115,7 @@ class SilkPlacer:
             return False
         if any(_hit(b, o) for o in self.silk):
             return False
-        if strict and any(_hit(b, c) for ref, c in self.crt.items() if ref != own):
+        if strict and any(_hit(b, c) and self._poly_hit(ref, b) for ref, c in self.crt.items() if ref != own):
             return False
         return True
 
@@ -162,21 +178,33 @@ def _new_text(board, txt, layer):
 
 
 def place_pin_labels(board, ox, oy, w, h, r, pin_labels):
-    """pin_labels: {ref: (richting, hoek, {padnummer: tekst})} -> labels op de onderkant (B.SilkS)."""
-    sp = SilkPlacer(board, ox, oy, w, h, r, side='B')
+    """pin_labels: {ref: (richting, hoek, {padnummer: tekst}, opties...)} -> labels op de bovenkant.
+    Opties: 'both' (ook onderkant), 'body' (naast de courtyard i.p.v. de pad), 'big', 'stagger'.
+    Wordt vóór place_all aangeroepen: pinnamen hebben een vaste plek, de rest past zich aan."""
     fps = {f.GetReference(): f for f in board.GetFootprints()}
     failed = []
-    for ref, (direction, angle, labels, *opt) in pin_labels.items():
-        stagger = 'stagger' in opt      # om en om in twee rijen (labels breder dan de pinafstand)
-        for i, pad in enumerate(sorted(fps[ref].Pads(), key=lambda p: int(p.GetNumber() or 0))):
-            txt = labels.get(pad.GetNumber())
-            if not txt:
+    for side in ('F', 'B'):
+        sp = SilkPlacer(board, ox, oy, w, h, r, side=side)
+        for ref, (direction, angle, labels, *opt) in pin_labels.items():
+            if side == 'B' and 'both' not in opt:
                 continue
-            t = _new_text(board, txt, pcbnew.B_SilkS)
-            off = 1.9 if (stagger and i % 2) else 0.0   # 1 tekstregel (incl. marge) lager
-            if not sp.place_dir(t, ref, _box(pad.GetBoundingBox()), direction, angle, offset=off):
-                board.Remove(t)
-                failed.append(f'{ref}.{pad.GetNumber()}')
+            fp = fps[ref]
+            size = 1.5 if 'big' in opt else TEXT_H
+            crt = fp.GetCourtyard(pcbnew.B_CrtYd if fp.IsFlipped() else pcbnew.F_CrtYd)
+            cb = _box(crt.BBox()) if crt.OutlineCount() else None
+            pads = sorted(fp.Pads(), key=lambda p: int(p.GetNumber() or 0))
+            for i, pad in enumerate(pads):
+                txt = labels.get(pad.GetNumber())
+                if not txt:
+                    continue
+                pb = _box(pad.GetBoundingBox())
+                if 'body' in opt and cb:
+                    pb = (cb[0], pb[1], cb[2], pb[3]) if direction in ('left', 'right') else (pb[0], cb[1], pb[2], cb[3])
+                t = _new_text(board, txt, sp.layer)
+                off = 1.9 if ('stagger' in opt and i % 2) else 0.0   # 1 tekstregel (incl. marge) verder
+                if not sp.place_dir(t, ref, pb, direction, angle, size=size, offset=off):
+                    board.Remove(t)
+                    failed.append(f'{ref}.{pad.GetNumber()}({side})')
     return failed
 
 
