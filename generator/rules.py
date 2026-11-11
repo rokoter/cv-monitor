@@ -11,7 +11,7 @@ CLASSES = [
     ('Default', 0.15, 0.2, 0.6, 0.3),
     ('Power',   0.2,  0.8, 0.8, 0.4),   # 5V na de zekering, VSYS, accu: tot ~1 A (lange accuweg: breed)
     ('PowerIn', 0.2,  0.5, 0.8, 0.4),   # USB-C VBUS-pinnen (0,5 mm steek): smaller
-    ('Batt',    0.2,  0.4, 0.8, 0.4),   # B- (via de 8205A in TSSOP-8: 0,4 mm past op de pads)
+    ('Batt',    0.2,  0.4, 0.8, 0.4),   # B- (via Q2 AO8810/8205A in TSSOP-8: 0,4 mm past op de pads)
     ('Supply',  0.2,  0.4, 0.6, 0.3),   # GND en 3V3 (vooral via de binnenvlakken)
     ('USB',     0.15, 0.25, 0.6, 0.3),  # USB D+/D-: differentieel paar 0,25/0,15 mm (~90 ohm, schatting)
 ]

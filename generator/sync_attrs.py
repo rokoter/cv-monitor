@@ -1,4 +1,4 @@
-"""LCSC-nummers en DNP/BOM-vlaggen uit design.py overnemen in een (al gerouteerd) bord,
+"""Waarde, LCSC-nummers en DNP/BOM-vlaggen uit design.py overnemen in een (al gerouteerd) bord,
 zonder plaatsing of routing te veranderen. Zelfde regels als make_pcb.py:
 dnp of in_bom=False -> niet in BOM en niet in de positiebestanden (CPL), dnp -> ook DNP-markering.
 Gebruik: /usr/bin/python3 generator/sync_attrs.py <bord.kicad_pcb>
@@ -28,11 +28,12 @@ for c in COMPONENTS:
         if c.get('dnp'):
             attrs |= getattr(pcbnew, 'FP_DNP', 0)
     lcsc = c.get('lcsc', '')
-    old = (fp.GetAttributes(), fp.GetProperty('LCSC') if fp.HasProperty('LCSC') else '')
+    old = (fp.GetAttributes(), fp.GetProperty('LCSC') if fp.HasProperty('LCSC') else '', fp.GetValue())
     fp.SetAttributes(attrs)
     if lcsc:
         fp.SetProperty('LCSC', lcsc)
-    if old != (attrs, lcsc if lcsc else old[1]):
+    fp.SetValue(c['value'])
+    if old != (attrs, lcsc if lcsc else old[1], c['value']):
         changed.append(c['ref'])
 pcbnew.SaveBoard(path, board)
 print('bijgewerkt:', ', '.join(changed) if changed else 'niets')

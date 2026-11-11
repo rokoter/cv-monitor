@@ -1,6 +1,6 @@
 # Productiebestanden PCB rev 0.2 – JLCPCB
 
-Gemaakt op 10 november 2026 uit het gerouteerde bord (DRC 0/0). Keuze: **Economic PCBA**, JLCPCB plaatst
+Gemaakt op 10 november 2026, onderdelen bijgewerkt op 11 november uit het gerouteerde bord (DRC 0/0). Keuze: **Economic PCBA**, JLCPCB plaatst
 alle SMD-onderdelen aan de bovenkant; de ESP-module en alle through-hole-onderdelen soldeer je zelf.
 
 | Bestand | Inhoud | Uploaden bij |
@@ -51,8 +51,10 @@ Klik op *Next*, upload de BOM en de CPL en kies *Process BOM & CPL*.
 ## 3. BOM controleren
 - Alle **27 regels** moeten een gekoppeld onderdeel hebben (vinkje aan) met voorraad voor 5 borden.
   Staat er "shortfall" of "no stock"? Stuur een screenshot, dan zoek ik een vervanger en pas ik `design.py` aan.
-- Verwacht **8 extended** onderdelen: J1 USB-C, F1 PTC, U1 USBLC6, U2 TP4056 (mogelijk "preferred" = geen toeslag),
-  U3 DW01A, U4 AP2112K, Q2 8205A en J5/J6 Qwiic.
+- Verwacht **9 extended** onderdelen: J1 USB-C, F1 PTC, U1 USBLC6, U3 DW01A, U4 AP2112K, Q2 AO8810, J5/J6 Qwiic
+  en de groene en blauwe LED (D3, D4). U2 TP4056 is "preferred" (geen toeslag).
+- Op 11 november 2026 was alles op voorraad (`generator/jlc_check.py`). Tussen controle en bestelling kan dat
+  veranderen; daarom deze stap toch even nalopen.
 - De zelf te solderen onderdelen staan niet in de bestanden, dus JLCPCB meldt daar niets over.
 
 ## 4. Plaatsingspreview – het belangrijkste stuk
@@ -69,7 +71,7 @@ ook als het goed lijkt:
 | U3 | DW01A (SOT-23-6) | pin 1 bij het driehoekje |
 | U4 | AP2112K-3.3 (SOT-23-5) | de kant met 3 pootjes op de 3 pads |
 | Q1, Q3 | AO3401A (SOT-23) | het losse pootje (drain) op de losse pad |
-| Q2 | 8205A (TSSOP-8) | pin 1 bij het driehoekje |
+| Q2 | AO8810 (TSSOP-8) | pin 1 bij het driehoekje |
 | D1 | SS34 (SMA) | kathodestreep aan de kant van de streep in de silkscreen |
 | D6 | 1N4148W (SOD-123) | kathodestreep aan de kant van de streep in de silkscreen |
 | D2, D3, D4 | LED's 0603 | kathode aan de gemarkeerde kant |
@@ -105,9 +107,11 @@ Van laag naar hoog, dan zit niets in de weg:
 ## Opnieuw maken
 Na een wijziging in `generator/design.py` (bijv. een ander LCSC-nummer), zonder opnieuw te routeren:
 ```bash
+./generator/build.sh                                                   # schema + BOM-overzicht
 /usr/bin/python3 generator/sync_attrs.py hardware/cv_monitor/cv_monitor.kicad_pcb
 /usr/bin/python3 generator/drc.py hardware/cv_monitor/cv_monitor.kicad_pcb
 /usr/bin/python3 generator/make_production.py hardware/cv_monitor/cv_monitor.kicad_pcb rev0.2
+python3 -I generator/jlc_check.py hardware/cv_monitor/production/cv_monitor_rev0.2_bom.csv   # voorraad + klasse
 ```
 
 Bronnen: [JLCPCB PCBA-capabilities](https://jlcpcb.com/capabilities/pcb-assembly-capabilities),

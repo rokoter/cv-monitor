@@ -1,4 +1,4 @@
-# Kosteninschatting POC – PCB rev 0.2, 10 november 2026
+# Kosteninschatting POC – PCB rev 0.2, 11 november 2026
 
 De productiebestanden zijn klaar (`hardware/cv_monitor/production/`). De definitieve prijs volgt uit de
 JLCPCB-offerte na het uploaden; dit is de inschatting vooraf. Bedragen in USD zoals JLCPCB rekent,
@@ -8,7 +8,8 @@ euro's afgerond (koers ~0,9, niet geverifieerd). Tarieven: JLCPCB-helpartikel "P
 ## Gekozen optie
 - 4-laags bord, 94 × 70 mm, 1,6 mm, groen, HASL; **5 stuks, alle 5 geassembleerd**.
 - **Economic PCBA**, alleen bovenkant: JLCPCB plaatst **27 unieke SMD-onderdelen** (57 per bord,
-  179 soldeerpunten), waarvan **8 extended**. Ook U1 (USB-ESD) en de Qwiic-connectoren J5/J6 zitten erbij.
+  179 soldeerpunten), waarvan **9 extended**. Ook U1 (USB-ESD) en de Qwiic-connectoren J5/J6 zitten erbij.
+- Voorraad en klasse op 11 november gecontroleerd met `generator/jlc_check.py`: alle 27 regels leverbaar.
 - Zelf solderen: de ESP-module en alle through-hole-onderdelen (klemmen, headers, NTC-connector, D5, accuhouder).
 
 ## A. JLCPCB-bestelling (1 zending)
@@ -18,14 +19,14 @@ euro's afgerond (koers ~0,9, niet geverifieerd). Tarieven: JLCPCB-helpartikel "P
 | Setup Economic PCBA | $8,18 | eenmalig per order |
 | Stencil | $1,53 | |
 | Confirm parts placement | $0,45 | engineer controleert de plaatsing vóór productie |
-| Extended onderdelen | $21,49 – 24,56 | 7–8 × $3,07; TP4056 is mogelijk "preferred" en dan gratis |
+| Extended onderdelen | $27,63 | 9 × $3,07; TP4056 is "preferred" en dus zonder toeslag |
 | Plaatsen (179 punten × 5 borden) | ≈ $1,50 | ~$0,0016 per soldeerpunt |
 | Onderdelen voor 5 borden | $8 – 15 | incl. minimale afnamehoeveelheden |
-| **Subtotaal JLCPCB** | **$43 – 66** | |
+| **Subtotaal JLCPCB** | **$49 – 69** | |
 | Verzending naar NL | $15 – 25 | afhankelijk van de vervoerder |
-| Btw 21% (IOSS, bij afrekenen) | ≈ €11 – 17 | |
+| Btw 21% (IOSS, bij afrekenen) | ≈ €12 – 18 | |
 | EU-douane sinds juli 2026 | ≈ €20 – 25 | €3 tijdelijk douanerecht per HS-code + €2 afhandeling per regel + vervoerderskosten (min. €15–16,50) |
-| **Totaal geleverd** | **≈ €85 – 125** | |
+| **Totaal geleverd** | **≈ €90 – 130** | |
 
 ## B. Zelf aan te schaffen (voor 2 werkende borden)
 | Onderdeel | Aantal | Indicatie |
@@ -43,11 +44,12 @@ euro's afgerond (koers ~0,9, niet geverifieerd). Tarieven: JLCPCB-helpartikel "P
 De andere 3 borden zijn ook geassembleerd: later alleen een ESP-module en de through-hole-onderdelen erbij.
 
 ## Totaal
-**≈ €120 – 180 voor 2 werkende borden incl. sensoren en accu's** (zonder displays), plus 3 reserveborden.
+**≈ €125 – 185 voor 2 werkende borden incl. sensoren en accu's** (zonder displays), plus 3 reserveborden.
 
 ## Waarom deze keuze
 | Alternatief | Verschil | Oordeel |
 |---|---|---|
+| Groene/blauwe LED vervangen door wit (basic) en geel (preferred) | ≈ $6 goedkoper | groen = vol en blauw = status zijn duidelijker |
 | Economic, maar U1 en J5/J6 zelf solderen | ≈ $6 goedkoper | fijn-pitch SMD met de hand; niet de moeite waard |
 | Economic, 2 i.p.v. 5 borden assembleren | ≈ $9 goedkoper | reserveborden zonder SMD zijn weinig waard |
 | Standard PCBA | ≈ $44 duurder | pas zinvol voor een eindversie of 10+ borden |
@@ -56,7 +58,8 @@ De andere 3 borden zijn ook geassembleerd: later alleen een ESP-module en de thr
 ## Waar zit het geld?
 1. **Vaste kosten per zending** (verzending + btw + douane ≈ €40–55): bestel alles in één JLCPCB-order
    en koop de losse onderdelen bij één leverancier.
-2. **Extended onderdelen** (≈ $21–25): elk uniek extended onderdeel kost eenmalig $3,07 per order.
+2. **Extended onderdelen** ($27,63): elk uniek extended onderdeel kost eenmalig $3,07 per order.
+   Sinds 2026 zijn groene en blauwe 0603-LED's geen basic-onderdelen meer bij JLCPCB.
 3. Het bord zelf en de geplaatste onderdelen zijn per stuk goedkoop.
 
 ## Bronnen

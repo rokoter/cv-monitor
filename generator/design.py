@@ -51,7 +51,7 @@ COMPONENTS = [
                'A4': 'VBUS_IN', 'A9': 'VBUS_IN', 'B4': 'VBUS_IN', 'B9': 'VBUS_IN',
                'A5': 'CC1', 'B5': 'CC2', 'A6': 'USB_D+', 'B6': 'USB_D+', 'A7': 'USB_D-', 'B7': 'USB_D-',
                'A8': 'NC', 'B8': 'NC'}),
-    dict(ref='F1', lib='Device:Polyfuse', value='1,1A PTC', gx=36, gy=10, rot=90, lcsc='C523825',
+    dict(ref='F1', lib='Device:Polyfuse', value='1,1A PTC', gx=36, gy=10, rot=90, lcsc='C269119',
          fp='Fuse:Fuse_1206_3216Metric', ref_at=(35, 8), val_at=(35, 12.5),
          nets={'1': 'VBUS_IN', '2': 'VBUS'}),
     R('R1', '5.1k', 28, 18, 'CC1', 'GND'),
@@ -80,7 +80,7 @@ COMPONENTS = [
          nets={'1': 'TEMP', '2': 'GND'}),
     LED('D2', 'rood: laden', 'C2286', 73, 22, 'LEDR', 'CHRG'),
     R('R4', '1k', 78, 22, 'LEDR', 'VBUS', rot=90, ref_at=(77, 20.5), val_at=(77, 23.5)),
-    LED('D3', 'groen: vol', 'C72043', 73, 27, 'LEDG', 'STDBY'),
+    LED('D3', 'groen: vol', 'C12624', 73, 27, 'LEDG', 'STDBY'),
     R('R5', '1k', 78, 27, 'LEDG', 'VBUS', rot=90, ref_at=(77, 25.5), val_at=(77, 28.5)),
 
     # ------------------------------------------------------------ 3. Power-path + LDO
@@ -117,7 +117,7 @@ COMPONENTS = [
     dict(ref='U3', lib='cv_monitor:DW01A', value='DW01A', gx=40, gy=52, lcsc='C351410',
          fp='Package_TO_SOT_SMD:SOT-23-6', ref_at=(34, 48.5), val_at=(41, 48.5),
          nets={'5': 'DW_VCC', '2': 'DW_CS', '1': 'DW_OD', '3': 'DW_OC', '4': 'NC', '6': 'B-'}),
-    dict(ref='Q2', lib='cv_monitor:FS8205A', value='8205A (HXY)', gx=58, gy=52, lcsc='C5148694',
+    dict(ref='Q2', lib='cv_monitor:FS8205A', value='AO8810 (8205A-compatibel)', gx=58, gy=52, lcsc='C21426',
          fp='Package_SO:TSSOP-8_4.4x3mm_P0.65mm', ref_at=(52, 48.5), val_at=(59, 48.5),
          nets={'4': 'DW_OD', '2': 'B-', '3': 'B-', '5': 'DW_OC', '6': 'GND', '7': 'GND',
                '1': 'NC', '8': 'NC'}),
@@ -168,7 +168,7 @@ COMPONENTS = [
          fp='Button_Switch_SMD:SW_Push_1P1T_XKB_TS-1187A', lcsc='C318884',
          ref_at=(46.5, 94.5), val_at=(46.5, 96), nets={'2': 'KNOP', '1': 'GND'}),
     R('R13', '1k', 54, 90, 'LED_STATUS', 'LEDB'),
-    LED('D4', 'blauw: status', 'C72041', 54, 96, 'LEDB', 'GND', rot=90,
+    LED('D4', 'blauw: status', 'C2288', 54, 96, 'LEDB', 'GND', rot=90,
         ref_at=(55.5, 95.5), val_at=(55.5, 98.5)),
     dict(ref='J4', lib='Connector_Generic:Conn_01x10', value='UITBREIDING (DNP)', gx=70, gy=96, dnp=True,
          pwr_rotate=True, stub={'2': 7.62}, fp='Connector_PinHeader_2.54mm:PinHeader_1x10_P2.54mm_Vertical',
@@ -275,7 +275,7 @@ TEXTS = [
     dict(t='Vertelt de ERC-controle waar een net\nzijn voeding vandaan krijgt.', gx=142, gy=30),
 
     dict(t='4. 18650 ACCU + BEVEILIGING', gx=4, gy=42, size=2.0, bold=True),
-    dict(t='DW01A + FS8205A schakelen af bij <2,4 V, >4,3 V of >~3 A.\n'
+    dict(t='DW01A + AO8810 (8205A-type) schakelen af bij <2,4 V, >4,3 V of >~4 A.\n'
            'Let op: B- = min van de cel; GND (P-) = systeemmassa.\n'
            'De FET-schakelaar zit in de min-leiding.\n'
            'Q3 = ompoolbeveiliging: accu goed -> gate laag -> Q3 geleidt (laden en ontladen).\n'

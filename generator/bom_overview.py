@@ -1,7 +1,7 @@
 """Maakt docs/BOM_JLCPCB.md: welke onderdelen JLCPCB plaatst, welke Koen zelf soldeert,
 en welke 'extended' zijn (opstartkosten per uniek onderdeel bij JLCPCB).
 
-De classificatie is handmatig gecontroleerd op de JLCPCB-onderdeelpagina's (datum in de kop).
+Klasse en voorraad gecontroleerd met generator/jlc_check.py (jlcparts-data, datum in de kop).
 Definitief is altijd wat de BOM-tool van JLCPCB bij het bestellen laat zien.
 """
 import os
@@ -11,17 +11,19 @@ from collections import OrderedDict
 sys.path.insert(0, os.path.dirname(__file__))
 from design import COMPONENTS  # noqa: E402
 
-CHECKED = '2026-11-09'
+CHECKED = '2026-11-11'
 # lcsc -> (klasse, opmerking)
 JLC = {
     'C15127': ('Basic', ''), 'C8678': ('Basic', ''), 'C318884': ('Basic', ''),
     'C165948': ('Extended', ''), 'C7519': ('Extended', 'ESD, optioneel'),
-    'C351410': ('Extended', ''), 'C5148694': ('Extended', 'vervangt uitverkochte C32254'),
-    'C51118': ('Extended', ''), 'C523825': ('Extended', 'geen basic PTC beschikbaar'),
-    'C160404': ('Extended', 'liggende JST-SH (Qwiic)'), 'C16581': ('Extended*', '*mogelijk "preferred" (geen toeslag)'),
+    'C351410': ('Extended', ''), 'C21426': ('Extended', 'AOS, pin-compatibel met 8205A; C5148694 niet meer leverbaar'),
+    'C51118': ('Extended', ''), 'C269119': ('Extended', 'geen basic PTC; C523825 uitverkocht'),
+    'C160404': ('Extended', 'liggende JST-SH (Qwiic)'), 'C16581': ('Preferred', 'geen toeslag'),
+    'C12624': ('Extended', 'geen groene 0603 meer in basic; C72043 uitverkocht'),
+    'C2288': ('Extended', 'geen blauwe 0603 meer in basic; C72041 uitverkocht'),
 }
 BASIC_PASSIVE = {'C14663', 'C15849', 'C15850', 'C45783', 'C21190', 'C22775', 'C22975', 'C23162', 'C23186',
-                 'C25803', 'C25804', 'C25819', 'C2286', 'C72041', 'C72043', 'C81598'}
+                 'C25803', 'C25804', 'C25819', 'C2286', 'C81598'}
 
 lines = OrderedDict()
 for c in COMPONENTS:
