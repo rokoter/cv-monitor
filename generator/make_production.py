@@ -24,8 +24,10 @@ LAYERS = 'F.Cu,In1.Cu,In2.Cu,B.Cu,F.Paste,B.Paste,F.SilkS,B.SilkS,F.Mask,B.Mask,
 
 # JLCPCB gebruikt voor sommige behuizingen een andere 0°-stand dan KiCad. Alleen correcties die
 # algemeen bekend zijn; alle gepolariseerde onderdelen controleren we in de JLCPCB-preview.
+# Gecontroleerd in de JLCPCB-preview van 11 november 2026 (SOT-23-5/-6 stonden met 180 een kwartslag verdraaid).
 ROT_FIX = [
-    (r'^SOT-23', 180),          # SOT-23, SOT-23-5, SOT-23-6
+    (r'^SOT-23-[56]', 270),     # SOT-23-5, SOT-23-6: JLC-model heeft de pinrijen boven/onder, pin 1 linksonder
+    (r'^SOT-23', 180),          # SOT-23 (3 pinnen)
     (r'^SOIC-', 270),
     (r'^TSSOP-', 270),
 ]

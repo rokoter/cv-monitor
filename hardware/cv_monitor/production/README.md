@@ -77,6 +77,10 @@ ook als het goed lijkt:
 | D2, D3, D4 | LED's 0603 | kathode aan de gemarkeerde kant |
 | SW1–SW3 | drukknoppen | vier pootjes op de vier pads, niet 90° verdraaid: dan zit de knop altijd "ingedrukt" (RESET houdt de ESP dan in reset) |
 
+**Eerste preview (11 november 2026):** alles goed behalve U1, U3 en U4 (SOT-23-6/-5), die stonden een kwartslag
+gedraaid. Gecorrigeerd in de CPL (90° / 270° / 270°). Na opnieuw uploaden van de CPL alleen die drie nog nalopen:
+pin-1-punt bij ons driehoekje, en bij U4 de 3 pootjes links.
+
 Klopt er iets niet: niet zelf in de JLCPCB-tool draaien, maar mij laten weten. Dan pas ik de draaiing in
 `generator/make_production.py` aan, zodat ook een nabestelling klopt.
 
