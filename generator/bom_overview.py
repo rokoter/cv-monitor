@@ -19,8 +19,8 @@ JLC = {
     'C351410': ('Extended', ''), 'C21426': ('Extended', 'AOS, pin-compatibel met 8205A; C5148694 niet meer leverbaar'),
     'C51118': ('Extended', ''), 'C269119': ('Extended', 'geen basic PTC; C523825 uitverkocht'),
     'C160404': ('Extended', 'liggende JST-SH (Qwiic)'), 'C16581': ('Preferred', 'geen toeslag'),
-    'C2290': ('Basic', 'wit i.p.v. groen: groen/blauw 0603 zijn extended'),
-    'C89811': ('Preferred', 'geel i.p.v. blauw; preferred = geen toeslag'),
+    'C12624': ('Extended', 'groen 0603 is geen basic meer; R5 = 4k7 voor gelijke helderheid als rood'),
+    'C89811': ('Preferred', 'geel i.p.v. blauw: minder fel, geen toeslag'),
 }
 BASIC_PASSIVE = {'C14663', 'C15849', 'C15850', 'C45783', 'C21190', 'C22775', 'C22975', 'C23162', 'C23186',
                  'C25803', 'C25804', 'C25819', 'C2286', 'C81598'}

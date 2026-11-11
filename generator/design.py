@@ -80,8 +80,8 @@ COMPONENTS = [
          nets={'1': 'TEMP', '2': 'GND'}),
     LED('D2', 'rood: laden', 'C2286', 73, 22, 'LEDR', 'CHRG'),
     R('R4', '1k', 78, 22, 'LEDR', 'VBUS', rot=90, ref_at=(77, 20.5), val_at=(77, 23.5)),
-    LED('D3', 'wit: vol', 'C2290', 73, 27, 'LEDG', 'STDBY'),
-    R('R5', '1k', 78, 27, 'LEDG', 'VBUS', rot=90, ref_at=(77, 25.5), val_at=(77, 28.5)),
+    LED('D3', 'groen: vol', 'C12624', 73, 27, 'LEDG', 'STDBY'),
+    R('R5', '4.7k', 78, 27, 'LEDG', 'VBUS', rot=90, ref_at=(77, 25.5), val_at=(77, 28.5)),
 
     # ------------------------------------------------------------ 3. Power-path + LDO
     dict(ref='D1', lib='Diode:SS34', value='SS34', gx=104, gy=16, rot=180, fp='Diode_SMD:D_SMA',
@@ -226,7 +226,7 @@ WIRES = [
     (('U2', '2'), ('R3', '1')),          # PROG -> R3
     (('U2', '7'), ('D2', '1')),          # CHRG -> rode LED kathode
     (('D2', '2'), ('R4', '1')),
-    (('U2', '6'), ('D3', '1')),          # STDBY -> kathode LED 'vol' (wit; net heet nog LEDG)
+    (('U2', '6'), ('D3', '1')),          # STDBY -> groene LED kathode (R5 4k7: even fel als de rode)
     (('D3', '2'), ('R5', '1')),
     (('U4', '3'), ('U4', '1')),          # EN aan VIN
     (('R13', '2'), ('D4', '2')),         # status-LED
@@ -260,7 +260,7 @@ TEXTS = [
     dict(t='Laadstroom = 1200 / R3 = 1200 / 2k = 600 mA\n'
            '(veilig voor elke 18650 en beperkt de warmte in de TP4056).\n'
            'CE aan VCC = altijd aan.\n'
-           'Rode LED = bezig met laden, witte LED = vol.\n'
+           'Rode LED = bezig met laden, groene LED = vol.\n'
            'NTC: 10k B3950 op J9 tegen de accu -> laden alleen tussen ~1 en 46 C.\n'
            'Zonder NTC: JP1 dicht laten (vaste 10k = "25 C"). Met NTC: JP1 doorsnijden.', gx=44, gy=39),
 

@@ -14,12 +14,12 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-11; bij b
 | U2 | TP4056 | SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias_0.3mm | C16581 | Preferred | 1 | geen toeslag |
 | C2, C3, C5, C6 | 10uF | C_0805_2012Metric | C15850 | Basic | 4 |  |
 | R3 | 2k | R_0603_1608Metric | C22975 | Basic | 1 |  |
-| R18, R19, R20, R21, R23 | 4.7k | R_0603_1608Metric | C23162 | Basic | 5 |  |
+| R5, R18, R19, R20, R21, R23 | 4.7k | R_0603_1608Metric | C23162 | Basic | 6 |  |
 | R24 | 47k | R_0603_1608Metric | C25819 | Basic | 1 |  |
 | R9, R10, R11, R22, R25 | 10k | R_0603_1608Metric | C25804 | Basic | 5 |  |
 | D2 | rood: laden | LED_0603_1608Metric | C2286 | Basic | 1 |  |
-| R4, R5, R7, R8, R13, R26 | 1k | R_0603_1608Metric | C21190 | Basic | 6 |  |
-| D3 | wit: vol | LED_0603_1608Metric | C2290 | Basic | 1 | wit i.p.v. groen: groen/blauw 0603 zijn extended |
+| R4, R7, R8, R13, R26 | 1k | R_0603_1608Metric | C21190 | Basic | 5 |  |
+| D3 | groen: vol | LED_0603_1608Metric | C12624 | Extended | 1 | groen 0603 is geen basic meer; R5 = 4k7 voor gelijke helderheid als rood |
 | D1 | SS34 | D_SMA | C8678 | Basic | 1 |  |
 | Q1, Q3 | AO3401A | SOT-23 | C15127 | Basic | 2 |  |
 | U4 | AP2112K-3.3 | SOT-23-5 | C51118 | Extended | 1 |  |
@@ -31,10 +31,10 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-11; bij b
 | C8 | 22uF | C_0805_2012Metric | C45783 | Basic | 1 |  |
 | R14, R15, R16, R17 | 100k | R_0603_1608Metric | C25803 | Basic | 4 |  |
 | SW1, SW2, SW3 | RESET / BOOT / STATUS | SW_Push_1P1T_XKB_TS-1187A | C318884 | Basic | 3 |  |
-| D4 | geel: status | LED_0603_1608Metric | C89811 | Preferred | 1 | geel i.p.v. blauw; preferred = geen toeslag |
+| D4 | geel: status | LED_0603_1608Metric | C89811 | Preferred | 1 | geel i.p.v. blauw: minder fel, geen toeslag |
 | J5, J6 | QWIIC 1 / QWIIC 2 | JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal | C160404 | Extended | 2 | liggende JST-SH (Qwiic) |
 
-**27 unieke onderdelen, waarvan 7 extended** (extended = eenmalige opstartkosten per uniek onderdeel per order).
+**27 unieke onderdelen, waarvan 8 extended** (extended = eenmalige opstartkosten per uniek onderdeel per order).
 
 ## Zelf solderen (THT, niet in de JLCPCB-BOM)
 
