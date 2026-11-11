@@ -3288,13 +3288,13 @@
     (at 109 111.5 180)
     (descr "LED SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags "LED")
-    (property "LCSC" "C12624")
+    (property "LCSC" "C2290")
     (attr smd)
     (fp_text reference "D3" (at 0 -2.078249) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp a9f224e7-4261-4b20-9032-661e25d04e6e)
     )
-    (fp_text value "groen: vol" (at 0 1.43 180) (layer "F.Fab") hide
+    (fp_text value "wit: vol" (at 0 1.43 180) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 7af86d23-37fb-4318-8820-2495661c6325)
     )
@@ -4256,13 +4256,13 @@
     (at 161 121.5 180)
     (descr "LED SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
     (tags "LED")
-    (property "LCSC" "C2288")
+    (property "LCSC" "C89811")
     (attr smd)
     (fp_text reference "D4" (at 2.731189 0) (layer "F.SilkS")
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp b0a4bdbb-4077-4e81-b83c-3fac86cb3132)
     )
-    (fp_text value "blauw: status" (at 0 1.43 180) (layer "F.Fab") hide
+    (fp_text value "geel: status" (at 0 1.43 180) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 0cecb5ab-018b-4479-b893-c40025433bb3)
     )

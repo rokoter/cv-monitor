@@ -51,8 +51,8 @@ Klik op *Next*, upload de BOM en de CPL en kies *Process BOM & CPL*.
 ## 3. BOM controleren
 - Alle **27 regels** moeten een gekoppeld onderdeel hebben (vinkje aan) met voorraad voor 5 borden.
   Staat er "shortfall" of "no stock"? Stuur een screenshot, dan zoek ik een vervanger en pas ik `design.py` aan.
-- Verwacht **9 extended** onderdelen: J1 USB-C, F1 PTC, U1 USBLC6, U3 DW01A, U4 AP2112K, Q2 AO8810, J5/J6 Qwiic
-  en de groene en blauwe LED (D3, D4). U2 TP4056 is "preferred" (geen toeslag).
+- Verwacht **7 extended** onderdelen: J1 USB-C, F1 PTC, U1 USBLC6, U3 DW01A, U4 AP2112K, Q2 AO8810 en J5/J6 Qwiic.
+  U2 TP4056 en D4 (gele LED) zijn "preferred": geen toeslag. D3 is een witte basic-LED.
 - Op 11 november 2026 was alles op voorraad (`generator/jlc_check.py`). Tussen controle en bestelling kan dat
   veranderen; daarom deze stap toch even nalopen.
 - De zelf te solderen onderdelen staan niet in de bestanden, dus JLCPCB meldt daar niets over.
@@ -78,8 +78,9 @@ ook als het goed lijkt:
 | SW1–SW3 | drukknoppen | vier pootjes op de vier pads, niet 90° verdraaid: dan zit de knop altijd "ingedrukt" (RESET houdt de ESP dan in reset) |
 
 **Eerste preview (11 november 2026):** alles goed behalve U1, U3 en U4 (SOT-23-6/-5), die stonden een kwartslag
-gedraaid. Gecorrigeerd in de CPL (90° / 270° / 270°). Na opnieuw uploaden van de CPL alleen die drie nog nalopen:
-pin-1-punt bij ons driehoekje, en bij U4 de 3 pootjes links.
+gedraaid. Gecorrigeerd in de CPL (90° / 270° / 270°). Daarna zijn D3 (wit) en D4 (geel) vervangen om de
+extended-toeslag te besparen. Na opnieuw uploaden van BOM en CPL dus nalopen: U1, U3, U4 (pin-1-punt bij ons
+driehoekje, bij U4 de 3 pootjes links) en D3, D4 (de "−" van JLCPCB aan de rechterkant, op onze kathode).
 
 Klopt er iets niet: niet zelf in de JLCPCB-tool draaien, maar mij laten weten. Dan pas ik de draaiing in
 `generator/make_production.py` aan, zodat ook een nabestelling klopt.

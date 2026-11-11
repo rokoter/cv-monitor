@@ -15,12 +15,12 @@ CHECKED = '2026-11-11'
 # lcsc -> (klasse, opmerking)
 JLC = {
     'C15127': ('Basic', ''), 'C8678': ('Basic', ''), 'C318884': ('Basic', ''),
-    'C165948': ('Extended', ''), 'C7519': ('Extended', 'ESD, optioneel'),
+    'C165948': ('Extended', ''), 'C7519': ('Extended', 'ESD; D+/D- lopen door de chip, dus niet weglaten'),
     'C351410': ('Extended', ''), 'C21426': ('Extended', 'AOS, pin-compatibel met 8205A; C5148694 niet meer leverbaar'),
     'C51118': ('Extended', ''), 'C269119': ('Extended', 'geen basic PTC; C523825 uitverkocht'),
     'C160404': ('Extended', 'liggende JST-SH (Qwiic)'), 'C16581': ('Preferred', 'geen toeslag'),
-    'C12624': ('Extended', 'geen groene 0603 meer in basic; C72043 uitverkocht'),
-    'C2288': ('Extended', 'geen blauwe 0603 meer in basic; C72041 uitverkocht'),
+    'C2290': ('Basic', 'wit i.p.v. groen: groen/blauw 0603 zijn extended'),
+    'C89811': ('Preferred', 'geel i.p.v. blauw; preferred = geen toeslag'),
 }
 BASIC_PASSIVE = {'C14663', 'C15849', 'C15850', 'C45783', 'C21190', 'C22775', 'C22975', 'C23162', 'C23186',
                  'C25803', 'C25804', 'C25819', 'C2286', 'C81598'}

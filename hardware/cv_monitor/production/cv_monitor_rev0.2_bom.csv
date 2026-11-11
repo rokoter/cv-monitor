@@ -5,8 +5,8 @@ Comment,Designator,Footprint,LCSC Part #
 22uF,C8,C_0805_2012Metric,C45783
 SS34,D1,D_SMA,C8678
 rood: laden,D2,LED_0603_1608Metric,C2286
-groen: vol,D3,LED_0603_1608Metric,C12624
-blauw: status,D4,LED_0603_1608Metric,C2288
+wit: vol,D3,LED_0603_1608Metric,C2290
+geel: status,D4,LED_0603_1608Metric,C89811
 1N4148W,D6,D_SOD-123,C81598
 "1,1A PTC",F1,Fuse_1206_3216Metric,C269119
 USB-C,J1,USB_C_Receptacle_HRO_TYPE-C-31-M-12,C165948
