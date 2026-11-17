@@ -1,6 +1,6 @@
 # CV temperatuurmonitor – stap 1: schema (rev 0.8)
 
-Herbruikbaar ESP32-S3-sensorbord: meet aanvoer- en retourtemperatuur van de CV met 2× DS18B20,
+Herbruikbaar ESP32-S3-sensorbord: meet 2 temperaturen met DS18B20's (bijv. CV-aanvoer en -retour),
 heeft een 18650 als UPS-backup, laadt/werkt via USB-C en heeft aansluitingen voor Qwiic-modules,
 een OLED (I²C) en een e-ink-display (SPI). Sinds rev 0.8 ook een Resol VBus-ingang (zonne-/boilerregelaar)
 en 2 relaisuitgangen (relais op het bord en/of extern).
@@ -34,8 +34,8 @@ Gemaakt in KiCad 7-formaat; KiCad 8/9 vraagt bij opslaan om te converteren – d
 | 2 | USB aanwezig (ADC1) | 15 | STATUS-knop |
 | 3 | vrij (strapping) | 16 | status-LED |
 | 35/36 | relais 1/2 | 38 | Resol VBus RX |
-| 4 | Sensor 1 (aanvoer) | 17/18 | uitbreiding J4 |
-| 5 | Sensor 2 (retour) | 19/20 | USB D-/D+ |
+| 4 | TEMP 1 (1-Wire) | 17/18 | uitbreiding J4 |
+| 5 | TEMP 2 (1-Wire) | 19/20 | USB D-/D+ |
 | 6/7 | uitbreiding J4 (ADC1) | 21 | e-ink BUSY |
 | 8 | I²C SDA (Qwiic + OLED) | 43/44 | UART TX/RX (J4) |
 | 9 | I²C SCL (Qwiic + OLED) | 45/46 | vrij (strapping) |

@@ -48,8 +48,8 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-17; bij b
 | BT1 | 18650 – houder MPD BK-18650-PC2 | BatteryHolder_MPD_BH-18650-PC2 |
 | D5 | rood 3mm THT: accu omgekeerd | LED_D3.0mm |
 | U5 | ESP32-S3-WROOM-1-N8 (zelf solderen) | ESP32-S3-WROOM-1_HandSolder |
-| J2 | SENSOR1 (aanvoer) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
-| J3 | SENSOR2 (retour) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
+| J2 | TEMP 1 (1-Wire) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
+| J3 | TEMP 2 (1-Wire) | TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal |
 | J4 | UITBREIDING (DNP) | PinHeader_1x10_P2.54mm_Vertical |
 | J8 | E-INK (DNP) | PinHeader_1x08_P2.54mm_Vertical |
 | J7 | OLED I2C (DNP) | PinHeader_1x04_P2.54mm_Vertical |

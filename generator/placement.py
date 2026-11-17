@@ -87,7 +87,7 @@ EDGE_ALIGN = {'J1': ('left', 0.0), 'J2': ('right', -0.6), 'J3': ('right', -0.6),
 FUNC_LABELS = {
     'SW1': 'RESET', 'SW2': 'BOOT', 'SW3': 'STATUS',
     'D2': 'LADEN', 'D3': 'VOL', 'D4': 'LED',
-    'J1': 'USB 5V', 'J2': 'AANVOER', 'J3': 'RETOUR', 'J4': 'UITBREIDING',
+    'J1': 'USB 5V', 'J2': 'TEMP 1', 'J3': 'TEMP 2', 'J4': 'UITBREIDING',
     'J5': 'QWIIC', 'J6': 'QWIIC', 'J7': 'OLED', 'J8': 'E-INK', 'J9': 'NTC',
 }
 

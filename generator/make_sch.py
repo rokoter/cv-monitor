@@ -305,7 +305,7 @@ out = f'''(kicad_sch (version 20230121) (generator eeschema)
   (uuid {ROOT})
   (paper "User" 520 297)
   (title_block
-    (title "CV temperatuurmonitor - aanvoer/retour")
+    (title "CV-monitor - temperatuur, Resol VBus en relais")
     (date "2026-11-17")
     (rev "0.8")
     (comment 1 "ESP32-S3 + 2x DS18B20 + 18650 UPS + Resol VBus + 2 relais + Qwiic + displays")

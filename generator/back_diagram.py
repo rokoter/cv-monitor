@@ -13,8 +13,8 @@ pinnen van J7/J4 (links in achteraanzicht) en USB-C (rechts), om het via-veld va
        │               │          │
      ACCU 18650 ───────┘   ┌──────┼───────┬─────────┐
                          1-WIRE  I2C     SPI       GPIO
-                         AANVOER OLED    E-INK     UITBREIDING
-                         RETOUR  QWIIC
+                         TEMP 1  OLED    E-INK     UITBREIDING
+                         TEMP 2  QWIIC
 """
 import pcbnew
 
@@ -129,7 +129,7 @@ def draw(board, ox, oy, x0=48.5):
 
     # uitgangen van de ESP32
     vb, vt = 24.5, 26.6           # verdeellijn, bovenkant van de pijlpunten
-    outs = [(5.0, ('1-WIRE', 'AANVOER', 'RETOUR')), (15.0, ('I2C', 'OLED', 'QWIIC')),
+    outs = [(5.0, ('1-WIRE', 'TEMP 1', 'TEMP 2')), (15.0, ('I2C', 'OLED', 'QWIIC')),
             (24.0, ('SPI', 'E-INK')), (SU, ('GPIO', 'UITBREIDING'))]
     d.line(SU, r3 + H / 2, SU, vb)
     d.line(outs[0][0], vb, SU, vb)

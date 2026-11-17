@@ -1,7 +1,7 @@
 # CV-monitor
 
-Herbruikbaar ESP32-S3-sensorbord voor Home Assistant (ESPHome). Eerste toepassing: aanvoer- en
-retourtemperatuur van de CV-installatie meten met 2× DS18B20. Voeding via USB-C met een 18650 als
+Herbruikbaar ESP32-S3-sensorbord voor Home Assistant (ESPHome). Twee algemene temperatuurpoorten (TEMP 1/2,
+DS18B20); eerste toepassing: aanvoer- en retourtemperatuur van de CV-installatie. Voeding via USB-C met een 18650 als
 UPS-backup. Uitbreidbaar via Qwiic (I²C), een uitbreidingsheader en aansluitingen voor OLED en e-ink.
 
 Leertraject: Koen stuurt en controleert, Claude voert uit.
