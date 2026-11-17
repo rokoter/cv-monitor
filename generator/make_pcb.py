@@ -176,7 +176,83 @@ def text(t, x, y, size=1.0, layer=pcbnew.F_SilkS, mirror=False):
 
 
 # titel bovenaan: midden tussen montagegaten H1 en H4, op dezelfde hoogte als de gaten
-text('CV-monitor rev 0.2', (HOLES['H1'][0] + HOLES['H4'][0]) / 2, HOLES['H1'][1], 1.2)
+text('CV-monitor rev 0.3', (HOLES['H1'][0] + HOLES['H4'][0]) / 2, HOLES['H1'][1], 1.2)
+
+# 230 V-zones: gestippeld kader op boven- en onderkant + waarschuwing ernaast
+from placement import MAINS_ZONES  # noqa: E402
+
+
+def _seg_dist(p1, p2, q1, q2):
+    """Kleinste afstand tussen twee lijnstukken (mm)."""
+    def d_pt(p, a, b):
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        L2 = dx * dx + dy * dy
+        t = 0.0 if L2 == 0 else max(0.0, min(1.0, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L2))
+        return math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy)
+
+    def cr(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    if (cr(q1, q2, p1) > 0) != (cr(q1, q2, p2) > 0) and (cr(p1, p2, q1) > 0) != (cr(p1, p2, q2) > 0):
+        return 0.0
+    return min(d_pt(p1, q1, q2), d_pt(p2, q1, q2), d_pt(q1, p1, p2), d_pt(q2, p1, p2))
+
+
+def silk_obstacles(layer):
+    """Silk-lijnen van footprints op deze laag (mm, t.o.v. het bord): ('seg', a, b, halve breedte)
+    of ('box', x1, y1, x2, y2) voor bogen/cirkels."""
+    obs = []
+    for fp in board.GetFootprints():
+        for it in fp.GraphicalItems():
+            if it.GetLayer() != layer or it.GetClass() == 'FP_TEXT':
+                continue
+            hw = pcbnew.ToMM(it.GetWidth()) / 2
+            if it.GetShape() == pcbnew.SHAPE_T_SEGMENT:
+                a, b = it.GetStart(), it.GetEnd()
+                obs.append(('seg', (pcbnew.ToMM(a.x) - OX, pcbnew.ToMM(a.y) - OY),
+                            (pcbnew.ToMM(b.x) - OX, pcbnew.ToMM(b.y) - OY), hw))
+            else:
+                bb = it.GetBoundingBox()
+                obs.append(('box', pcbnew.ToMM(bb.GetLeft()) - OX, pcbnew.ToMM(bb.GetTop()) - OY,
+                            pcbnew.ToMM(bb.GetRight()) - OX, pcbnew.ToMM(bb.GetBottom()) - OY))
+    return obs
+
+
+def dashed(x1, y1, x2, y2, layer, obstacles=(), dash=1.2, gap=0.8, w=0.2, clr=0.15):
+    """Stippellijn; streepjes die een silk-lijn van een footprint zouden raken worden overgeslagen
+    (bijv. waar het kader onder de omtrek van het relais doorloopt)."""
+    L = math.hypot(x2 - x1, y2 - y1)
+    ux, uy = (x2 - x1) / L, (y2 - y1) / L
+    t = 0.0
+    while t < L:
+        e = min(t + dash, L)
+        a, b = (x1 + ux * t, y1 + uy * t), (x1 + ux * e, y1 + uy * e)
+        hit = False
+        for o in obstacles:
+            if o[0] == 'seg':
+                hit = _seg_dist(a, b, o[1], o[2]) < w / 2 + o[3] + clr
+            else:
+                m = w / 2 + clr
+                hit = (min(a[0], b[0]) - m < o[3] and o[1] < max(a[0], b[0]) + m and
+                       min(a[1], b[1]) - m < o[4] and o[2] < max(a[1], b[1]) + m)
+            if hit:
+                break
+        if not hit:
+            s = pcbnew.PCB_SHAPE(board)
+            s.SetShape(pcbnew.SHAPE_T_SEGMENT)
+            s.SetStart(P(*a))
+            s.SetEnd(P(*b))
+            add_shape(s, layer, w)
+        t += dash + gap
+
+
+# kader open aan de bordrand: de klem steekt daar met de draadingang tot aan de rand
+for (zx1, zy1, zx2, zy2) in MAINS_ZONES:
+    for layer in (pcbnew.F_SilkS, pcbnew.B_SilkS):
+        obs = silk_obstacles(layer)
+        for a in ((zx1, zy2, zx1, zy1), (zx1, zy1, zx2, zy1), (zx2, zy1, zx2, zy2)):
+            dashed(*a, layer, obs)
+    text('230V~ 5A', zx1 - 5.2, 92.0, 1.0)
+    text('230V~ 5A', (zx1 + zx2) / 2, 92.0, 1.0, pcbnew.B_SilkS, mirror=True)
 
 # accupolariteit: '+' en '-' naast de padden van de houder (boven- en onderkant)
 bt = fps['BT1']
@@ -213,8 +289,8 @@ if failed:
     print('referentie naar fab-laag (geen plek op silk):', ', '.join(failed))
 
 # ------------------------------------------------------------------ mechanische controle
-from pcb_checks import tht_vs_other_side  # noqa: E402
-mech = tht_vs_other_side(board)
+from pcb_checks import tht_vs_other_side, mains_clearance  # noqa: E402
+mech = tht_vs_other_side(board) + mains_clearance(board)
 for e in mech:
     print('MECH-FOUT:', e)
 

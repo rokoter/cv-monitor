@@ -361,7 +361,7 @@ TEXTS = [
 
     dict(t='11. RELAIS (OP HET BORD EN/OF EXTERN)', gx=163, gy=6, size=2.0, bold=True),
     dict(t='Per kanaal: K1/K2 (Finder 34.51, 5 V) op het bord, en/of een extern relais op J11\n'
-           '(spoel tussen V+ en OUT1/OUT2). Q4/Q5 schakelen de spoel(en) naar GND.\n'
+           '(spoel tussen V+ en REL1/REL2). Q4/Q5 schakelen de spoel(en) naar GND.\n'
            'GPIO35/36 hoog = relais aan. 10k houdt de relais uit tijdens opstarten.\n'
            'D11/D12 branden als het relais aangestuurd wordt. D8/D9 = vrijloop.\n'
            'V+ = spoelspanning van ALLE relais: met K1/K2 geplaatst alleen 5 V (USB via D10).\n'

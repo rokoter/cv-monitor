@@ -12,9 +12,9 @@ pinnen van J7/J4 (links in achteraanzicht) en USB-C (rechts), om het via-veld va
      BEVEILIGING       │       ESP32-S3
        │               │          │
      ACCU 18650 ───────┘   ┌──────┼───────┬─────────┐
-                         1-WIRE  I2C     SPI       GPIO
-                         TEMP 1  OLED    E-INK     UITBREIDING
-                         TEMP 2  QWIIC
+                 1-WIRE  I2C    SPI    UART^   GPIO    GPIO
+                 TEMP 1  OLED   E-INK  VBUS    RELAIS  J4
+                 TEMP 2  QWIIC         RESOL   1 + 2
 """
 import pcbnew
 
@@ -127,15 +127,19 @@ def draw(board, ox, oy, x0=48.5):
     d.arrow(JU, r4, JU, r1 + 0.6)
     d.dot(JU, r1)
 
-    # uitgangen van de ESP32
+    # aansluitingen van de ESP32 (pijl omlaag = uitgang, pijl omhoog = ingang)
     vb, vt = 24.5, 26.6           # verdeellijn, bovenkant van de pijlpunten
-    outs = [(5.0, ('1-WIRE', 'TEMP 1', 'TEMP 2')), (15.0, ('I2C', 'OLED', 'QWIIC')),
-            (24.0, ('SPI', 'E-INK')), (SU, ('GPIO', 'UITBREIDING'))]
+    outs = [(4.0, ('1-WIRE', 'TEMP 1', 'TEMP 2'), False), (11.5, ('I2C', 'OLED', 'QWIIC'), False),
+            (18.5, ('SPI', 'E-INK'), False), (25.0, ('UART', 'VBUS', 'RESOL'), True),
+            (32.0, ('GPIO', 'RELAIS', '1 + 2'), False), (39.5, ('GPIO', 'J4'), False)]
     d.line(SU, r3 + H / 2, SU, vb)
-    d.line(outs[0][0], vb, SU, vb)
+    d.line(outs[0][0], vb, outs[-1][0], vb)
     d.dot(SU, vb)
-    for u, lines in outs:
-        d.arrow(u, vb, u, vt)
+    for u, lines, inp in outs:
+        if inp:
+            d.arrow(u, vt + 0.4, u, vb + 0.1)
+        else:
+            d.arrow(u, vb, u, vt)
         for k, t in enumerate(lines):
             d.text(t, u, vt + 1.2 + 1.6 * k)
     return d

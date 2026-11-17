@@ -23,7 +23,7 @@ Gemaakt in KiCad 7-formaat; KiCad 8/9 vraagt bij opslaan om te converteren – d
 | 8 | Qwiic | 2× JST-SH, I²C met 4,7k pull-ups |
 | 9 | Displays | J8 e-ink (SPI, Waveshare-volgorde), J7 OLED (I²C) – beide DNP |
 | 10 | Resol VBus | J10, opto-coupler U6 (LTV-817S): alleen lezen, Resol-massa gescheiden van GND, RX = GPIO38 |
-| 11 | Relais | 2× AO3400A (GPIO35/36) + vrijloop + status-LED; per kanaal Finder 34.51 (5 V) op het bord (J12/J13, 230 V~ max 5 A) en/of extern relais op J11 (V+/OUT1/OUT2/GND) |
+| 11 | Relais | 2× AO3400A (GPIO35/36) + vrijloop + status-LED; per kanaal Finder 34.51 (5 V) op het bord (J12/J13, 230 V~ max 5 A) en/of extern relais op J11 (V+/REL1/REL2/GND) |
 | – | Testpunten | TP1–TP5: VBUS, VSYS, BAT+, 3V3, GND (alleen koperpads) |
 
 ## GPIO-overzicht (ESP32-S3)

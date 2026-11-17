@@ -58,3 +58,39 @@ def passive_orientation(board):
             if abs(o) > 0.01:
                 issues.append(f'{ref}: staat op {fp.GetOrientationDegrees():.0f}° (moet horizontaal)')
     return issues
+
+
+MAINS_NETS = ('NO1', 'COM1', 'NC1', 'NO2', 'COM2', 'NC2')
+
+
+def mains_clearance(board, dist_mm=8.0, mains=MAINS_NETS):
+    """230 V-veiligheid: al het koper (pads, gaten, sporen, vias) van andere netten moet minstens
+    dist_mm van het 230 V-koper blijven, op álle lagen (ook de binnenlagen). Koper van twee
+    verschillende 230 V-circuits (relais 1 vs. relais 2) telt ook als 'ander'. Pads van hetzelfde
+    relais onderling (NO/COM/NC) vallen er buiten: die afstand ligt vast in het relais zelf."""
+    clr = pcbnew.FromMM(dist_mm)
+    items = [p for fp in board.GetFootprints() for p in fp.Pads()] + list(board.GetTracks())
+    def circuit(net):
+        return net[-1] if net in mains else None          # '1' of '2'
+    hv = [i for i in items if i.GetNetname() in mains]
+    errors = []
+    for a in hv:
+        ca = circuit(a.GetNetname())
+        for b in items:
+            if b is a or circuit(b.GetNetname()) == ca:
+                continue
+            for layer in (pcbnew.F_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.B_Cu):
+                if not (a.IsOnLayer(layer) or a.GetClass() == 'PAD' and a.GetAttribute() == pcbnew.PAD_ATTRIB_PTH):
+                    continue
+                if not (b.IsOnLayer(layer) or b.GetClass() == 'PAD' and
+                        b.GetAttribute() in (pcbnew.PAD_ATTRIB_PTH, pcbnew.PAD_ATTRIB_NPTH)):
+                    continue
+                if a.GetEffectiveShape(layer).Collide(b.GetEffectiveShape(layer), clr):
+                    def name(i):
+                        if i.GetClass() == 'PAD':
+                            return f'{pcbnew.Cast_to_FOOTPRINT(i.GetParent()).GetReference()}.{i.GetNumber() or "gat"}'
+                        return f'{i.GetClass().lower()} {i.GetNetname()}'
+                    errors.append(f'{name(a)} ({a.GetNetname()}) < {dist_mm:g} mm van {name(b)} '
+                                  f'({b.GetNetname() or "geen net"}) op {board.GetLayerName(layer)}')
+                    break
+    return sorted(set(errors))

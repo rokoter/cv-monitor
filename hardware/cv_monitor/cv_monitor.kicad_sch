@@ -9659,7 +9659,7 @@
     (effects (font (size 2.0 2.0) bold) (justify left bottom))
     (uuid 031c2941-af86-5d2d-9fe4-c9240e633524)
   )
-  (text "Per kanaal: K1/K2 (Finder 34.51, 5 V) op het bord, en/of een extern relais op J11\n(spoel tussen V+ en OUT1/OUT2). Q4/Q5 schakelen de spoel(en) naar GND.\nGPIO35/36 hoog = relais aan. 10k houdt de relais uit tijdens opstarten.\nD11/D12 branden als het relais aangestuurd wordt. D8/D9 = vrijloop.\nV+ = spoelspanning van ALLE relais: met K1/K2 geplaatst alleen 5 V (USB via D10).\nEigen 12/24 V op V+ en GND alleen zonder K1/K2 (of met 12/24 V-uitvoering).\n230 V-zone J12/J13: max 5 A / 250 V~, 8 mm afstand tot al het andere koper." (at 416.56 167.64 0)
+  (text "Per kanaal: K1/K2 (Finder 34.51, 5 V) op het bord, en/of een extern relais op J11\n(spoel tussen V+ en REL1/REL2). Q4/Q5 schakelen de spoel(en) naar GND.\nGPIO35/36 hoog = relais aan. 10k houdt de relais uit tijdens opstarten.\nD11/D12 branden als het relais aangestuurd wordt. D8/D9 = vrijloop.\nV+ = spoelspanning van ALLE relais: met K1/K2 geplaatst alleen 5 V (USB via D10).\nEigen 12/24 V op V+ en GND alleen zonder K1/K2 (of met 12/24 V-uitvoering).\n230 V-zone J12/J13: max 5 A / 250 V~, 8 mm afstand tot al het andere koper." (at 416.56 167.64 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 62619a8d-0828-5d44-b38a-7da65c0f941a)
   )

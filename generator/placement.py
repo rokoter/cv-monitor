@@ -4,12 +4,12 @@
 Rotatie volgt KiCad: positief = tegen de klok in.
 """
 
-BOARD_W, BOARD_H = 94.0, 70.0
+BOARD_W, BOARD_H = 100.0, 100.0     # rev 0.3: groter voor Resol VBus + relais (binnen 100 x 100)
 COPPER_LAYERS = 4          # F.Cu signaal | In1 GND-vlak | In2 voeding | B.Cu signaal
 CORNER_R = 3.0
 
 # Bevestigingsgaten M3 (ook gebruikt voor de behuizing in FreeCAD)
-HOLES = {'H1': (3.5, 3.5), 'H2': (3.5, 66.5), 'H3': (90.5, 66.5), 'H4': (47.0, 3.5)}
+HOLES = {'H1': (3.5, 3.5), 'H2': (3.5, 96.5), 'H3': (96.5, 96.5), 'H4': (47.0, 3.5)}
 
 # Headers J7/J4 op één verticale lijn; J8 met J4 onderaan gelijk (zelfde 2,54-mm-raster)
 HDR_X, HDR_Y = 55.0, 22.0
@@ -71,17 +71,41 @@ PLACE = {
     'SW1': (24.0, 66.0, 0, 'F'), 'SW2': (32.5, 66.0, 0, 'F'), 'SW3': (41.0, 66.0, 0, 'F'),
     'R11': (61.0, 13.5, 0, 'F'),           # pull-up STATUS-knop (GPIO15), bij de ESP
     'J4': (HDR_X, HDR_Y, 0, 'F'),         # uitbreiding, pinnamen links (boven het accuhoudergebied)
-    # ---- 8. Qwiic (onderrand, opening naar beneden)
-    'R20': (52.0, 60.5, 0, 'F'), 'R21': (52.0, 63.0, 0, 'F'),
-    'J5': (64.0, None, 0, 'F'), 'J6': (74.0, None, 0, 'F'),   # y berekend: opening aan de onderrand
+    # ---- 8. Qwiic (onderrand rechts, opening naar beneden)
+    'R20': (79.4, 90.5, 0, 'F'), 'R21': (83.4, 90.5, 0, 'F'),
+    'J5': (80.4, None, 0, 'F'), 'J6': (88.4, None, 0, 'F'),   # y berekend: opening aan de onderrand
     # ---- 9. Displays (bovenrand)
     'J8': (66.5, HDR_Y + 2 * 2.54, 0, 'F'),  # e-ink: onderkant gelijk met J4 (pin 1 op hoogte van J4-pin 3)
     'J7': (HDR_X, 8.5, 0, 'F'),           # OLED: verticaal uitgelijnd met J4
+    # ---- 10. Resol VBus (rechterrand onder TEMP 2; opto-geïsoleerd)
+    'J10': (None, 71.0, 90, 'F'),          # pin 1 (+) onder, draadingang aan de rechterrand
+    # links van J10 een vrije strook voor de pinnamen (+/-); geïsoleerde kant (R29, D7) direct ernaast
+    'U6': (78.0, 66.0, 180, 'F'),          # 180°: ingang (pin 1/2) naar J10 toe
+    'D7': (86.0, 70.2, 0, 'F'),            # kathode links (onder U6 pin 1), anode rechts (RESOL-)
+    'R29': (86.5, 72.6, 180, 'F'),         # pad 1 rechts (naar J10 +)
+    'R30': (70.0, 64.73, 180, 'F'),        # pulldown RX, pad 1 rechts op één lijn met U6 pin 3
+    # ---- 11. Relais: K liggend met de contacten links, 230 V-klem eronder aan de onderrand.
+    # Spoel (A1/A2) rechts: 9 mm vrij tussen spoel- en contactpads (8 mm-eis voor 230 V).
+    'K1': (37.0, 85.0, 180, 'F'), 'K2': (72.5, 85.0, 180, 'F'),   # 1 mm hoger: ruimte voor NO/COM/NC
+    'J12': (15.75, None, 0, 'F'), 'J13': (51.25, None, 0, 'F'),   # pinnen recht onder NO/COM/NC
+    'D8': (38.9, 79.4, 0, 'F'), 'D9': (74.4, 79.4, 0, 'F'),       # vrijloop direct boven de spoelpads
+    'Q4': (39.0, 75.5, 0, 'F'), 'R31': (34.8, 74.0, 0, 'F'), 'R33': (34.8, 76.6, 180, 'F'),
+    'R35': (43.5, 72.0, 0, 'F'), 'D11': (43.5, 74.5, 180, 'F'),
+    'Q5': (74.5, 75.5, 0, 'F'), 'R32': (70.3, 74.0, 0, 'F'), 'R34': (70.3, 76.6, 180, 'F'),
+    'R36': (79.0, 72.0, 0, 'F'), 'D12': (79.0, 74.5, 180, 'F'),
+    'D10': (81.5, 81.0, 0, 'F'),           # SS14: USB-5V -> V+ (spoelspanning); links van de pinnamen van J11
+    'J11': (None, 90.0, 90, 'F'),          # extern relais: pin 1 (V+) onder, draadingang rechts
 }
 
 # Onderdelen die met de 'opening' tegen een bordrand moeten: (rand, overstek in mm)
 EDGE_ALIGN = {'J1': ('left', 0.0), 'J2': ('right', -0.6), 'J3': ('right', -0.6),
-              'J5': ('bottom', 0.0), 'J6': ('bottom', 0.0)}
+              'J5': ('bottom', 0.0), 'J6': ('bottom', 0.0),
+              'J10': ('right', -0.6), 'J11': ('right', -0.6), 'J12': ('bottom', -0.3), 'J13': ('bottom', -0.3)}
+
+# 230 V-zones (x1, y1, x2, y2): gestippeld silkscreen-kader (open aan de bordrand) rond de contactpinnen
+# van het relais en de 230 V-klem. Koper van andere netten blijft 8 mm van het 230 V-koper (regel bij routing).
+MAINS_ZONES = [(12.4, 83.2, 29.2, 99.4), (47.8, 83.2, 64.6, 99.4)]
+MAINS_CLEARANCE = 8.0
 
 # Functielabels op de bovenkant (silkscreen), naast het onderdeel
 FUNC_LABELS = {
@@ -89,6 +113,8 @@ FUNC_LABELS = {
     'D2': 'LADEN', 'D3': 'VOL', 'D4': 'LED',
     'J1': 'USB 5V', 'J2': 'TEMP 1', 'J3': 'TEMP 2', 'J4': 'UITBREIDING',
     'J5': 'QWIIC', 'J6': 'QWIIC', 'J7': 'OLED', 'J8': 'E-INK', 'J9': 'NTC',
+    'J10': 'RESOL', 'J11': 'RELAIS', 'D11': 'REL1', 'D12': 'REL2',   # kort: past boven de klem
+    # (J10 niet 'VBUS' noemen: zo heet ook de USB-5V, zie testpunt TP1)
 }
 
 # Functielabels op de onderkant (onderdelen die aan de onderkant zitten)
@@ -101,7 +127,7 @@ NTC_SLOT = ('J9', 44.0, 4.0, 7.0)   # x = midden van de behuizing van J9 (vertic
 # Labels die altijd recht boven het onderdeel moeten staan (op één lijn)
 # Bij 'up'/'down' komt de referentie daar nog boven/onder (eerst functie, dan referentie).
 FUNC_LABEL_DIR = {'D4': 'right', 'SW1': 'up', 'SW2': 'up', 'SW3': 'up',
-                  'J2': 'up', 'J3': 'down', 'J4': 'down', 'J8': 'down'}
+                  'J2': 'up', 'J3': 'down', 'J4': 'down', 'J8': 'down', 'J10': 'up', 'J11': 'up'}
 
 # Pinbenamingen op de BOVENKANT (daar steek/schroef je de draden in), één naam per regel.
 # (richting t.o.v. de pad, teksthoek, {pad: tekst}, opties...)
@@ -116,4 +142,8 @@ PIN_LABELS = {
     'J2': ('left', 0, {'1': '3V3', '2': 'DQ', '3': 'GND'}, 'body'),
     'J3': ('left', 0, {'1': '3V3', '2': 'DQ', '3': 'GND'}, 'body'),
     'D5': ('down', 0, {'2': '+'}, 'both', 'big'),   # anode van de accu-omgekeerd-LED
+    'J10': ('left', 0, {'1': '+', '2': '-'}, 'body'),
+    'J11': ('left', 0, {'1': 'V+', '2': 'REL1', '3': 'REL2', '4': 'GND'}, 'body'),
+    'J12': ('up', 0, {'1': 'NO', '2': 'COM', '3': 'NC'}, 'body'),
+    'J13': ('up', 0, {'1': 'NO', '2': 'COM', '3': 'NC'}, 'body'),
 }

@@ -38,6 +38,9 @@ LIBRARY = [
     'D_SMA', 'D_SOD-123', 'Fuse_1206_3216Metric', 'LED_0603_1608Metric', 'LED_D3.0mm',
     'TSSOP-8_4.4x3mm_P0.65mm', 'SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.35x2.35mm',
     'SOT-23', 'SOT-23-5', 'SOT-23-6', 'R_0603_1608Metric',
+    'Relay_SPDT_Finder_34.51_Vertical', 'TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal',
+    'TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal', 'TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal',
+    'SMDIP-4_W9.53mm',
     'TerminalBlock_Phoenix_PT-1,5-3-3.5-H_1x03_P3.50mm_Horizontal', 'ESP32-S3-WROOM-1',
 ]
 

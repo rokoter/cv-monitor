@@ -9,8 +9,8 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 ## Status
 | Stap | Status |
 |------|--------|
-| 1. Schema (KiCad) | rev 0.8 – nieuw: Resol VBus-ingang (opto-geïsoleerd) en 2 relaiskanalen, Finder 34.51 op het bord en/of extern (`docs/schema_blok10_11_vbus_relais.png`), in review |
-| 2. PCB-layout | rev 0.2 gerouteerd (DRC 0/0), niet besteld; rev 0.3 (VBus + relais) volgt na akkoord schema. rev 0.2: 4 lagen, USB als differentieel paar – `docs/pcb_routing_*_rev0.2.png`, 3D: `docs/pcb_3d_*_rev0.2.png` |
+| 1. Schema (KiCad) | rev 0.8 akkoord – nieuw: Resol VBus-ingang (opto-geïsoleerd) en 2 relaiskanalen, Finder 34.51 op het bord en/of extern (`docs/schema_blok10_11_vbus_relais.png`) |
+| 2. PCB-layout | rev 0.3 (100 × 100 mm, VBus + relais): plaatsing in review – `docs/pcb_plaatsing_rev0.3.png`, `docs/pcb_preview_*_rev0.3.png`, 3D: `docs/pcb_3d_*_rev0.3.png`; routing volgt na akkoord. rev 0.2 (gerouteerd, DRC 0/0) is niet besteld en vervalt |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | rev 0.2 klaar voor offerte: Economic PCBA, ESP + through-hole zelf – `hardware/cv_monitor/production/README.md`, kosten: `docs/KOSTEN.md` |
 | 4. Firmware (ESPHome) | – |
 | 5. Behuizing (FreeCAD) | – |
@@ -45,13 +45,13 @@ xvfb-run -a java -jar freerouting.jar -de $P.dsn -dr generator/freerouting.rules
 - `route.py prep` geeft elke SMD-pad op GND/3V3 een eigen via naar het vlak (`generator/fanout.py`),
   legt de dubbele USB-C-datapinnen vast en houdt de antennezone (alle lagen) en de bovenlaag onder
   de ESP-module vrij van sporen. Freerouting (v1.9.0, open source) routeert de rest.
-- Koperlagen als plaatje: `generator/render_layers.sh $P.kicad_pcb docs rev0.2`.
+- Koperlagen als plaatje: `generator/render_layers.sh $P.kicad_pcb docs rev0.3`.
 
 3D: alle footprints staan in de projectbibliotheek `cv_monitor.pretty` en de 3D-modellen (STEP) in
 `hardware/cv_monitor/3dmodels` (zie de README daar). In KiCad: **Beeld → 3D-viewer** (Alt+3).
-Bord met onderdelen: 94 × 70 × 29,9 mm (19,1 mm onder het bord door accuhouder + cel, 9,3 mm erboven).
-Snelle preview zonder KiCad: `kicad-cli pcb export step` en `generator/render_3d.py` →
-`docs/pcb_3d_boven_rev0.2.png` en `docs/pcb_3d_onder_rev0.2.png`.
+Bord met onderdelen (rev 0.3): 100 × 100 × 35,8 mm (19,1 mm onder het bord door accuhouder + cel, 15,1 mm
+erboven door de relais). Snelle preview zonder KiCad: `kicad-cli pcb export step` en `generator/render_3d.py` →
+`docs/pcb_3d_boven_rev0.3.png` en `docs/pcb_3d_onder_rev0.3.png`.
 
 Plaatsingsafspraken (worden door `drc.py` mee gecontroleerd):
 - alle R's, C's, diodes en LED's horizontaal (0° of 180°), kleine onderdelen in nette rijen/kolommen;
@@ -60,7 +60,10 @@ Plaatsingsafspraken (worden door `drc.py` mee gecontroleerd):
 - pinnamen van headers en klemmen op de bovenkant (waar je aansluit), één naam per regel links van de pin;
 - polariteit (+) bij de accu en bij de accu-omgekeerd-LED, op boven- en onderkant;
 - achterkant: blokschema van de werking (`generator/back_diagram.py`), titel bovenaan tussen de montagegaten;
-- geen THT-pin door een onderdeel aan de andere kant (accuhouder).
+- geen THT-pin door een onderdeel aan de andere kant (accuhouder);
+- 230 V (relaiscontacten NO/COM/NC + klemmen J12/J13): gestippeld kader op boven- en onderkant met
+  '230V~ 5A', en al het koper van andere netten (alle lagen, ook gaten) minstens 8 mm van het 230 V-koper
+  (`pcb_checks.mains_clearance`; krapste plek nu 8,3 mm: spoelpad K1.A2 ↔ NO-pad K2).
 
 ## Productiebestanden (JLCPCB)
 ```bash
