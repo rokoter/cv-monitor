@@ -12,7 +12,7 @@ LED0603 = 'LED_SMD:LED_0603_1608Metric'
 # LCSC-nummers basis-onderdelen JLCPCB (worden in de BOM-stap nogmaals gecontroleerd)
 LC = {
     '5.1k': 'C23186', '2k': 'C22975', '1k': 'C21190', '100': 'C22775', '10k': 'C25804',
-    '100k': 'C25803', '4.7k': 'C23162', '47k': 'C25819',
+    '100k': 'C25803', '4.7k': 'C23162', '47k': 'C25819', '3.3k': 'C22978',
     '10u': 'C15850', '22u': 'C45783', '100n': 'C14663', '1u': 'C15849',
 }
 
@@ -91,11 +91,11 @@ COMPONENTS = [
          nets={'1': 'VBUS', '2': 'VSYS', '3': 'BAT+'}),
     R('R8', '1k', 98, 25, 'VBUS', 'GND'),
     C('C5', '10u', 112, 22, 'VSYS', 'GND', '0805'),
-    dict(ref='U4', lib='Regulator_Linear:AP2112K-3.3', value='AP2112K-3.3', gx=124, gy=18,
-         fp='Package_TO_SOT_SMD:SOT-23-5', lcsc='C51118', ref_at=(121, 14.5), val_at=(121, 15.5),
+    dict(ref='U4', lib='Regulator_Linear:AP2112K-3.3', value='AP2112K-3.3', gx=120, gy=18,
+         fp='Package_TO_SOT_SMD:SOT-23-5', lcsc='C51118', ref_at=(117, 14.5), val_at=(117, 15.5),
          label_wired={'1': True},
          nets={'1': 'VSYS', '3': 'VSYS', '2': 'GND', '4': 'NC', '5': '+3V3'}),
-    C('C6', '10u', 134, 20, '+3V3', 'GND', '0805'),
+    C('C6', '10u', 128, 20, '+3V3', 'GND', '0805'),
 
     # ------------------------------------------------------------ 4. Accu + beveiliging
     dict(ref='BT1', lib='Device:Battery_Cell', value='18650', gx=7, gy=55, extra={'MPN': 'houder MPD BK-18650-PC2'},
@@ -131,7 +131,8 @@ COMPONENTS = [
                '18': 'EPD_CS', '19': 'EPD_DIN', '20': 'EPD_CLK', '21': 'EPD_DC', '22': 'EPD_RST',
                '8': 'KNOP', '9': 'LED_STATUS', '10': 'EXP_GPIO17', '11': 'EXP_GPIO18',
                '13': 'USB_D-', '14': 'USB_D+', '23': 'EPD_BUSY', '37': 'UART_TX', '36': 'UART_RX',
-               **{n: 'NC' for n in ['16', '24', '25', '26', '28', '29', '30', '31', '32', '33', '34', '35']}}),
+               '28': 'RELAIS1', '29': 'RELAIS2', '31': 'RESOL_RX',
+               **{n: 'NC' for n in ['16', '24', '25', '26', '30', '32', '33', '34', '35']}}),
     C('C8', '22u', 116, 44, '+3V3', 'GND', '0805'),
     C('C9', '100n', 120, 44, '+3V3', 'GND'),
 
@@ -198,16 +199,47 @@ COMPONENTS = [
          nets={'1': 'GND', '2': '+3V3', '3': 'I2C_SCL', '4': 'I2C_SDA'}),
 
     # ------------------------------------------------------------ Testpunten (alleen koperpads, geen BOM)
-    dict(ref='TP1', lib='Connector:TestPoint', value='VBUS', gx=143, gy=37, rot=180, in_bom=False,
-         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(143.8, 38), val_at=(143.8, 39), nets={'1': 'VBUS'}),
-    dict(ref='TP2', lib='Connector:TestPoint', value='VSYS', gx=147, gy=37, rot=180, in_bom=False,
-         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(147.8, 38), val_at=(147.8, 39), nets={'1': 'VSYS'}),
-    dict(ref='TP3', lib='Connector:TestPoint', value='BAT+', gx=151, gy=37, rot=180, in_bom=False,
-         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(151.8, 38), val_at=(151.8, 39), nets={'1': 'BAT+'}),
-    dict(ref='TP4', lib='Connector:TestPoint', value='3V3', gx=155, gy=37, rot=180, in_bom=False,
-         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(155.8, 38), val_at=(155.8, 39), nets={'1': '+3V3'}),
-    dict(ref='TP5', lib='Connector:TestPoint', value='GND', gx=159, gy=36, in_bom=False,
-         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(160, 37.5), val_at=(160, 38.5), nets={'1': 'GND'}),
+    dict(ref='TP1', lib='Connector:TestPoint', value='VBUS', gx=66, gy=109.5, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(67.3, 110.5), val_at=(67.3, 111.4), nets={'1': 'VBUS'}),
+    dict(ref='TP2', lib='Connector:TestPoint', value='VSYS', gx=70, gy=109.5, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(71.3, 110.5), val_at=(71.3, 111.4), nets={'1': 'VSYS'}),
+    dict(ref='TP3', lib='Connector:TestPoint', value='BAT+', gx=74, gy=109.5, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(75.3, 110.5), val_at=(75.3, 111.4), nets={'1': 'BAT+'}),
+    dict(ref='TP4', lib='Connector:TestPoint', value='3V3', gx=78, gy=109.5, rot=180, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(79.3, 110.5), val_at=(79.3, 111.4), nets={'1': '+3V3'}),
+    dict(ref='TP5', lib='Connector:TestPoint', value='GND', gx=82, gy=108.5, in_bom=False,
+         fp='TestPoint:TestPoint_Pad_D1.5mm', ref_at=(83.2, 109.7), val_at=(83.2, 110.6), nets={'1': 'GND'}),
+
+    # ------------------------------------------------------------ 10. Resol VBus (opto-geïsoleerd) + relais
+    dict(ref='J10', lib='Connector:Screw_Terminal_01x02', value='RESOL VBUS', gx=133, gy=11.5, rot=180, dnp=True,
+         fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal',
+         ref_at=(131, 8.5), val_at=(135.5, 14.3), nets={'1': 'RESOL+', '2': 'RESOL-'}),
+    R('R29', '3.3k', 138.5, 11.5, 'RESOL+', 'OPTO_A', rot=90, ref_at=(137, 12.9), val_at=(137, 13.9)),
+    dict(ref='D7', lib='Diode:1N4148W', value='1N4148W', gx=141.5, gy=13, rot=270, fp='Diode_SMD:D_SOD-123',
+         lcsc='C81598', label_wired={'2': True}, ref_at=(139.6, 13.3), val_at=(139.6, 16.2),
+         nets={'1': 'OPTO_A', '2': 'RESOL-'}),
+    dict(ref='U6', lib='Isolator:PC817', value='LTV-817S', gx=146, gy=12.5, lcsc='C109227',
+         fp='Package_DIP:SMDIP-4_W9.53mm', ref_at=(142.5, 9.6), val_at=(145.2, 9.6),
+         nets={'1': 'OPTO_A', '2': 'RESOL-', '3': 'RESOL_RX', '4': '+3V3'}),
+    R('R30', '4.7k', 152, 15, 'RESOL_RX', 'GND', ref_at=(153, 14.6), val_at=(153, 15.6)),
+
+    dict(ref='J11', lib='Connector:Screw_Terminal_01x04', value='RELAIS', gx=133, gy=25, rot=180, dnp=True,
+         pwr_rotate=True, fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal',
+         ref_at=(131, 21.6), val_at=(135.5, 28.6), nets={'1': 'REL_V+', '2': 'REL1', '3': 'REL2', '4': 'GND'}),
+    dict(ref='D10', lib='Diode:SS14', value='SS14', gx=137.5, gy=20.5, fp='Diode_SMD:D_SMA', lcsc='C2480',
+         ref_at=(136.5, 19.2), val_at=(136.5, 21.9), nets={'1': 'REL_V+', '2': 'VBUS'}),
+    dict(ref='D8', lib='Diode:1N4148W', value='1N4148W', gx=143, gy=23.0, rot=270, fp='Diode_SMD:D_SOD-123',
+         lcsc='C81598', ref_at=(145, 22.3), val_at=(145.6, 23.5), nets={'1': 'REL_V+', '2': 'REL1'}),
+    dict(ref='Q4', lib='Transistor_FET:AO3400A', value='AO3400A', gx=142, gy=27.5, fp='Package_TO_SOT_SMD:SOT-23',
+         lcsc='C20917', ref_at=(144.2, 27.1), val_at=(144.8, 28.1), nets={'1': 'REL1_G', '2': 'GND', '3': 'REL1'}),
+    R('R31', '100', 140, 30.0, 'REL1_G', 'RELAIS1', stub={'2': 6.35}, ref_at=(140.6, 29.8), val_at=(140.6, 30.8)),
+    R('R33', '10k', 138, 30.0, 'REL1_G', 'GND', ref_at=(135.8, 29.8), val_at=(135.8, 30.8)),
+    dict(ref='D9', lib='Diode:1N4148W', value='1N4148W', gx=152, gy=23.0, rot=270, fp='Diode_SMD:D_SOD-123',
+         lcsc='C81598', ref_at=(154, 22.3), val_at=(154.6, 23.5), nets={'1': 'REL_V+', '2': 'REL2'}),
+    dict(ref='Q5', lib='Transistor_FET:AO3400A', value='AO3400A', gx=151, gy=27.5, fp='Package_TO_SOT_SMD:SOT-23',
+         lcsc='C20917', ref_at=(153.2, 27.1), val_at=(153.8, 28.1), nets={'1': 'REL2_G', '2': 'GND', '3': 'REL2'}),
+    R('R32', '100', 149, 30.0, 'REL2_G', 'RELAIS2', stub={'2': 6.35}, ref_at=(149.6, 29.8), val_at=(149.6, 30.8)),
+    R('R34', '10k', 147, 30.0, 'REL2_G', 'GND', ref_at=(144.8, 29.8), val_at=(144.8, 30.8)),
 
     # ------------------------------------------------------------ Bevestigingsgaten M3 (behuizing)
     dict(ref='H1', lib='Mechanical:MountingHole', value='M3', gx=9, gy=110, in_bom=False,
@@ -238,22 +270,33 @@ WIRES = [
     (('R26', '2'), ('D6', '1')),
     (('R14', '2'), ('R15', '1'), 'VBAT_SENSE'),
     (('R16', '2'), ('R17', '1'), 'VBUS_SENSE'),
+    (('J10', '1'), ('R29', '1')),        # VBus+ -> serieweerstand
+    (('R29', '2'), ('D7', '1')),         # -> knooppunt OPTO_A
+    (('D7', '1'), ('U6', '1')),          # -> LED van de opto-coupler
+    (('D7', '2'), ('U6', '2')),          # D7 antiparallel over de LED
+    (('U6', '3'), ('R30', '1'), 'RESOL_RX'),
+    (('R31', '1'), ('Q4', '1')),         # gateweerstand relais 1
+    (('R33', '1'), ('Q4', '1')),         # pulldown gate 1
+    (('D8', '2'), ('Q4', '3'), 'REL1'),  # vrijloopdiode over spoel 1
+    (('R32', '1'), ('Q5', '1')),         # gateweerstand relais 2
+    (('R34', '1'), ('Q5', '1')),         # pulldown gate 2
+    (('D9', '2'), ('Q5', '3'), 'REL2'),  # vrijloopdiode over spoel 2
 ]
 
 # PWR_FLAG markeringen: (soort, net, gx, gy)
 FLAGS = [
-    ('power', 'GND', 146, 14),
-    ('power', 'VBUS', 154, 14),
-    ('label', 'VSYS', 144, 24),
-    ('label', 'B-', 151, 24),
-    ('label', 'DW_VCC', 157, 24),
+    ('power', 'GND', 31, 109.5),
+    ('power', 'VBUS', 36, 109.5),
+    ('label', 'VSYS', 41, 109.5),
+    ('label', 'B-', 48, 109.5),
+    ('label', 'DW_VCC', 55, 109.5),
 ]
 
 TEXTS = [
     dict(t='1. USB-C INGANG', gx=4, gy=6, size=2.0, bold=True),
     dict(t='F1: herstelbare zekering (1,1 A) beschermt tegen kortsluiting op het bord.\n'
            'CC1/CC2 met 5,1k naar GND: de adapter ziet een "sink" en levert 5 V.\n'
-           'U1 USBLC6 (ESD): footprint aanwezig, in de POC niet bestukt. ESP32-S3 heeft native USB:\n'
+           'U1 USBLC6 (ESD): D+/D- lopen door de chip, JLCPCB plaatst hem. ESP32-S3 heeft native USB:\n'
            'flashen en loggen via dezelfde USB-C, geen USB-serieel chip nodig.', gx=4, gy=38),
 
     dict(t='2. LADER (TP4056)', gx=44, gy=6, size=2.0, bold=True),
@@ -271,8 +314,16 @@ TEXTS = [
            'AP2112K-3.3: LDO 600 mA, ~250 mV dropout. Werkt tot cel ~3,4 V.\n'
            'Voeding: lader >= 1 A gebruiken (laden 0,6 A + systeem); een pc-poort levert te weinig.', gx=94, gy=37),
 
-    dict(t='PWR_FLAGS', gx=142, gy=6, size=2.0, bold=True),
-    dict(t='Vertelt de ERC-controle waar een net\nzijn voeding vandaan krijgt.', gx=142, gy=30),
+    dict(t='PWR_FLAGS + TESTPUNTEN', gx=29, gy=106.4, size=2.0, bold=True),
+    dict(t='PWR_FLAG: bron van het net voor ERC.\n'
+           'TP1-TP5: meetpunten (koperpads).', gx=87, gy=109.5),
+
+    dict(t='10. RESOL VBUS + RELAIS', gx=131, gy=6, size=2.0, bold=True),
+    dict(t='VBus: alleen lezen, 9600 baud, ~8 V. Opto U6 houdt de Resol-\n'
+           'massa los van onze GND; D7 beschermt bij ompolen. RX = GPIO38.\n'
+           'Relais extern: Q4/Q5 (GPIO35/36) schakelen de spoel naar GND,\n'
+           'D8/D9 = vrijloop (spoel max ~150 mA), 10k = uit bij opstarten.\n'
+           'V+ = 5 V via D10 (alleen met USB) of eigen 12/24 V op V+/GND.', gx=131, gy=40.0),
 
     dict(t='4. 18650 ACCU + BEVEILIGING', gx=4, gy=42, size=2.0, bold=True),
     dict(t='DW01A + AO8810 (8205A-type) schakelen af bij <2,4 V, >4,3 V of >~4 A.\n'

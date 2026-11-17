@@ -11,7 +11,7 @@ from collections import OrderedDict
 sys.path.insert(0, os.path.dirname(__file__))
 from design import COMPONENTS  # noqa: E402
 
-CHECKED = '2026-11-11'
+CHECKED = '2026-11-17'
 # lcsc -> (klasse, opmerking)
 JLC = {
     'C15127': ('Basic', ''), 'C8678': ('Basic', ''), 'C318884': ('Basic', ''),
@@ -21,9 +21,10 @@ JLC = {
     'C160404': ('Extended', 'liggende JST-SH (Qwiic)'), 'C16581': ('Preferred', 'geen toeslag'),
     'C12624': ('Extended', 'groen 0603 is geen basic meer; R5 = 4k7 voor gelijke helderheid als rood'),
     'C89811': ('Preferred', 'geel i.p.v. blauw: minder fel, geen toeslag'),
+    'C109227': ('Basic', 'opto-coupler VBus (PC817-type)'), 'C20917': ('Basic', ''), 'C2480': ('Basic', ''),
 }
 BASIC_PASSIVE = {'C14663', 'C15849', 'C15850', 'C45783', 'C21190', 'C22775', 'C22975', 'C23162', 'C23186',
-                 'C25803', 'C25804', 'C25819', 'C2286', 'C81598'}
+                 'C25803', 'C25804', 'C25819', 'C2286', 'C81598', 'C22978'}
 
 lines = OrderedDict()
 for c in COMPONENTS:

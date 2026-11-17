@@ -306,9 +306,9 @@ out = f'''(kicad_sch (version 20230121) (generator eeschema)
   (paper "A3")
   (title_block
     (title "CV temperatuurmonitor - aanvoer/retour")
-    (date "2026-11-09")
-    (rev "0.5")
-    (comment 1 "ESP32-S3 + 2x DS18B20 + 18650 UPS via USB-C + Qwiic + OLED/e-ink")
+    (date "2026-11-17")
+    (rev "0.8")
+    (comment 1 "ESP32-S3 + 2x DS18B20 + 18650 UPS + Resol VBus + 2 relais + Qwiic + displays")
     (comment 2 "Opdrachtgever/controle: Koen - uitvoering: Claude")
   )
   (lib_symbols
