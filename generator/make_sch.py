@@ -303,7 +303,7 @@ print('geometrie:', bad, 'conflicten')
 libsyms = '\n'.join('    ' + load_symbol(l)[0].replace('\n', '\n    ') for l in sorted(lib_ids))
 out = f'''(kicad_sch (version 20230121) (generator eeschema)
   (uuid {ROOT})
-  (paper "A3")
+  (paper "User" 520 297)
   (title_block
     (title "CV temperatuurmonitor - aanvoer/retour")
     (date "2026-11-17")

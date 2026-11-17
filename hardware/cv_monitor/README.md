@@ -1,8 +1,9 @@
-# CV temperatuurmonitor – stap 1: schema (rev 0.7)
+# CV temperatuurmonitor – stap 1: schema (rev 0.8)
 
 Herbruikbaar ESP32-S3-sensorbord: meet aanvoer- en retourtemperatuur van de CV met 2× DS18B20,
 heeft een 18650 als UPS-backup, laadt/werkt via USB-C en heeft aansluitingen voor Qwiic-modules,
-een OLED (I²C) en een e-ink-display (SPI).
+een OLED (I²C) en een e-ink-display (SPI). Sinds rev 0.8 ook een Resol VBus-ingang (zonne-/boilerregelaar)
+en 2 relaisuitgangen (relais op het bord en/of extern).
 
 ## Openen
 Pak de map uit en open `cv_monitor.kicad_pro` in KiCad (7, 8 of 9). De projectbibliotheken
@@ -21,6 +22,8 @@ Gemaakt in KiCad 7-formaat; KiCad 8/9 vraagt bij opslaan om te converteren – d
 | 7 | Bediening | RESET, BOOT, STATUS-knop, status-LED, uitbreidingsheader J4 (DNP) |
 | 8 | Qwiic | 2× JST-SH, I²C met 4,7k pull-ups |
 | 9 | Displays | J8 e-ink (SPI, Waveshare-volgorde), J7 OLED (I²C) – beide DNP |
+| 10 | Resol VBus | J10, opto-coupler U6 (LTV-817S): alleen lezen, Resol-massa gescheiden van GND, RX = GPIO38 |
+| 11 | Relais | 2× AO3400A (GPIO35/36) + vrijloop + status-LED; per kanaal Finder 34.51 (5 V) op het bord (J12/J13, 230 V~ max 5 A) en/of extern relais op J11 (V+/OUT1/OUT2/GND) |
 | – | Testpunten | TP1–TP5: VBUS, VSYS, BAT+, 3V3, GND (alleen koperpads) |
 
 ## GPIO-overzicht (ESP32-S3)
@@ -30,6 +33,7 @@ Gemaakt in KiCad 7-formaat; KiCad 8/9 vraagt bij opslaan om te converteren – d
 | 1 | VBAT meting (ADC1) | 14 | e-ink RST |
 | 2 | USB aanwezig (ADC1) | 15 | STATUS-knop |
 | 3 | vrij (strapping) | 16 | status-LED |
+| 35/36 | relais 1/2 | 38 | Resol VBus RX |
 | 4 | Sensor 1 (aanvoer) | 17/18 | uitbreiding J4 |
 | 5 | Sensor 2 (retour) | 19/20 | USB D-/D+ |
 | 6/7 | uitbreiding J4 (ADC1) | 21 | e-ink BUSY |

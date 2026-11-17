@@ -9,7 +9,7 @@ Leertraject: Koen stuurt en controleert, Claude voert uit.
 ## Status
 | Stap | Status |
 |------|--------|
-| 1. Schema (KiCad) | rev 0.8 – nieuw: Resol VBus-ingang (opto-geïsoleerd) en 2 relaisuitgangen (`docs/schema_blok10_vbus_relais.png`), in review |
+| 1. Schema (KiCad) | rev 0.8 – nieuw: Resol VBus-ingang (opto-geïsoleerd) en 2 relaiskanalen, Finder 34.51 op het bord en/of extern (`docs/schema_blok10_11_vbus_relais.png`), in review |
 | 2. PCB-layout | rev 0.2 gerouteerd (DRC 0/0), niet besteld; rev 0.3 (VBus + relais) volgt na akkoord schema. rev 0.2: 4 lagen, USB als differentieel paar – `docs/pcb_routing_*_rev0.2.png`, 3D: `docs/pcb_3d_*_rev0.2.png` |
 | 3. JLCPCB productie (Gerber, BOM, CPL) | rev 0.2 klaar voor offerte: Economic PCBA, ESP + through-hole zelf – `hardware/cv_monitor/production/README.md`, kosten: `docs/KOSTEN.md` |
 | 4. Firmware (ESPHome) | – |

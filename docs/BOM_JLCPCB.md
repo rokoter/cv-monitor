@@ -17,8 +17,8 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-17; bij b
 | R5, R18, R19, R20, R21, R23, R30 | 4.7k | R_0603_1608Metric | C23162 | Basic | 7 |  |
 | R24 | 47k | R_0603_1608Metric | C25819 | Basic | 1 |  |
 | R9, R10, R11, R22, R25, R33, R34 | 10k | R_0603_1608Metric | C25804 | Basic | 7 |  |
-| D2 | rood: laden | LED_0603_1608Metric | C2286 | Basic | 1 |  |
-| R4, R7, R8, R13, R26 | 1k | R_0603_1608Metric | C21190 | Basic | 5 |  |
+| D2, D11, D12 | rood: laden / rood: relais 1 / rood: relais 2 | LED_0603_1608Metric | C2286 | Basic | 3 |  |
+| R4, R7, R8, R13, R26, R35, R36 | 1k | R_0603_1608Metric | C21190 | Basic | 7 |  |
 | D3 | groen: vol | LED_0603_1608Metric | C12624 | Extended | 1 | groen 0603 is geen basic meer; R5 = 4k7 voor gelijke helderheid als rood |
 | D1 | SS34 | D_SMA | C8678 | Basic | 1 |  |
 | Q1, Q3 | AO3401A | SOT-23 | C15127 | Basic | 2 |  |
@@ -54,4 +54,8 @@ Gegenereerd uit `generator/design.py`. Klasse gecontroleerd op 2026-11-17; bij b
 | J8 | E-INK (DNP) | PinHeader_1x08_P2.54mm_Vertical |
 | J7 | OLED I2C (DNP) | PinHeader_1x04_P2.54mm_Vertical |
 | J10 | RESOL VBUS | TerminalBlock_Phoenix_PT-1,5-2-3.5-H_1x02_P3.50mm_Horizontal |
-| J11 | RELAIS | TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal |
+| J11 | EXTERN RELAIS | TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal |
+| K1 | Finder 34.51 5V – Finder 34.51.7.005.0010 | Relay_SPDT_Finder_34.51_Vertical |
+| J12 | 230V~ 5A – Phoenix MKDS 1,5/3-5,08 | TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal |
+| K2 | Finder 34.51 5V – Finder 34.51.7.005.0010 | Relay_SPDT_Finder_34.51_Vertical |
+| J13 | 230V~ 5A – Phoenix MKDS 1,5/3-5,08 | TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal |

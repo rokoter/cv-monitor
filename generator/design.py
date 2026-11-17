@@ -223,23 +223,52 @@ COMPONENTS = [
          nets={'1': 'OPTO_A', '2': 'RESOL-', '3': 'RESOL_RX', '4': '+3V3'}),
     R('R30', '4.7k', 152, 15, 'RESOL_RX', 'GND', ref_at=(153, 14.6), val_at=(153, 15.6)),
 
-    dict(ref='J11', lib='Connector:Screw_Terminal_01x04', value='RELAIS', gx=133, gy=25, rot=180, dnp=True,
+    # ------------------------------------------------------------ 11. Relais (op het bord en/of extern)
+    dict(ref='J11', lib='Connector:Screw_Terminal_01x04', value='EXTERN RELAIS', gx=194, gy=9.5, dnp=True,
          pwr_rotate=True, fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_PT-1,5-4-3.5-H_1x04_P3.50mm_Horizontal',
-         ref_at=(131, 21.6), val_at=(135.5, 28.6), nets={'1': 'REL_V+', '2': 'REL1', '3': 'REL2', '4': 'GND'}),
-    dict(ref='D10', lib='Diode:SS14', value='SS14', gx=137.5, gy=20.5, fp='Diode_SMD:D_SMA', lcsc='C2480',
-         ref_at=(136.5, 19.2), val_at=(136.5, 21.9), nets={'1': 'REL_V+', '2': 'VBUS'}),
-    dict(ref='D8', lib='Diode:1N4148W', value='1N4148W', gx=143, gy=23.0, rot=270, fp='Diode_SMD:D_SOD-123',
-         lcsc='C81598', ref_at=(145, 22.3), val_at=(145.6, 23.5), nets={'1': 'REL_V+', '2': 'REL1'}),
-    dict(ref='Q4', lib='Transistor_FET:AO3400A', value='AO3400A', gx=142, gy=27.5, fp='Package_TO_SOT_SMD:SOT-23',
-         lcsc='C20917', ref_at=(144.2, 27.1), val_at=(144.8, 28.1), nets={'1': 'REL1_G', '2': 'GND', '3': 'REL1'}),
-    R('R31', '100', 140, 30.0, 'REL1_G', 'RELAIS1', stub={'2': 6.35}, ref_at=(140.6, 29.8), val_at=(140.6, 30.8)),
-    R('R33', '10k', 138, 30.0, 'REL1_G', 'GND', ref_at=(135.8, 29.8), val_at=(135.8, 30.8)),
-    dict(ref='D9', lib='Diode:1N4148W', value='1N4148W', gx=152, gy=23.0, rot=270, fp='Diode_SMD:D_SOD-123',
-         lcsc='C81598', ref_at=(154, 22.3), val_at=(154.6, 23.5), nets={'1': 'REL_V+', '2': 'REL2'}),
-    dict(ref='Q5', lib='Transistor_FET:AO3400A', value='AO3400A', gx=151, gy=27.5, fp='Package_TO_SOT_SMD:SOT-23',
-         lcsc='C20917', ref_at=(153.2, 27.1), val_at=(153.8, 28.1), nets={'1': 'REL2_G', '2': 'GND', '3': 'REL2'}),
-    R('R32', '100', 149, 30.0, 'REL2_G', 'RELAIS2', stub={'2': 6.35}, ref_at=(149.6, 29.8), val_at=(149.6, 30.8)),
-    R('R34', '10k', 147, 30.0, 'REL2_G', 'GND', ref_at=(144.8, 29.8), val_at=(144.8, 30.8)),
+         ref_at=(192, 7.6), val_at=(189.5, 14.6), nets={'1': 'REL_V+', '2': 'REL1', '3': 'REL2', '4': 'GND'}),
+    dict(ref='D10', lib='Diode:SS14', value='SS14', gx=173, gy=10, fp='Diode_SMD:D_SMA', lcsc='C2480',
+         ref_at=(172, 8.4), val_at=(172, 11.6), nets={'1': 'REL_V+', '2': 'VBUS'}),
+    # kanaal 1: GPIO -> R31 -> Q4; K1 op het bord en/of extern relais op J11
+    R('R31', '100', 170, 26, 'RELAIS1', 'REL1_G', rot=90, label_wired={'1': True},
+      ref_at=(170, 24.7), val_at=(170, 27.3)),
+    dict(ref='Q4', lib='Transistor_FET:AO3400A', value='AO3400A', gx=175.5, gy=26, fp='Package_TO_SOT_SMD:SOT-23',
+         lcsc='C20917', ref_at=(177.7, 25.6), val_at=(178.3, 26.6),
+         nets={'1': 'REL1_G', '2': 'GND', '3': 'REL1'}),
+    R('R33', '10k', 172.5, 29, 'REL1_G', 'GND', ref_at=(174.2, 28.8), val_at=(174.2, 29.8)),
+    R('R35', '1k', 168.5, 28.5, 'RELAIS1', 'LED1_A', ref_at=(166.6, 28.3), val_at=(166.6, 29.3)),
+    LED('D11', 'rood: relais 1', 'C2286', 168.5, 32.5, 'LED1_A', 'GND', rot=90,
+        ref_at=(166.4, 32.3), val_at=(165, 34.6)),
+    dict(ref='D8', lib='Diode:1N4148W', value='1N4148W', gx=176.5, gy=20.5, rot=270, fp='Diode_SMD:D_SOD-123',
+         lcsc='C81598', ref_at=(174.6, 20.1), val_at=(173.4, 21.1), nets={'1': 'REL_V+', '2': 'REL1'}),
+    dict(ref='K1', lib='Relay:FINDER-34.51', value='Finder 34.51 5V', gx=182, gy=22, dnp=True,
+         fp='Relay_THT:Relay_SPDT_Finder_34.51_Vertical', extra={'MPN': 'Finder 34.51.7.005.0010'},
+         ref_at=(179.6, 17.4), val_at=(182, 16.3),
+         nets={'A1': 'REL_V+', 'A2': 'REL1', '11': 'COM1', '12': 'NC1', '14': 'NO1'}),
+    dict(ref='J12', lib='Connector:Screw_Terminal_01x03', value='230V~ 5A', gx=192, gy=21, dnp=True,
+         fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal',
+         extra={'MPN': 'Phoenix MKDS 1,5/3-5,08'}, ref_at=(192, 18.4), val_at=(192.5, 23.7),
+         nets={'1': 'NO1', '2': 'COM1', '3': 'NC1'}),
+    # kanaal 2: GPIO -> R32 -> Q5; K2 op het bord en/of extern relais op J11
+    R('R32', '100', 170, 46, 'RELAIS2', 'REL2_G', rot=90, label_wired={'1': True},
+      ref_at=(170, 44.7), val_at=(170, 47.3)),
+    dict(ref='Q5', lib='Transistor_FET:AO3400A', value='AO3400A', gx=175.5, gy=46, fp='Package_TO_SOT_SMD:SOT-23',
+         lcsc='C20917', ref_at=(177.7, 45.6), val_at=(178.3, 46.6),
+         nets={'1': 'REL2_G', '2': 'GND', '3': 'REL2'}),
+    R('R34', '10k', 172.5, 49, 'REL2_G', 'GND', ref_at=(174.2, 48.8), val_at=(174.2, 49.8)),
+    R('R36', '1k', 168.5, 48.5, 'RELAIS2', 'LED2_A', ref_at=(166.6, 48.3), val_at=(166.6, 49.3)),
+    LED('D12', 'rood: relais 2', 'C2286', 168.5, 52.5, 'LED2_A', 'GND', rot=90,
+        ref_at=(166.4, 52.3), val_at=(165, 54.6)),
+    dict(ref='D9', lib='Diode:1N4148W', value='1N4148W', gx=176.5, gy=40.5, rot=270, fp='Diode_SMD:D_SOD-123',
+         lcsc='C81598', ref_at=(174.6, 40.1), val_at=(173.4, 41.1), nets={'1': 'REL_V+', '2': 'REL2'}),
+    dict(ref='K2', lib='Relay:FINDER-34.51', value='Finder 34.51 5V', gx=182, gy=42, dnp=True,
+         fp='Relay_THT:Relay_SPDT_Finder_34.51_Vertical', extra={'MPN': 'Finder 34.51.7.005.0010'},
+         ref_at=(179.6, 37.4), val_at=(182, 36.3),
+         nets={'A1': 'REL_V+', 'A2': 'REL2', '11': 'COM2', '12': 'NC2', '14': 'NO2'}),
+    dict(ref='J13', lib='Connector:Screw_Terminal_01x03', value='230V~ 5A', gx=192, gy=41, dnp=True,
+         fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal',
+         extra={'MPN': 'Phoenix MKDS 1,5/3-5,08'}, ref_at=(192, 38.4), val_at=(192.5, 43.7),
+         nets={'1': 'NO2', '2': 'COM2', '3': 'NC2'}),
 
     # ------------------------------------------------------------ Bevestigingsgaten M3 (behuizing)
     dict(ref='H1', lib='Mechanical:MountingHole', value='M3', gx=9, gy=110, in_bom=False,
@@ -275,12 +304,18 @@ WIRES = [
     (('D7', '1'), ('U6', '1')),          # -> LED van de opto-coupler
     (('D7', '2'), ('U6', '2')),          # D7 antiparallel over de LED
     (('U6', '3'), ('R30', '1'), 'RESOL_RX'),
-    (('R31', '1'), ('Q4', '1')),         # gateweerstand relais 1
-    (('R33', '1'), ('Q4', '1')),         # pulldown gate 1
-    (('D8', '2'), ('Q4', '3'), 'REL1'),  # vrijloopdiode over spoel 1
-    (('R32', '1'), ('Q5', '1')),         # gateweerstand relais 2
-    (('R34', '1'), ('Q5', '1')),         # pulldown gate 2
-    (('D9', '2'), ('Q5', '3'), 'REL2'),  # vrijloopdiode over spoel 2
+    (('R31', '2'), ('Q4', '1')),            # gateweerstand relais 1
+    (('R33', '1'), ('Q4', '1')),            # pulldown gate 1
+    (('R35', '1'), ('R31', '1')),          # status-LED aan de GPIO-kant
+    (('R35', '2'), ('D11', '2')),
+    (('D8', '2'), ('Q4', '3'), 'REL1'),    # vrijloopdiode -> drain
+    (('D8', '1'), ('K1', 'A1'), 'REL_V+'),   # vrijloopdiode over de spoel van K1
+    (('R32', '2'), ('Q5', '1')),            # gateweerstand relais 2
+    (('R34', '1'), ('Q5', '1')),            # pulldown gate 2
+    (('R36', '1'), ('R32', '1')),          # status-LED aan de GPIO-kant
+    (('R36', '2'), ('D12', '2')),
+    (('D9', '2'), ('Q5', '3'), 'REL2'),    # vrijloopdiode -> drain
+    (('D9', '1'), ('K2', 'A1'), 'REL_V+'),   # vrijloopdiode over de spoel van K2
 ]
 
 # PWR_FLAG markeringen: (soort, net, gx, gy)
@@ -318,12 +353,20 @@ TEXTS = [
     dict(t='PWR_FLAG: bron van het net voor ERC.\n'
            'TP1-TP5: meetpunten (koperpads).', gx=87, gy=109.5),
 
-    dict(t='10. RESOL VBUS + RELAIS', gx=131, gy=6, size=2.0, bold=True),
-    dict(t='VBus: alleen lezen, 9600 baud, ~8 V. Opto U6 houdt de Resol-\n'
-           'massa los van onze GND; D7 beschermt bij ompolen. RX = GPIO38.\n'
-           'Relais extern: Q4/Q5 (GPIO35/36) schakelen de spoel naar GND,\n'
-           'D8/D9 = vrijloop (spoel max ~150 mA), 10k = uit bij opstarten.\n'
-           'V+ = 5 V via D10 (alleen met USB) of eigen 12/24 V op V+/GND.', gx=131, gy=40.0),
+    dict(t='10. RESOL VBUS', gx=131, gy=6, size=2.0, bold=True),
+    dict(t='VBus (Resol DeltaSol e.a.): alleen lezen, 9600 baud, ~8 V.\n'
+           'Opto U6 houdt de Resol-massa los van onze GND (anders kan\n'
+           'de uitgang van de regelaar beschadigen). D7 beschermt bij\n'
+           'ompolen. RX = GPIO38 (UART-RX in ESPHome).', gx=131, gy=25),
+
+    dict(t='11. RELAIS (OP HET BORD EN/OF EXTERN)', gx=163, gy=6, size=2.0, bold=True),
+    dict(t='Per kanaal: K1/K2 (Finder 34.51, 5 V) op het bord, en/of een extern relais op J11\n'
+           '(spoel tussen V+ en OUT1/OUT2). Q4/Q5 schakelen de spoel(en) naar GND.\n'
+           'GPIO35/36 hoog = relais aan. 10k houdt de relais uit tijdens opstarten.\n'
+           'D11/D12 branden als het relais aangestuurd wordt. D8/D9 = vrijloop.\n'
+           'V+ = spoelspanning van ALLE relais: met K1/K2 geplaatst alleen 5 V (USB via D10).\n'
+           'Eigen 12/24 V op V+ en GND alleen zonder K1/K2 (of met 12/24 V-uitvoering).\n'
+           '230 V-zone J12/J13: max 5 A / 250 V~, 8 mm afstand tot al het andere koper.', gx=164, gy=66),
 
     dict(t='4. 18650 ACCU + BEVEILIGING', gx=4, gy=42, size=2.0, bold=True),
     dict(t='DW01A + AO8810 (8205A-type) schakelen af bij <2,4 V, >4,3 V of >~4 A.\n'
